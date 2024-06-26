@@ -4,7 +4,13 @@
     "paths": {
       "@components/*": ["components/*"],
       "@api/*": ["api/*"],
-      "@modules/*": ["modules/*"]
+      "@modules/*": ["modules/*"],
+      "@layout/*": ["layout/*"],
+      "@pages/*": ["pages/*"],
+      "@app/*": ["app/*"],
+      "@constants/*": ["constants/*"],
+      "@utils/*": ["utils/*"],
+      "@routes/*": ["routes/*"]
     }
   },
   "include": ["src/**/*"]

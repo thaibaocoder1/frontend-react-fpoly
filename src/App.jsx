@@ -1,11 +1,11 @@
-import Register from "@modules/Auth/components/Register";
-import { Container } from "@mui/material";
+import { BrowserRouter } from "react-router-dom";
+import RoutesFeature from "./routes";
 
 function App() {
   return (
-    <Container sx={{ marginTop: 4 }}>
-      <Register></Register>
-    </Container>
+    <BrowserRouter>
+      <RoutesFeature />
+    </BrowserRouter>
   );
 }
 

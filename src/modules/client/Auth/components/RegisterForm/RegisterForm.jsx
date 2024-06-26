@@ -2,7 +2,7 @@ import InputField from "@components/FormControls/InputField";
 import PasswordField from "@components/FormControls/PasswordField";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import { Avatar, Button, LinearProgress, Typography } from "@mui/material";
+import { Avatar, Box, Button, LinearProgress, Typography } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
@@ -79,10 +79,14 @@ function RegisterForm(props) {
         Please register your account
       </Typography>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <InputField name="fullname" label="Fullname" form={form}></InputField>
-        <InputField name="username" label="Username" form={form}></InputField>
-        <InputField name="email" label="Email" form={form}></InputField>
-        <InputField name="phone" label="Phone" form={form}></InputField>
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <InputField name="fullname" label="Fullname" form={form}></InputField>
+          <InputField name="username" label="Username" form={form}></InputField>
+        </Box>
+        <Box sx={{ display: "flex", gap: 2 }}>
+          <InputField name="email" label="Email" form={form}></InputField>
+          <InputField name="phone" label="Phone" form={form}></InputField>
+        </Box>
         <PasswordField
           name="password"
           label="Password"
@@ -104,6 +108,9 @@ function RegisterForm(props) {
           Create an account
         </Button>
       </form>
+      <Box textAlign="center" pt={1}>
+        <Button color="primary">Dont have an account. Register here </Button>
+      </Box>
     </ThemeProvider>
   );
 }

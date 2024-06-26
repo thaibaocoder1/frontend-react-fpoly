@@ -9,6 +9,12 @@ export default defineConfig({
       "@components": "/src/components",
       "@api": "/src/api",
       "@modules": "/src/modules",
+      "@layout": "/src/layout",
+      "@pages": "/src/pages",
+      "@app": "/src/app",
+      "@constants": "/src/constants",
+      "@utils": "/src/utils",
+      "@routes": "/src/routes",
     },
   },
 });
