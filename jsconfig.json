@@ -10,7 +10,8 @@
       "@app/*": ["app/*"],
       "@constants/*": ["constants/*"],
       "@utils/*": ["utils/*"],
-      "@routes/*": ["routes/*"]
+      "@routes/*": ["routes/*"],
+      "@hooks/*": ["hooks/*"]
     }
   },
   "include": ["src/**/*"]

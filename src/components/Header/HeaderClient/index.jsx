@@ -1,4 +1,6 @@
+import useCategory from "@hooks/useCategory";
 import { useState } from "react";
+import { BsSearch } from "react-icons/bs";
 import {
   FaFacebookF,
   FaGithub,
@@ -20,7 +22,9 @@ import logo from "../../../assets/react.svg";
 
 const HeaderClient = () => {
   const [state, setState] = useState(false);
-  // const [showShidebar, setShowShidebar] = useState(true);
+  const [categoryShow, setCategoryShow] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
+  const { categoryList } = useCategory();
   const { pathname } = useLocation();
 
   return (
@@ -33,14 +37,14 @@ const HeaderClient = () => {
                 <span>
                   <MdEmail />
                 </span>
-                <span>support@gmail.com</span>
+                <span>thaibaok4.1@gmail.com</span>
               </li>
 
               <li className="flex relative justify-center items-center gap-2 text-sm ">
                 <span>
                   <IoMdPhonePortrait />
                 </span>
-                <span>+(123) 3243 343</span>
+                <span>+(84) 852 xxx 0xx</span>
               </li>
             </ul>
 
@@ -51,13 +55,13 @@ const HeaderClient = () => {
                     <FaFacebookF />
                   </a>
                   <a href="#">
-                    <FaTwitter />{" "}
+                    <FaTwitter />
                   </a>
                   <a href="#">
                     <FaLinkedin />
                   </a>
                   <a href="#">
-                    <FaGithub />{" "}
+                    <FaGithub />
                   </a>
                 </div>
                 <div className="flex group cursor-pointer text-slate-800 text-sm justify-center items-center gap-1 relative after:h-[18px] after:w-[1px] after:bg-[#afafaf] after:-right-[16px] after:absolute before:absolute before:h-[18px] before:bg-[#afafaf] before:w-[1px] before:-left-[20px]">
@@ -77,8 +81,7 @@ const HeaderClient = () => {
                     to="/dashboard"
                   >
                     <span>
-                      {" "}
-                      <FaUser />{" "}
+                      <FaUser />
                     </span>
                     <span> {state.name} </span>
                   </Link>
@@ -88,8 +91,7 @@ const HeaderClient = () => {
                     className="flex cursor-pointer justify-center items-center gap-2 text-sm text-black"
                   >
                     <span>
-                      {" "}
-                      <FaLock />{" "}
+                      <FaLock />
                     </span>
                     <span>Login </span>
                   </Link>
@@ -110,11 +112,10 @@ const HeaderClient = () => {
                 </Link>
                 <div
                   className="justify-center items-center w-[30px] h-[30px] bg-white text-slate-600 border border-slate-600 rounded-sm cursor-pointer lg:hidden md-lg:flex xl:hidden hidden"
-                  // onClick={() => setShowShidebar(false)}
+                  onClick={() => setShowSidebar(true)}
                 >
                   <span>
-                    {" "}
-                    <FaList />{" "}
+                    <FaList />
                   </span>
                 </div>
               </div>
@@ -125,6 +126,7 @@ const HeaderClient = () => {
                 <ul className="flex justify-start items-start gap-8 text-sm font-bold uppercase md-lg:hidden">
                   <li>
                     <NavLink
+                      to={"/"}
                       className={`p-2 block ${
                         pathname === "/" ? "text-[#059473]" : "text-slate-600"
                       }`}
@@ -216,24 +218,19 @@ const HeaderClient = () => {
         </div>
       </div>
 
-      <div className="hidden md-lg:block">
+      <div className={`${showSidebar ? "block" : "hidden"}`}>
         <div
-          // ${
-          //     showShidebar ? "invisible" : "visible"
-          //   }
-          // onClick={() => setShowShidebar(true)}
-          className={`fixed duration-200 transition-all hidden md-lg:block w-screen h-screen bg-[rgba(0,0,0,0.5)] top-0 left-0 z-20`}
+          onClick={() => setShowSidebar(true)}
+          className={`fixed duration-200 transition-all hidden md-lg:block w-screen h-screen bg-[rgba(0,0,0,0.5)] top-0 left-0 z-20 ${
+            showSidebar ? "visible" : "invisible"
+          }`}
         ></div>
-        {/* ${
-            showShidebar ? "-left-[300px]" : "left-0 top-0"
-          }  */}
         <div
-          className={`w-[300px] z-[9999] transition-all duration-200 fixed overflow-y-auto bg-white h-screen py-6 px-8 `}
+          className={`w-[300px] z-[9999] transition-all duration-200 fixed overflow-y-auto bg-white h-screen py-6 px-8 ${
+            showSidebar ? "left-0 top-0" : "-left-[300px]"
+          }`}
         >
           <div className="flex justify-start flex-col gap-6">
-            <Link to="/">
-              <img src={logo} alt="BSMART" />
-            </Link>
             <div className="flex justify-start items-center gap-10">
               <div className="flex group cursor-pointer text-slate-800 text-sm justify-center items-center gap-1 relative after:h-[18px] after:w-[1px] after:bg-[#afafaf] after:-right-[16px] after:absolute ">
                 <img src={logo} alt="" />
@@ -251,8 +248,7 @@ const HeaderClient = () => {
                   to="/dashboard"
                 >
                   <span>
-                    {" "}
-                    <FaUser />{" "}
+                    <FaUser />
                   </span>
                   <span>{state.name}</span>
                 </Link>
@@ -262,8 +258,7 @@ const HeaderClient = () => {
                   to="/login"
                 >
                   <span>
-                    {" "}
-                    <FaLock />{" "}
+                    <FaLock />
                   </span>
                   <span>Login </span>
                 </Link>
@@ -273,6 +268,7 @@ const HeaderClient = () => {
             <ul className="flex flex-col justify-start items-start text-sm font-bold uppercase">
               <li>
                 <NavLink
+                  to={"/"}
                   className={`p-2 block ${
                     pathname === "/" ? "text-[#059473]" : "text-slate-600"
                   }`}
@@ -355,7 +351,7 @@ const HeaderClient = () => {
                 <span>
                   <MdEmail />
                 </span>
-                <span>support@gmail.com</span>
+                <span>thaibaok4.1@gmail.com</span>
               </li>
             </ul>
           </div>
@@ -367,8 +363,8 @@ const HeaderClient = () => {
           <div className="w-3/12 md-lg:w-full">
             <div className="bg-white relative">
               <div
-                // onClick={() => setCategoryShow(!categoryShow)}
-                className="h-[50px] bg-[#059473] text-white flex justify-center md-lg:justify-between md-lg:px-6 items-center gap-3 font-bold text-md cursor-pointer"
+                onClick={() => setCategoryShow(!categoryShow)}
+                className="h-[50px] bg-[#059473] text-white flex justify-center md-lg:justify-between md-lg:px-6 items-center gap-3 font-bold text-md cursor-pointer  select-none"
               >
                 <div className="flex justify-center items-center gap-3">
                   <span>
@@ -380,34 +376,34 @@ const HeaderClient = () => {
                   <IoIosArrowDown />
                 </span>
               </div>
-              {/* ${
-                  categoryShow ? "h-0" : "h-[400px]"
-                }  */}
+
               <div
-                className={`overflow-hidden transition-all md-lg:relative duration-500 absolute z-[99999] bg-[#dbf3ed] w-full border-x`}
+                className={`${
+                  categoryShow ? "m-h-[400px]" : "h-0"
+                } overflow-hidden transition-all md-lg:relative duration-500 absolute z-[99999] bg-[#dbf3ed] w-full border-x`}
               >
-                {/* <ul className="py-2 text-slate-600 font-medium">
-                  {categorys.map((c, i) => {
+                <ul className="py-2 text-slate-600 font-medium">
+                  {categoryList.map((c, i) => {
                     return (
                       <li
                         key={i}
                         className="flex justify-start items-center gap-2 px-[24px] py-[6px]"
                       >
                         <img
-                          src={c.image}
+                          src={c.imageUrl}
                           className="w-[30px] h-[30px] rounded-full overflow-hidden"
-                          alt=""
+                          alt={c.slug}
                         />
                         <Link
-                          to={`/products?category=${c.name}`}
+                          to={`/products?category=${c.title}`}
                           className="text-sm block"
                         >
-                          {c.name}
+                          {c.title}
                         </Link>
                       </li>
                     );
                   })}
-                </ul> */}
+                </ul>
               </div>
             </div>
           </div>
@@ -416,32 +412,20 @@ const HeaderClient = () => {
             <div className="flex flex-wrap w-full justify-between items-center md-lg:gap-6">
               <div className="w-8/12 md-lg:w-full">
                 <div className="flex border h-[50px] items-center relative gap-6">
-                  <div className="relative after:absolute after:h-[25px] after:w-[1px] after:bg-[#afafaf] after:-right-[15px] md:hidden">
-                    <select
-                      // onChange={(e) => setCategory(e.target.value)}
-                      className="w-[160px] text-slate-600 font-semibold bg-transparent px-2 h-full outline-0 border-none"
-                    >
-                      <option value="">Select Category</option>
-                      {/* {categorys.map((c, i) => (
-                        <option key={i} value={c.name}>
-                          {" "}
-                          {c.name}{" "}
-                        </option>
-                      ))} */}
-                    </select>
-                  </div>
+                  <label
+                    htmlFor="searchInput"
+                    className="relative after:absolute after:h-[25px] after:w-[1px] after:bg-[#afafaf] after:-right-[15px] after:-top-[5px]  ml-3 md:hidden"
+                  >
+                    <BsSearch></BsSearch>
+                  </label>
                   <input
                     className="w-full relative bg-transparent text-slate-500 outline-0 px-3 h-full"
-                    // onChange={(e) => setSearchValue(e.target.value)}
                     type="text"
-                    name=""
-                    id=""
+                    name="search"
+                    id="searchInput"
                     placeholder="What do you need"
                   />
-                  <button
-                    // onClick={search}
-                    className="bg-[#059473] right-0 absolute px-8 h-full font-semibold uppercase text-white"
-                  >
+                  <button className="bg-[#059473] right-0 absolute px-8 h-full font-semibold uppercase text-white">
                     Search
                   </button>
                 </div>
@@ -456,7 +440,7 @@ const HeaderClient = () => {
                   </div>
                   <div className="flex justify-end flex-col gap-1">
                     <h2 className="text-md font-medium text-slate-700">
-                      +1343-43233455
+                      +(84) 852 xxx 0xx
                     </h2>
                     <span className="text-sm">Support 24/7</span>
                   </div>

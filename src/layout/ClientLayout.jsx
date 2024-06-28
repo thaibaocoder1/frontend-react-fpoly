@@ -1,10 +1,14 @@
+import FooterClient from "@components/Footer/FooterClient/FooterClient";
+import HeaderClient from "@components/Header/HeaderClient";
 import { Outlet } from "react-router-dom";
 
 const ClientLayout = () => {
   return (
-    <div>
+    <>
+      <HeaderClient />
       <Outlet />
-    </div>
+      <FooterClient />
+    </>
   );
 };
 

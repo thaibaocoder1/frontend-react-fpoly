@@ -1,9 +1,11 @@
+import useCategory from "@hooks/useCategory";
 import Carousel from "react-multi-carousel";
-import { Link } from "react-router-dom";
 import "react-multi-carousel/lib/styles.css";
-import image from "../../assets/banner/1.jpg";
+import { Link } from "react-router-dom";
 
 const Categories = () => {
+  const { categoryList } = useCategory();
+
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -34,6 +36,7 @@ const Categories = () => {
       items: 1,
     },
   };
+
   return (
     <div className="w-[87%] mx-auto relative">
       <div className="w-full">
@@ -49,17 +52,27 @@ const Categories = () => {
         responsive={responsive}
         transitionDuration={500}
       >
-        {/* {Categoriess.length > 0 &&
-                  Categoriess.map((b, i) => (
-                    <Link key={i} to={`product/details/${b.link}`}>
-                      <img src={b.Categories} alt="" />
-                    </Link>
-                  ))} */}
-        {[1, 2, 3, 4, 5, 6].map((item, i) => (
-          <Link key={i} to={`#`}>
-            <img src={image} alt="Categories" />
-          </Link>
-        ))}
+        {categoryList.length > 0 &&
+          categoryList.map((item) => (
+            <Link
+              className="h-[200px] border block"
+              key={item._id}
+              to={`product/details/${item.slug}`}
+            >
+              <div className="w-full h-full relative">
+                <img
+                  src={item.imageUrl}
+                  className="w-full h-full object-cover"
+                  alt={item.slug}
+                />
+                <div className="absolute bottom-4 w-full mx-auto font-bold left-0 flex justify-center items-center">
+                  <span className="py-[2px] px-6 bg-slate-700/50 text-white">
+                    {item.title}
+                  </span>
+                </div>
+              </div>
+            </Link>
+          ))}
       </Carousel>
     </div>
   );

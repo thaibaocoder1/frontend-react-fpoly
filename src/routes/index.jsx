@@ -1,8 +1,8 @@
-import HeaderClient from "@components/Header/HeaderClient";
 import ClientLayout from "@layout/ClientLayout";
 import Register from "@modules/client/Auth/components/Register";
 import { Container } from "@mui/material";
 import Home from "@pages/client/Home";
+import Shop from "@pages/client/Shop";
 import { useRoutes } from "react-router-dom";
 
 const RoutesFeature = () => {
@@ -13,12 +13,11 @@ const RoutesFeature = () => {
       children: [
         {
           index: true,
-          element: (
-            <>
-              <HeaderClient />
-              <Home />
-            </>
-          ),
+          element: <Home />,
+        },
+        {
+          path: "shops",
+          element: <Shop />,
         },
         {
           path: "/register",
