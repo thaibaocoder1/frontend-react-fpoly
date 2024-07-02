@@ -57,7 +57,7 @@ const Categories = () => {
             <Link
               className="h-[200px] border block"
               key={item._id}
-              to={`product/details/${item.slug}`}
+              to={`shops?category=${item.slug}`}
             >
               <div className="w-full h-full relative">
                 <img

@@ -1,27 +1,8 @@
-import useProduct from "@hooks/useProduct";
-import ListPage from "@modules/client/Product/pages/ListPage";
-import { filtersObj } from "@utils/Filters";
-import { useEffect, useState } from "react";
+import CartFeature from "@modules/client/Cart";
 import { IoIosArrowForward } from "react-icons/io";
-import { NavLink, useSearchParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-const Shop = () => {
-  const [searchParams] = useSearchParams();
-  const [filters, setFilters] = useState({
-    ...filtersObj,
-    _category: searchParams.get("category") || "",
-  });
-  const { productList, pagination } = useProduct(filters);
-  const handleFiltersChange = (page) => {
-    setFilters((prev) => ({ ...prev, _page: page }));
-  };
-  useEffect(() => {
-    const category = searchParams.get("category") || "";
-    setFilters((prev) => ({
-      ...prev,
-      _category: category,
-    }));
-  }, [searchParams]);
+const Cart = () => {
   return (
     <>
       <section
@@ -36,19 +17,15 @@ const Shop = () => {
                 <span className="pt-1">
                   <IoIosArrowForward />
                 </span>
-                <span>Shop</span>
+                <span>Cart</span>
               </div>
             </div>
           </div>
         </div>
       </section>
-      <ListPage
-        products={productList}
-        pagination={pagination}
-        onChange={handleFiltersChange}
-      />
+      <CartFeature />
     </>
   );
 };
 
-export default Shop;
+export default Cart;

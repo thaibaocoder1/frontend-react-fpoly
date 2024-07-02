@@ -1,9 +1,10 @@
+import { formatSalePrice } from "@utils/Format";
+import PropTypes from "prop-types";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import Carousel from "react-multi-carousel";
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-const ProductFeature = ({ title }) => {
+const ProductFeature = ({ title, products }) => {
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },
@@ -22,6 +23,7 @@ const ProductFeature = ({ title }) => {
       items: 1,
     },
   };
+  // eslint-disable-next-line react/prop-types
   const ButtonGroup = ({ next, previous }) => {
     return (
       <div className="flex justify-between items-center">
@@ -55,15 +57,31 @@ const ProductFeature = ({ title }) => {
         renderButtonGroupOutside={true}
         customButtonGroup={<ButtonGroup />}
       >
-        <div className="flex flex-col justify-start gap-2">
-          <Link to="/" className="flex justify-start items-start">
-            <img className="w-[110px] h-[110px]" src="" alt="" />
-            <div className="px-3 flex justify-start items-start gap-1 flex-col text-slate-600">
-              <h2>Name</h2>
-              <span className="text-lg font-bold">price</span>
+        {products.map((p, i) => {
+          return (
+            <div key={i} className="flex flex-col justify-start gap-2">
+              {p.map((item) => (
+                <NavLink
+                  to={`shops/detail/${item._id}`}
+                  key={item._id}
+                  className="flex justify-start items-start"
+                >
+                  <img
+                    className="w-[110px] h-[110px] object-contain"
+                    src={item.thumb.fileName}
+                    alt={item.name}
+                  />
+                  <div className="px-3 flex justify-start items-start gap-1 flex-col text-slate-600">
+                    <h2>{item.name}</h2>
+                    <span className="text-lg font-bold">
+                      {formatSalePrice(item.price, item.discount)}
+                    </span>
+                  </div>
+                </NavLink>
+              ))}
             </div>
-          </Link>
-        </div>
+          );
+        })}
       </Carousel>
     </div>
   );
@@ -71,6 +89,7 @@ const ProductFeature = ({ title }) => {
 
 ProductFeature.propTypes = {
   title: PropTypes.string.isRequired,
+  products: PropTypes.array.isRequired,
 };
 
 export default ProductFeature;

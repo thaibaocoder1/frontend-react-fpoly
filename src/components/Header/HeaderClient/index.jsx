@@ -17,15 +17,20 @@ import {
   IoMdPhonePortrait,
 } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../../assets/react.svg";
+import { useSelector } from "react-redux";
 
 const HeaderClient = () => {
   const [state, setState] = useState(false);
   const [categoryShow, setCategoryShow] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
+
   const { categoryList } = useCategory();
+  const cartSlice = useSelector((state) => state.cart.data);
+
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   return (
     <div className="w-full bg-white">
@@ -83,7 +88,7 @@ const HeaderClient = () => {
                     <span>
                       <FaUser />
                     </span>
-                    <span> {state.name} </span>
+                    <span>{state.name}</span>
                   </Link>
                 ) : (
                   <Link
@@ -93,7 +98,7 @@ const HeaderClient = () => {
                     <span>
                       <FaLock />
                     </span>
-                    <span>Login </span>
+                    <span>Login</span>
                   </Link>
                 )}
               </div>
@@ -199,7 +204,7 @@ const HeaderClient = () => {
                     </div>
 
                     <div
-                      // onClick={redirect_card_page}
+                      onClick={() => navigate("/cart")}
                       className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]"
                     >
                       <span className="text-xl text-green-500">
@@ -207,7 +212,7 @@ const HeaderClient = () => {
                       </span>
 
                       <div className="w-[15px] h-[15px] text-xs font-medium absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
-                        0
+                        {cartSlice.length}
                       </div>
                     </div>
                   </div>
@@ -395,7 +400,7 @@ const HeaderClient = () => {
                           alt={c.slug}
                         />
                         <Link
-                          to={`/products?category=${c.title}`}
+                          to={`shops?category=${c.slug}`}
                           className="text-sm block"
                         >
                           {c.title}

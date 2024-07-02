@@ -6,9 +6,10 @@ InputField.propTypes = {
   form: PropTypes.object.isRequired,
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
+  autoComplete: PropTypes.string,
 };
 
-function InputField({ form, name, label }) {
+function InputField({ form, name, label, autoComplete }) {
   const {
     control,
     formState: { errors },
@@ -31,6 +32,7 @@ function InputField({ form, name, label }) {
           }}
           error={!!errors[name]}
           helperText={errors[name]?.message}
+          autoComplete={autoComplete}
         />
       )}
     />

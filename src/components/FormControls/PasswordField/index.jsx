@@ -10,12 +10,6 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
 
-PasswordField.propTypes = {
-  form: PropTypes.object.isRequired,
-  name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-};
-
 function PasswordField({ form, name, label }) {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -51,6 +45,7 @@ function PasswordField({ form, name, label }) {
                   </IconButton>
                 </InputAdornment>
               }
+              autoComplete="new-password"
             />
           )}
         />
@@ -61,5 +56,10 @@ function PasswordField({ form, name, label }) {
     </div>
   );
 }
+PasswordField.propTypes = {
+  form: PropTypes.object.isRequired,
+  name: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+};
 
 export default PasswordField;

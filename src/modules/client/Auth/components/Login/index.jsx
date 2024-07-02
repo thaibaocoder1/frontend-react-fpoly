@@ -1,32 +1,29 @@
 import toastObj from "@utils/Toast";
-import RegisterForm from "../RegisterForm/RegisterForm";
-import { register } from "../../AuthSlice";
-import { unwrapResult } from "@reduxjs/toolkit";
+import LoginForm from "../LoginForm/LoginForm";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { login } from "../../AuthSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
 
-function Register() {
+function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (values) => {
     try {
-      values.imageUrl = "https://placehold.co/400";
-      const action = register(values);
+      const action = login(values);
       const resultAction = await dispatch(action);
       const data = unwrapResult(resultAction);
-      if (data._id && data) {
-        navigate("/login");
-      }
+      data && navigate("/");
     } catch (error) {
       toastObj.error(error.message);
     }
   };
   return (
     <div>
-      <RegisterForm onSubmit={handleSubmit}></RegisterForm>
+      <LoginForm onSubmit={handleSubmit}></LoginForm>
     </div>
   );
 }
 
-export default Register;
+export default Login;

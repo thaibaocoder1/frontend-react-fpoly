@@ -9,54 +9,27 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
 
-RegisterForm.propTypes = {
+LoginForm.propTypes = {
   onSubmit: PropTypes.func,
 };
 
 const defaultTheme = createTheme();
 
-function RegisterForm(props) {
+function LoginForm(props) {
   const schema = yup.object({
-    fullname: yup
-      .string()
-      .required("Please enter fullname")
-      .test(
-        "should has at least two words",
-        "Please enter at least two words",
-        (value) => {
-          return value.split(" ").length >= 2;
-        }
-      ),
-    username: yup.string().required("Please enter username"),
     email: yup
       .string()
       .required("Please enter email")
       .email("Please enter a valid email"),
-    phone: yup
-      .string()
-      .required("Please enter phone number")
-      .test("should match with pattern", "Phone is invalid", (value) => {
-        const pattern = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
-        return pattern.test(value);
-      }),
     password: yup
       .string()
       .required("Please enter password")
       .min(6, "Please enter at least 6 characters"),
-    retypePassword: yup
-      .string()
-      .required("Please enter retype password")
-      .min(6, "Please enter at least 6 characters")
-      .oneOf([yup.ref("password")], "Password does not match"),
   });
   const form = useForm({
     defaultValues: {
-      fullname: "",
       email: "",
-      username: "",
-      phone: "",
       password: "",
-      retypePassword: "",
     },
     resolver: yupResolver(schema),
   });
@@ -77,30 +50,18 @@ function RegisterForm(props) {
         Welcome to Ecommerce
       </Typography>
       <Typography sx={{ textAlign: "center" }} variant="p" component={"h3"}>
-        Please register your account
+        Please login here
       </Typography>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <Box sx={{ display: "flex", gap: 2 }}>
-          <InputField name="fullname" label="Fullname" form={form}></InputField>
-          <InputField
-            name="username"
-            label="Username"
-            form={form}
-            autoComplete="username"
-          ></InputField>
-        </Box>
-        <Box sx={{ display: "flex", gap: 2 }}>
-          <InputField name="email" label="Email" form={form}></InputField>
-          <InputField name="phone" label="Phone" form={form}></InputField>
-        </Box>
+        <InputField
+          name="email"
+          label="Email"
+          form={form}
+          autoComplete="email"
+        ></InputField>
         <PasswordField
           name="password"
           label="Password"
-          form={form}
-        ></PasswordField>
-        <PasswordField
-          name="retypePassword"
-          label="Retype Password"
           form={form}
         ></PasswordField>
         <Button
@@ -111,16 +72,16 @@ function RegisterForm(props) {
           color="primary"
           size="large"
         >
-          Create an account
+          Login
         </Button>
       </form>
       <Box textAlign="center" pt={1}>
         <Button color="primary">
-          <Link to={"/login"}>Have an account. Login here</Link>
+          <Link to={"/register"}>Dont have an account. Register here</Link>
         </Button>
       </Box>
     </ThemeProvider>
   );
 }
 
-export default RegisterForm;
+export default LoginForm;
