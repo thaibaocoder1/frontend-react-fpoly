@@ -1,10 +1,10 @@
-import useCategory from "@hooks/useCategory";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 const Categories = () => {
-  const { categoryList } = useCategory();
+  const { categories } = useSelector((state) => state.category.data);
 
   const responsive = {
     superLargeDesktop: {
@@ -52,8 +52,8 @@ const Categories = () => {
         responsive={responsive}
         transitionDuration={500}
       >
-        {categoryList.length > 0 &&
-          categoryList.map((item) => (
+        {categories.length > 0 &&
+          categories.map((item) => (
             <Link
               className="h-[200px] border block"
               key={item._id}

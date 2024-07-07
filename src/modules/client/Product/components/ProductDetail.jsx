@@ -1,9 +1,9 @@
+import { addProductToCart } from "@app/slice/CartSlice";
 import Rating from "@components/Rating/Rating";
-import { addProductToCart } from "@modules/client/Cart/CartSlice";
 import { formatOriginalPrice, formatSalePrice } from "@utils/Format";
 import toastObj from "@utils/Toast";
 import PropTypes from "prop-types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FaFacebookF,
   FaGithub,
@@ -13,14 +13,25 @@ import {
 } from "react-icons/fa";
 import { IoIosArrowForward } from "react-icons/io";
 import Carousel from "react-multi-carousel";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { getRelatedProducts } from "../../../../app/slice/ProductSlice";
 import ProductContent from "./ProductContent";
+import ProductRelated from "./ProductRelated";
+import { PacmanLoader } from "react-spinners";
 
 const ProductDetail = ({ product }) => {
-  const [quantity, setQuantity] = useState(1);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const [quantity, setQuantity] = useState(1);
+  const { data, loading } = useSelector((state) => state.product);
+  const userInfo = useSelector((state) => state.auth.user);
+  useEffect(() => {
+    const controller = new AbortController();
+    dispatch(getRelatedProducts(product._id, { signal: controller.signal }));
+    return () => controller.abort();
+  }, [product, dispatch]);
   const increaseQuantity = () => {
     if (quantity >= product.stock) {
       toastObj.error("Out of Stock");
@@ -34,15 +45,19 @@ const ProductDetail = ({ product }) => {
     }
   };
   const handleAddToCart = () => {
-    dispatch(
-      addProductToCart({
-        userId: 1,
-        quantity,
-        productId: product._id,
-      })
-    );
-    toastObj.success("Add to cart success!");
-    setQuantity(1);
+    if (userInfo && userInfo._id) {
+      dispatch(
+        addProductToCart({
+          userId: userInfo._id,
+          quantity: 1,
+          productId: product._id,
+        })
+      );
+      toastObj.success("Add to cart success!");
+    } else {
+      toastObj.error("Please login first");
+      navigate("/login");
+    }
   };
   const responsive = {
     superLargeDesktop: {
@@ -74,6 +89,13 @@ const ProductDetail = ({ product }) => {
       items: 1,
     },
   };
+  if (loading === true)
+    return (
+      <div className="fixed inset-0 flex items-center justify-center w-full h-full transition-all duration-300">
+        <PacmanLoader />
+      </div>
+    );
+
   return (
     <>
       <section>
@@ -100,7 +122,7 @@ const ProductDetail = ({ product }) => {
               <div className="p-5 border">
                 <img
                   className="h-[400px] w-full"
-                  src={product.thumb?.fileName}
+                  src={product.thumb?.[0].fileName}
                   alt={product.name}
                 />
               </div>
@@ -111,15 +133,13 @@ const ProductDetail = ({ product }) => {
                   responsive={responsive}
                   transitionDuration={500}
                 >
-                  {[1, 2, 3, 4, 5].map((img, i) => {
+                  {product?.thumb.map((img, i) => {
                     return (
-                      <div key={i}>
+                      <div key={i} className="bg-slate-50">
                         <img
-                          className="h-[120px] cursor-pointer"
-                          src={
-                            "https://plus.unsplash.com/premium_photo-1699466748006-f8a8d7011c2c?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-                          }
-                          alt=""
+                          className="h-[100px] w-full cursor-pointer object-contain"
+                          src={img.fileName}
+                          alt={i}
                         />
                       </div>
                     );
@@ -259,7 +279,7 @@ const ProductDetail = ({ product }) => {
         </div>
       </section>
       <ProductContent product={product} />
-      {/* <ProductRelated relatedProducts={} /> */}
+      <ProductRelated relatedProducts={data.related} />
     </>
   );
 };

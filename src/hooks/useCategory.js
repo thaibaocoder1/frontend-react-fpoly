@@ -1,34 +1,20 @@
-import categoryApi from "@api/CategoryApi";
-import { CanceledError } from "axios";
-import { useEffect, useState } from "react";
+import { getAllCategory } from "@app/slice/CategorySlice";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const useCategory = () => {
-  const [categoryList, setCategoryList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const dispatch = useDispatch();
+  const { data, loading, error } = useSelector((state) => state.category);
 
   useEffect(() => {
-    const { request, cancel } = categoryApi.getAll();
-    const getCategoryList = async () => {
-      try {
-        setIsLoading(true);
-        const res = await request;
-        if (res && res.status === "success") {
-          setIsLoading(false);
-          const { data } = res;
-          setCategoryList(data);
-        }
-      } catch (error) {
-        if (error instanceof CanceledError) return;
-        setError(error.message);
-        setIsLoading(true);
-      }
+    const controller = new AbortController();
+    dispatch(getAllCategory({ signal: controller.signal }));
+    return () => {
+      return controller.abort();
     };
-    getCategoryList();
-    return () => cancel();
-  }, []);
+  }, [dispatch]);
 
-  return { categoryList, isLoading, error };
+  return { data, loading, error };
 };
 
 export default useCategory;

@@ -1,24 +1,31 @@
 import Rating from "@components/Rating/Rating";
-import { addProductToCart } from "@modules/client/Cart/CartSlice";
+import { addProductToCart } from "@app/slice/CartSlice";
 import { formatSalePrice } from "@utils/Format";
 import toastObj from "@utils/Toast";
 import PropTypes from "prop-types";
 import { FaEye, FaRegHeart } from "react-icons/fa";
 import { RiShoppingCartLine } from "react-icons/ri";
-import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 const ProductShop = ({ p, styles }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const userInfo = useSelector((state) => state.auth.user);
   const handleAddToCart = () => {
-    dispatch(
-      addProductToCart({
-        userId: 1,
-        quantity: 1,
-        productId: p._id,
-      })
-    );
-    toastObj.success("Add to cart success!");
+    if (userInfo && userInfo._id) {
+      dispatch(
+        addProductToCart({
+          userId: userInfo._id,
+          quantity: 1,
+          productId: p._id,
+        })
+      );
+      toastObj.success("Add to cart success!");
+    } else {
+      toastObj.error("Please login first");
+      navigate("/login");
+    }
   };
   return (
     <div
@@ -37,8 +44,10 @@ const ProductShop = ({ p, styles }) => {
       >
         <Link to={`detail/${p._id}`}>
           <img
-            className="h-[240px] rounded-md md:h-[270px] xs:h-[170px] w-full object-contain"
-            src={p.thumb.fileName}
+            className={`h-[200px] rounded-md md:h-[270px] xs:h-[170px] w-full ${
+              styles === "grid" ? "object-contain" : "object-cover"
+            }`}
+            src={p.thumb[0].fileName}
             alt={p.name}
           />
         </Link>

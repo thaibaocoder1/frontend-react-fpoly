@@ -1,32 +1,17 @@
-import productApi from "@api/ProductApi";
+import useProductSingle from "@hooks/useProductSingle";
 import ProductDetail from "@modules/client/Product/components/ProductDetail";
-import { useEffect, useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { NavLink, useParams } from "react-router-dom";
 
 const ShopDetail = () => {
   const { id } = useParams();
-  const [isLoading, setIsLoading] = useState(true);
-  const [product, setProduct] = useState({});
+  const { current } = useProductSingle(id);
 
-  useEffect(() => {
-    async function getProduct() {
-      setIsLoading(true);
-      try {
-        const res = await productApi.getOne(id);
-        if (res && res.status === "success") {
-          const { data } = res;
-          setProduct(data);
-          setIsLoading(false);
-        }
-      } catch (error) {
-        console.log(error);
-        setIsLoading(false);
-      }
-    }
-    getProduct();
-  }, [id]);
-
+  if (!current) {
+    return (
+      <div className="animate-spin w-8 h-8 border border-x-transparent"></div>
+    );
+  }
   return (
     <>
       <section
@@ -47,7 +32,7 @@ const ShopDetail = () => {
           </div>
         </div>
       </section>
-      {isLoading ? "Loading..." : <ProductDetail product={product} />}
+      <ProductDetail product={current} />
     </>
   );
 };

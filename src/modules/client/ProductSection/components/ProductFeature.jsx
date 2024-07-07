@@ -68,7 +68,7 @@ const ProductFeature = ({ title, products }) => {
                 >
                   <img
                     className="w-[110px] h-[110px] object-contain"
-                    src={item.thumb.fileName}
+                    src={item.thumb[0].fileName}
                     alt={item.name}
                   />
                   <div className="px-3 flex justify-start items-start gap-1 flex-col text-slate-600">

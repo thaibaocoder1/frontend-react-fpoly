@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 
 const ProductSkeleton = ({ length }) => {
-  return Array.from({ length }).map((_, index) => (
+  return Array.from(new Array(length)).map((_, index) => (
     <div key={index} className="shadow rounded-md max-w-sm w-full mx-auto">
       <div className="animate-pulse flex flex-col">
         <div className="rounded-t-md bg-slate-300 h-48 w-full"></div>

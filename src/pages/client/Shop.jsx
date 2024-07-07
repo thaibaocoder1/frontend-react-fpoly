@@ -1,27 +1,28 @@
 import useProduct from "@hooks/useProduct";
 import ListPage from "@modules/client/Product/pages/ListPage";
-import { filtersObj } from "@utils/Filters";
 import { useEffect, useState } from "react";
 import { IoIosArrowForward } from "react-icons/io";
 import { NavLink, useSearchParams } from "react-router-dom";
 
 const Shop = () => {
   const [searchParams] = useSearchParams();
+  const category = searchParams.get("category") || "";
   const [filters, setFilters] = useState({
-    ...filtersObj,
-    _category: searchParams.get("category") || "",
+    _page: 1,
+    _limit: 6,
+    _category: category,
   });
-  const { productList, pagination } = useProduct(filters);
-  const handleFiltersChange = (page) => {
-    setFilters((prev) => ({ ...prev, _page: page }));
-  };
+  const { data } = useProduct(filters);
   useEffect(() => {
-    const category = searchParams.get("category") || "";
     setFilters((prev) => ({
       ...prev,
       _category: category,
+      _page: category !== "" ? 1 : prev._page,
     }));
-  }, [searchParams]);
+  }, [category]);
+  const handleFiltersChange = (page) => {
+    setFilters((prev) => ({ ...prev, _page: page }));
+  };
   return (
     <>
       <section
@@ -43,8 +44,8 @@ const Shop = () => {
         </div>
       </section>
       <ListPage
-        products={productList}
-        pagination={pagination}
+        products={data.products}
+        pagination={data.pagination}
         onChange={handleFiltersChange}
       />
     </>

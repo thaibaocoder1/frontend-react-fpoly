@@ -1,4 +1,3 @@
-import useCategory from "@hooks/useCategory";
 import { Box, Button, Pagination, TextField } from "@mui/material";
 import PropTypes from "prop-types";
 import { useState } from "react";
@@ -6,31 +5,27 @@ import { AiFillStar } from "react-icons/ai";
 import { BsFillGridFill } from "react-icons/bs";
 import { CiStar } from "react-icons/ci";
 import { FaThList } from "react-icons/fa";
+import { useSelector } from "react-redux";
 import ProductList from "../components/ProductList";
 
 const ListPage = ({ products, pagination, onChange }) => {
   const [category, setCategory] = useState("");
   const [styles, setStyles] = useState("grid");
-  const { categoryList } = useCategory();
+  const [filter, setFilter] = useState(true);
 
-  const queryCategory = (e, value) => {
-    if (e.target.checked) {
-      setCategory(value);
-    } else {
-      setCategory("");
-    }
-  };
+  const { categories } = useSelector((state) => state.category.data);
+
+  const queryCategory = (e, value) =>
+    e.target.checked ? setCategory(value) : setCategory("");
   const handleChange = (e, page) => {
     if (onChange) onChange(page);
   };
-
   return (
     <section className="py-16">
       <div className="w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto">
-        {/* ${!filter ? "mb-6" : "mb-0"}  */}
-        <div className={`md:block hidden`}>
+        <div className={`md:block hidden ${!filter ? "mb-6" : "mb-0"}`}>
           <button
-            // onClick={() => setFilter(!filter)}
+            onClick={() => setFilter(!filter)}
             className="text-center w-full py-2 px-3 bg-indigo-500 text-white"
           >
             Filter Product
@@ -38,33 +33,35 @@ const ListPage = ({ products, pagination, onChange }) => {
         </div>
 
         <div className="w-full flex flex-wrap">
-          {/* ${
+          <div
+            className={`w-3/12 md-lg:w-4/12 md:w-full pr-8 ${
               filter
                 ? "md:h-0 md:overflow-hidden md:mb-6"
                 : "md:h-auto md:overflow-auto md:mb-0"
-            }  */}
-          <div className={`w-3/12 md-lg:w-4/12 md:w-full pr-8`}>
+            }`}
+          >
             <h2 className="text-3xl font-bold mb-3 text-slate-600">Category</h2>
             <div className="py-2">
-              {categoryList.map((c, i) => (
-                <div
-                  key={i}
-                  className="flex justify-start items-center gap-2 py-1"
-                >
-                  <input
-                    checked={category === c.title ? true : false}
-                    onChange={(e) => queryCategory(e, c.title)}
-                    type="checkbox"
-                    id={c.title}
-                  />
-                  <label
-                    className="text-slate-600 block cursor-pointer"
-                    htmlFor={c.title}
+              {categories.length > 0 &&
+                categories.map((c, i) => (
+                  <div
+                    key={i}
+                    className="flex justify-start items-center gap-2 py-1"
                   >
-                    {c.title}
-                  </label>
-                </div>
-              ))}
+                    <input
+                      checked={category === c.slug ? true : false}
+                      onChange={(e) => queryCategory(e, c.slug)}
+                      type="checkbox"
+                      id={c.title}
+                    />
+                    <label
+                      className="text-slate-600 block cursor-pointer"
+                      htmlFor={c.title}
+                    >
+                      {c.title}
+                    </label>
+                  </div>
+                ))}
             </div>
 
             <div className="py-2 flex flex-col gap-2">
@@ -221,8 +218,6 @@ const ListPage = ({ products, pagination, onChange }) => {
                 </div>
               </div>
             </div>
-
-            <div className="py-5 flex flex-col gap-4 md:hidden">Latest</div>
           </div>
 
           <div className="w-9/12 md-lg:w-8/12 md:w-full">
@@ -246,7 +241,7 @@ const ListPage = ({ products, pagination, onChange }) => {
                       onClick={() => setStyles("grid")}
                       className={`p-2 ${
                         styles === "grid" && "bg-slate-300"
-                      } text-slate-600 hover:bg-slate-300 cursor-pointer rounded-sm `}
+                      } text-slate-600 hover:bg-slate-300 cursor-pointer rounded-sm`}
                     >
                       <BsFillGridFill />
                     </div>
@@ -254,7 +249,7 @@ const ListPage = ({ products, pagination, onChange }) => {
                       onClick={() => setStyles("list")}
                       className={`p-2 ${
                         styles === "list" && "bg-slate-300"
-                      } text-slate-600 hover:bg-slate-300 cursor-pointer rounded-sm `}
+                      } text-slate-600 hover:bg-slate-300 cursor-pointer rounded-sm`}
                     >
                       <FaThList />
                     </div>
@@ -268,8 +263,8 @@ const ListPage = ({ products, pagination, onChange }) => {
 
               <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <Pagination
-                  count={pagination.totalPages}
-                  page={pagination.page}
+                  count={pagination.totalPages || 10}
+                  page={pagination.page || 1}
                   color="primary"
                   variant="outlined"
                   shape="rounded"

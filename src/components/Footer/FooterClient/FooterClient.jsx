@@ -12,7 +12,7 @@ const FooterClient = () => {
             <img
               className="w-[190px] h-[70px]  sm:w-full"
               src={logo}
-              alt="logo"
+              alt="BSMART"
             />
             <ul className="flex flex-col gap-2 text-slate-600">
               <li>Address : FPT Polytechnic College</li>
@@ -25,7 +25,7 @@ const FooterClient = () => {
         <div className="w-5/12 lg:w-8/12 sm:w-full">
           <div className="flex justify-center sm:justify-start sm:mt-6 w-full">
             <div>
-              <h2 className="font-bold text-lg mb-2">Usefull Links </h2>
+              <h2 className="font-bold text-lg mb-2">Usefull Links</h2>
               <div className="flex justify-between gap-[80px] lg:gap-[40px]">
                 <ul className="flex flex-col gap-2 text-slate-600 text-sm font-semibold">
                   <li>
@@ -124,14 +124,14 @@ const FooterClient = () => {
 
       <div className="w-[90%] flex flex-wrap justify-center items-center text-slate-600 mx-auto py-5 text-center">
         <span className="sm:text-sm whitespace-nowrap">
-          Copyright @ 2024 All Rights Reserved - baoDeV{" "}
+          Copyright @ 2024 All Rights Reserved - baoDeV
         </span>
       </div>
 
       <div className="hidden fixed md-lg:block w-[50px] h-[110px] bottom-3 right-2 bg-white rounded-full p-2">
         <div className="w-full h-full flex gap-3 flex-col justify-center items-center">
-          <div
-            // onClick={() => navigate(userInfo ? "/card" : "/login")}
+          <Link
+            to={"/cart"}
             className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]"
           >
             <span className="text-xl text-green-500">
@@ -142,12 +142,10 @@ const FooterClient = () => {
                 {card_product_count}
               </div>
             )} */}
-          </div>
+          </Link>
 
-          <div
-            // onClick={() =>
-            //   navigate(userInfo ? "/dashboard/my-wishlist" : "/login")
-            // }
+          <Link
+            to={"/dashboard/wishlist"}
             className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]"
           >
             <span className="text-xl text-green-500">
@@ -158,7 +156,7 @@ const FooterClient = () => {
                 {wishlist_count}
               </div>
             )} */}
-          </div>
+          </Link>
         </div>
       </div>
     </footer>

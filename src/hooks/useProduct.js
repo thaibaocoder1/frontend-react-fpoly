@@ -1,8 +1,10 @@
-import productApi from "@api/ProductApi";
-import { CanceledError } from "axios";
-import { useEffect, useMemo, useState } from "react";
+import { getProductsWithParams } from "@app/slice/ProductSlice";
+import { useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const useProduct = (filters) => {
+  const dispatch = useDispatch();
+  const { data, loading, error } = useSelector((state) => state.product);
   const config = useMemo(() => {
     return {
       params: {
@@ -12,38 +14,14 @@ const useProduct = (filters) => {
       },
     };
   }, [filters]);
-  const [productList, setProductList] = useState([]);
-  const [pagination, setPagination] = useState({
-    page: 1,
-    limit: 6,
-    totalPages: 20,
-  });
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
 
   useEffect(() => {
-    const { request, cancel } = productApi.getWithParams(config);
-    const getProductList = async () => {
-      try {
-        setIsLoading(true);
-        const res = await request;
-        if (res && res.status === "success") {
-          const { data, pagination } = res;
-          setProductList(data);
-          setPagination(pagination);
-          setIsLoading(false);
-        }
-      } catch (error) {
-        if (error instanceof CanceledError) return;
-        setError(error.message);
-        setIsLoading(true);
-      }
-    };
-    getProductList();
-    return () => cancel();
-  }, [config]);
+    const controller = new AbortController();
+    dispatch(getProductsWithParams(config, { signal: controller.signal }));
+    return () => controller.abort();
+  }, [config, dispatch]);
 
-  return { productList, pagination, isLoading, error };
+  return { data, loading, error };
 };
 
 export default useProduct;

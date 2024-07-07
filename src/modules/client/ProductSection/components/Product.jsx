@@ -1,24 +1,31 @@
-import { addProductToCart } from "@modules/client/Cart/CartSlice";
+import { addProductToCart } from "@app/slice/CartSlice";
 import { formatOriginalPrice, formatSalePrice } from "@utils/Format";
 import toastObj from "@utils/Toast";
 import PropTypes from "prop-types";
 import { FaEye, FaRegHeart } from "react-icons/fa";
 import { RiShoppingCartLine } from "react-icons/ri";
-import { useDispatch } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Product = ({ product }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const userInfo = useSelector((state) => state.auth.user);
 
   const handleAddToCart = () => {
-    dispatch(
-      addProductToCart({
-        userId: 1,
-        quantity: 1,
-        productId: product._id,
-      })
-    );
-    toastObj.success("Add to cart success!");
+    if (userInfo && userInfo._id) {
+      dispatch(
+        addProductToCart({
+          userId: userInfo._id,
+          quantity: 1,
+          productId: product._id,
+        })
+      );
+      toastObj.success("Add to cart success!");
+    } else {
+      toastObj.error("Please login first");
+      navigate("/login");
+    }
   };
   return (
     <div className="hover:-translate-y-2 group transition-all duration-500 hover:shadow-md shadow rounded-md max-w-sm w-full mx-auto">
@@ -33,7 +40,7 @@ const Product = ({ product }) => {
           )}
           <NavLink to={`shops/detail/${product._id}`}>
             <img
-              src={product.thumb.fileName}
+              src={product.thumb[0].fileName}
               alt={product.name}
               className="sm:w-full w-full h-full object-contain mx-auto cursor-pointer"
             />

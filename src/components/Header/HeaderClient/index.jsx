@@ -22,11 +22,11 @@ import logo from "../../../assets/react.svg";
 import { useSelector } from "react-redux";
 
 const HeaderClient = () => {
-  const [state, setState] = useState(false);
+  const userInfo = useSelector((state) => state.auth.user);
   const [categoryShow, setCategoryShow] = useState(false);
   const [showSidebar, setShowSidebar] = useState(false);
 
-  const { categoryList } = useCategory();
+  const { data } = useCategory();
   const cartSlice = useSelector((state) => state.cart.data);
 
   const { pathname } = useLocation();
@@ -70,7 +70,7 @@ const HeaderClient = () => {
                   </a>
                 </div>
                 <div className="flex group cursor-pointer text-slate-800 text-sm justify-center items-center gap-1 relative after:h-[18px] after:w-[1px] after:bg-[#afafaf] after:-right-[16px] after:absolute before:absolute before:h-[18px] before:bg-[#afafaf] before:w-[1px] before:-left-[20px]">
-                  <img src={logo} alt="" />
+                  <img src={logo} alt="BSMART" />
                   <span>
                     <IoMdArrowDropdown />
                   </span>
@@ -80,7 +80,7 @@ const HeaderClient = () => {
                   </ul>
                 </div>
 
-                {state ? (
+                {userInfo?._id ? (
                   <Link
                     className="flex cursor-pointer justify-center items-center gap-2 text-sm text-black"
                     to="/dashboard"
@@ -88,7 +88,7 @@ const HeaderClient = () => {
                     <span>
                       <FaUser />
                     </span>
-                    <span>{state.name}</span>
+                    <span>{userInfo?.username}</span>
                   </Link>
                 ) : (
                   <Link
@@ -155,12 +155,12 @@ const HeaderClient = () => {
                   <li>
                     <NavLink
                       className={`p-2 block ${
-                        pathname === "/blog"
+                        pathname === "/policy"
                           ? "text-[#059473]"
                           : "text-slate-600"
                       }`}
                     >
-                      Blog
+                      Policy
                     </NavLink>
                   </li>
                   <li>
@@ -182,7 +182,7 @@ const HeaderClient = () => {
                           : "text-slate-600"
                       }`}
                     >
-                      Contact Us
+                      Contact
                     </NavLink>
                   </li>
                 </ul>
@@ -191,7 +191,7 @@ const HeaderClient = () => {
                   <div className="flex justify-center gap-5">
                     <div
                       // onClick={() =>
-                      //   navigate(userInfo ? "/dashboard/my-wishlist" : "/login")
+                      //   navigate(userInfo? ? "/dashboard/my-wishlist" : "/login")
                       // }
                       className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]"
                     >
@@ -247,7 +247,7 @@ const HeaderClient = () => {
                   <li>English</li>
                 </ul>
               </div>
-              {state ? (
+              {userInfo?._id ? (
                 <Link
                   className="flex cursor-pointer justify-center items-center gap-2 text-sm text-black"
                   to="/dashboard"
@@ -255,7 +255,7 @@ const HeaderClient = () => {
                   <span>
                     <FaUser />
                   </span>
-                  <span>{state.name}</span>
+                  <span>{userInfo?.username}</span>
                 </Link>
               ) : (
                 <Link
@@ -265,7 +265,7 @@ const HeaderClient = () => {
                   <span>
                     <FaLock />
                   </span>
-                  <span>Login </span>
+                  <span>Login</span>
                 </Link>
               )}
             </div>
@@ -295,10 +295,10 @@ const HeaderClient = () => {
               <li>
                 <NavLink
                   className={`p-2 block ${
-                    pathname === "/blog" ? "text-[#059473]" : "text-slate-600"
+                    pathname === "/policy" ? "text-[#059473]" : "text-slate-600"
                   }`}
                 >
-                  Blog
+                  Policy
                 </NavLink>
               </li>
               <li>
@@ -318,7 +318,7 @@ const HeaderClient = () => {
                       : "text-slate-600"
                   }`}
                 >
-                  Contact Us
+                  Contact
                 </NavLink>
               </li>
             </ul>
@@ -369,7 +369,7 @@ const HeaderClient = () => {
             <div className="bg-white relative">
               <div
                 onClick={() => setCategoryShow(!categoryShow)}
-                className="h-[50px] bg-[#059473] text-white flex justify-center md-lg:justify-between md-lg:px-6 items-center gap-3 font-bold text-md cursor-pointer  select-none"
+                className="h-[50px] bg-[#059473] text-white flex justify-center md-lg:justify-between md-lg:px-6 items-center gap-3 font-bold text-md cursor-pointer select-none"
               >
                 <div className="flex justify-center items-center gap-3">
                   <span>
@@ -388,7 +388,7 @@ const HeaderClient = () => {
                 } overflow-hidden transition-all md-lg:relative duration-500 absolute z-[99999] bg-[#dbf3ed] w-full border-x`}
               >
                 <ul className="py-2 text-slate-600 font-medium">
-                  {categoryList.map((c, i) => {
+                  {data.categories.map((c, i) => {
                     return (
                       <li
                         key={i}
