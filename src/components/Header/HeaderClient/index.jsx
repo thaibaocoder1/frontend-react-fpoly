@@ -13,13 +13,14 @@ import {
 import { FaCartShopping, FaHeart, FaTwitter } from "react-icons/fa6";
 import {
   IoIosArrowDown,
+  IoIosArrowUp,
   IoMdArrowDropdown,
   IoMdPhonePortrait,
 } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
+import { useSelector } from "react-redux";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../../assets/react.svg";
-import { useSelector } from "react-redux";
 
 const HeaderClient = () => {
   const userInfo = useSelector((state) => state.auth.user);
@@ -378,7 +379,7 @@ const HeaderClient = () => {
                   <span>All Category</span>
                 </div>
                 <span className="pt-1">
-                  <IoIosArrowDown />
+                  {categoryShow ? <IoIosArrowUp /> : <IoIosArrowDown />}
                 </span>
               </div>
 

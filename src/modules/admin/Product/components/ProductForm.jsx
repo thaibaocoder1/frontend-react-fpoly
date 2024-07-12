@@ -9,6 +9,7 @@ import FileField from "./FormControlProduct/FileField";
 import InputField from "./FormControlProduct/InputField";
 import SelectField from "./FormControlProduct/SelectField";
 import TextareaField from "./FormControlProduct/TextareaField";
+import slugify from "slugify";
 
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
 const schema = (isEditMode) =>
@@ -74,6 +75,14 @@ const ProductForm = ({ onSubmit, current }) => {
     resolver: yupResolver(schema(!!current), { abortEarly: false }),
   });
   const onSubmitData = async (data) => {
+    data.slug = slugify(data.name, {
+      replacement: "-",
+      remove: undefined,
+      lower: false,
+      strict: false,
+      locale: "vi",
+      trim: true,
+    });
     const formData = convertObjToFormData(data);
     onSubmit && (await onSubmit(formData));
   };
@@ -148,26 +157,28 @@ const ProductForm = ({ onSubmit, current }) => {
       </section>
       <div>
         <FileField form={form} name="imageUrl" current={current} />
-        <button
-          className="bg-red-500 w-[225px] hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3"
-          type="submit"
-        >
-          Add Product
-        </button>
-        <button
-          className="bg-blue-500 w-[225px] hover:shadow-blue-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3 ml-5"
-          type="button"
-          onClick={handleResetForm}
-        >
-          Reset form
-        </button>
-        <button
-          className="bg-slate-500 w-[225px] hover:shadow-slate-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3 ml-5"
-          type="button"
-          onClick={() => navigate("..")}
-        >
-          Back
-        </button>
+        <div className="flex">
+          <button
+            className="bg-red-500 w-1/3 hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3"
+            type="submit"
+          >
+            Submit
+          </button>
+          <button
+            className="bg-blue-500 w-1/3 hover:shadow-blue-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3 ml-5"
+            type="button"
+            onClick={handleResetForm}
+          >
+            Reset form
+          </button>
+          <button
+            className="bg-slate-500 w-1/3 hover:shadow-slate-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3 ml-5"
+            type="button"
+            onClick={() => navigate("..")}
+          >
+            Back
+          </button>
+        </div>
       </div>
     </form>
   );

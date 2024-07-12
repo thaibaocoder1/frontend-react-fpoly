@@ -1,5 +1,5 @@
 import { getProductsWithParams } from "@app/slice/ProductSlice";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const useProduct = (filters) => {
@@ -11,14 +11,19 @@ const useProduct = (filters) => {
         _page: filters?._page,
         _limit: filters?._limit,
         _category: filters?._category,
+        _search: filters?._search,
       },
     };
   }, [filters]);
-
+  const mountedRef = useRef(false);
   useEffect(() => {
-    const controller = new AbortController();
-    dispatch(getProductsWithParams(config, { signal: controller.signal }));
-    return () => controller.abort();
+    let promise;
+    if (mountedRef.current) {
+      promise = dispatch(getProductsWithParams(config));
+    } else {
+      mountedRef.current = true;
+    }
+    return () => promise && promise.abort();
   }, [config, dispatch]);
 
   return { data, loading, error };

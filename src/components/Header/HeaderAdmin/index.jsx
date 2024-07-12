@@ -1,8 +1,10 @@
 import { FaList } from "react-icons/fa";
 import PropTypes from "prop-types";
 import logo from "../../../assets/react.svg";
+import { useSelector } from "react-redux";
 
 const HeaderAdmin = ({ showSidebar, setShowSidebar }) => {
+  const userInfo = useSelector((state) => state.auth.user);
   return (
     <div className="fixed top-0 left-0 w-full py-5 px-2 lg:px-7 z-40">
       <div
@@ -34,23 +36,27 @@ const HeaderAdmin = ({ showSidebar, setShowSidebar }) => {
           <div className="flex justify-center items-center">
             <div className="flex justify-center items-center gap-3">
               <div className="flex justify-center items-center flex-col text-end">
-                <h2 className="text-md font-bold">Admin</h2>
-                <span className="text-[14px] w-full font-normal">Admin</span>
+                <h2 className="text-md font-bold">
+                  Hello! {userInfo.username}
+                </h2>
+                <span className="text-[14px] w-full font-normal">
+                  {userInfo.role}
+                </span>
               </div>
 
-              {/* {userInfo.role === "admin" ? (
+              {userInfo ? (
                 <img
                   className="w-[45px] h-[45px] rounded-full overflow-hidden"
-                  src="http://localhost:3001/images/admin.jpg"
-                  alt=""
+                  src={logo}
+                  alt={userInfo.username}
                 />
               ) : (
-              )} */}
-              <img
-                className="w-[45px] h-[45px] rounded-full overflow-hidden"
-                src={logo}
-                alt="BSMART"
-              />
+                <img
+                  className="w-[45px] h-[45px] rounded-full overflow-hidden"
+                  src={logo}
+                  alt="BSMART"
+                />
+              )}
             </div>
           </div>
         </div>

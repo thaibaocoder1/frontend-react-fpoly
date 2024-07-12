@@ -1,9 +1,9 @@
+import { login } from "@app/slice/AuthSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
 import toastObj from "@utils/Toast";
-import LoginForm from "../LoginForm/LoginForm";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../AuthSlice";
-import { unwrapResult } from "@reduxjs/toolkit";
+import LoginForm from "../LoginForm/LoginForm";
 
 function Login() {
   const dispatch = useDispatch();
@@ -16,14 +16,10 @@ function Login() {
       const data = unwrapResult(resultAction);
       data && navigate("/");
     } catch (error) {
-      toastObj.error(error.message);
+      toastObj.error(error);
     }
   };
-  return (
-    <div>
-      <LoginForm onSubmit={handleSubmit}></LoginForm>
-    </div>
-  );
+  return <LoginForm onSubmit={handleSubmit}></LoginForm>;
 }
 
 export default Login;

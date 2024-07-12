@@ -11,7 +11,8 @@
       "@constants/*": ["constants/*"],
       "@utils/*": ["utils/*"],
       "@routes/*": ["routes/*"],
-      "@hooks/*": ["hooks/*"]
+      "@hooks/*": ["hooks/*"],
+      "@assets/*": ["assets/*"]
     }
   },
   "include": ["src/**/*"]

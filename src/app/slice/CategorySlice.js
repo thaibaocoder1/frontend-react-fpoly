@@ -1,18 +1,16 @@
 import categoryApi from "@api/CategoryApi";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { CanceledError } from "axios";
 
 export const getAllCategory = createAsyncThunk(
   "category/getAllCategory",
-  async (_, { rejectWithValue, fulfillWithValue, signal }) => {
+  async (payload, { rejectWithValue, fulfillWithValue, signal }) => {
     try {
-      const response = await categoryApi.getAll(signal);
+      const response = await categoryApi.getAll(payload, signal);
       return fulfillWithValue({
         data: response.data,
         pagination: response.pagination,
       });
     } catch (error) {
-      if (error instanceof CanceledError) return;
       return rejectWithValue(error.message);
     }
   }

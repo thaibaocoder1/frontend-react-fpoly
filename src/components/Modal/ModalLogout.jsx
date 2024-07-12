@@ -39,7 +39,7 @@ export default function ModalLogout({ open, handleClose, onConfirm }) {
         open={open}
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Logout Dialog
+          Do you want to logout?
         </DialogTitle>
         <IconButton
           aria-label="close"

@@ -1,9 +1,14 @@
 export const convertBase64 = (file) => {
-  const reader = new FileReader();
-  reader.onload = () => {
-    return reader.result.toString();
-  };
-  reader.readAsDataURL(file);
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result.toString());
+    };
+    reader.onerror = (error) => {
+      reject(error);
+    };
+    reader.readAsDataURL(file);
+  });
 };
 export const converMutipletBase64 = (files) => {
   return new Promise((resolve, reject) => {
@@ -41,12 +46,16 @@ export const convertObjToFormData = (data) => {
     if (key === "imageUrl") {
       if (Array.isArray(data[key])) {
         data[key].forEach((file) => {
-          if (file instanceof File) {
+          if (file instanceof File && !file._id) {
             formData.append(key, file);
+          } else {
+            formData.append(key, file._id);
           }
         });
       } else {
-        formData.append(key, data[key][0]);
+        const conditon =
+          data[key] instanceof FileList ? data[key][0] : data[key];
+        formData.append(key, conditon);
       }
     } else {
       formData.append(key, data[key]);

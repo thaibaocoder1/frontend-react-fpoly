@@ -2,7 +2,7 @@ import { formatSalePrice } from "@utils/Format";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
-const ProductItem = ({ product, onChange }) => {
+const ProductItem = ({ product }) => {
   return (
     <tr>
       <td scope="row" className="py-1 px-4 font-medium whitespace-nowrap">
@@ -51,12 +51,6 @@ const ProductItem = ({ product, onChange }) => {
           >
             View
           </Link>
-          <span
-            onClick={() => onChange && onChange()}
-            className="text-[#fafafa] p-[6px] bg-red-500 rounded hover:shadow-lg cursor-pointer hover:shadow-red-500/50"
-          >
-            Delete
-          </span>
         </div>
       </td>
     </tr>
@@ -65,7 +59,6 @@ const ProductItem = ({ product, onChange }) => {
 
 ProductItem.propTypes = {
   product: PropTypes.object.isRequired,
-  onChange: PropTypes.func,
 };
 
 export default ProductItem;

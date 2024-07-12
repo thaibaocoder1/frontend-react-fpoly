@@ -38,7 +38,7 @@ const ProductContent = ({ product }) => {
               {state === "reviews" ? (
                 <ProductReviews product={product} />
               ) : (
-                <p className="py-5 text-slate-600">{product.description}</p>
+                <p className="py-5 text-slate-600">{product.content}</p>
               )}
             </div>
           </div>

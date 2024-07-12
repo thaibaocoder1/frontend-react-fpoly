@@ -5,6 +5,7 @@ import toastObj from "@utils/Toast";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import slugify from "slugify";
 import * as yup from "yup";
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
 
@@ -36,7 +37,7 @@ const CategoryForm = () => {
     setValue,
     clearErrors,
   } = useForm({
-    mode: "all",
+    mode: "onBlur",
     resolver: yupResolver(schema(!!currentCategory)),
   });
 
@@ -53,21 +54,29 @@ const CategoryForm = () => {
     isShowDialog === false && clearErrors(["title", "imageUrl"]);
   }, [currentCategory, setValue, clearErrors, isShowDialog]);
 
-  const onSubmit = (data) => {
-    if (currentCategory && !data.imageUrl[0]) {
-      const newCategory = {
-        ...data,
-        id: currentCategory._id,
-        imageUrl: currentCategory?.imageUrl,
-      };
+  const onSubmit = async (data) => {
+    data.slug = slugify(data.title, {
+      replacement: "-",
+      remove: undefined,
+      lower: true,
+      strict: false,
+      locale: "vi",
+      trim: true,
+    });
+    !data.imageUrl[0] && (data.imageUrl = currentCategory.imageUrl);
+    let newCategory = convertObjToFormData(data);
+    if (currentCategory) {
+      newCategory.append("id", currentCategory?._id);
       dispatch(updateCategory(newCategory));
     } else {
-      convertBase64(data.imageUrl[0]);
+      const imageUrl = await convertBase64(data.imageUrl[0]);
+      setImage(imageUrl);
       const formData = convertObjToFormData(data);
       dispatch(createCategory(formData));
     }
     toastObj.success("Handle success!");
     reset();
+    setImage("");
   };
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -80,7 +89,7 @@ const CategoryForm = () => {
           {...register("title")}
           placeholder="Category name"
         />
-        <p className="text-red-500 text-sm">{errors.title?.message}</p>
+        <p className="text-white text-sm">{errors.title?.message}</p>
       </div>
 
       <div>

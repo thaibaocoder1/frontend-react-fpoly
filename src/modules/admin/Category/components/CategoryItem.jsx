@@ -34,13 +34,13 @@ const CategoryItem = ({ category, onClick }) => {
               onClick={() => {
                 dispatch(getOneCategory(category._id));
               }}
-              className="p-[6px] cursor-pointer bg-sky-500 rounded hover:shadow-lg hover:shadow-sky-500/50"
+              className="text-white p-[6px] cursor-pointer bg-sky-500 rounded hover:shadow-lg hover:shadow-sky-500/50"
             >
               Edit
             </span>
             <span
               onClick={() => setOpen(true)}
-              className="p-[6px] bg-red-500 rounded hover:shadow-lg hover:shadow-red-500/50 cursor-pointer"
+              className="text-white p-[6px] bg-red-500 rounded hover:shadow-lg hover:shadow-red-500/50 cursor-pointer"
             >
               Delete
             </span>

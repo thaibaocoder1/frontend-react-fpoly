@@ -1,27 +1,76 @@
-import { useState } from "react";
-import Swal from "sweetalert2";
-import withReactContent from "sweetalert2-react-content";
+import * as React from "react";
+import Button from "@mui/material/Button";
+import { styled } from "@mui/material/styles";
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import Typography from "@mui/material/Typography";
+import PropTypes from "prop-types";
 
-const ModalConfirmCart = () => {
-  const [inputValue, setInputValue] = useState("");
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
 
-  const showSwal = () => {
-    withReactContent(Swal).fire({
-      title: <i>Input something</i>,
-      input: "text",
-      inputValue,
-      preConfirm: () => {
-        setInputValue(Swal.getInput()?.value || "");
-      },
-    });
+ModalConfirmCart.propTypes = {
+  open: PropTypes.bool,
+  item: PropTypes.object,
+  handleClose: PropTypes.func,
+  onConfirm: PropTypes.func,
+};
+
+export default function ModalConfirmCart({
+  open,
+  item,
+  handleClose,
+  onConfirm,
+}) {
+  const handleClickConfirm = () => {
+    if (onConfirm) onConfirm(item);
+    handleClose();
   };
 
   return (
-    <>
-      <button onClick={showSwal}>Show SweetAlert2 modal</button>
-      <div>Your input: {inputValue}</div>
-    </>
+    <React.Fragment>
+      <BootstrapDialog
+        onClose={handleClose}
+        aria-labelledby="customized-dialog-title"
+        open={open}
+      >
+        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+          Do you want to delete this product?
+        </DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent dividers sx={{ minWidth: "500px" }}>
+          <Typography gutterBottom>
+            This product will be removed out of your cart. Continue?
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleClickConfirm} color="warning">
+            Confirm
+          </Button>
+        </DialogActions>
+      </BootstrapDialog>
+    </React.Fragment>
   );
-};
-
-export default ModalConfirmCart;
+}

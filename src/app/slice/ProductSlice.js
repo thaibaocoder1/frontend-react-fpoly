@@ -1,6 +1,5 @@
 import productApi from "@api/ProductApi";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { CanceledError } from "axios";
 
 export const getProductsWithParams = createAsyncThunk(
   "product/getProductsWithParams",
@@ -12,7 +11,6 @@ export const getProductsWithParams = createAsyncThunk(
         pagination: response.pagination,
       });
     } catch (error) {
-      if (error instanceof CanceledError) return;
       return rejectWithValue(error.message);
     }
   }
@@ -24,7 +22,6 @@ export const getProductsNoParams = createAsyncThunk(
       const response = await productApi.getAll(signal);
       return fulfillWithValue(response.data);
     } catch (error) {
-      if (error instanceof CanceledError) return;
       return rejectWithValue(error.message);
     }
   }
@@ -36,7 +33,6 @@ export const getRelatedProducts = createAsyncThunk(
       const response = await productApi.getRelatedProducts(payload, signal);
       return fulfillWithValue(response.data);
     } catch (error) {
-      if (error instanceof CanceledError) return;
       return rejectWithValue(error.message);
     }
   }
@@ -48,7 +44,6 @@ export const getOneProduct = createAsyncThunk(
       const res = await productApi.getOne(payload, signal);
       return fulfillWithValue(res.data);
     } catch (error) {
-      if (error instanceof CanceledError) return;
       return rejectWithValue(error.message);
     }
   }

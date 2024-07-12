@@ -3,24 +3,32 @@ import { useState } from "react";
 import ProductItem from "./ProductItem";
 import { Outlet } from "react-router-dom";
 import { Pagination } from "@mui/material";
+import SearchItem from "@components/SearchItem/SearchItem";
 
 const ProductList = () => {
   const [filters, setFilters] = useState({
     _page: 1,
     _limit: 6,
+    _search: "",
   });
   const { data } = useProduct(filters);
-  const handleFiltersChange = () => {
-    console.log("changes");
-  };
   const handlePageChange = (_, page) => {
     setFilters((prev) => ({ ...prev, _page: page }));
+  };
+  const handleSearchChange = (value) => {
+    setFilters((prev) => ({ ...prev, _search: value }));
   };
 
   return (
     <>
       <div className="w-full">
         <div className="w-full p-4 bg-white rounded-md">
+          <div className="flex justify-between items-center">
+            <h3 className="text-slate-600 bg-slate-300 p-2 rounded-md">
+              Search
+            </h3>
+            <SearchItem onChange={handleSearchChange} />
+          </div>
           <div className="relative overflow-x-auto">
             <table className="w-full text-sm text-left">
               <thead className="text-sm text-black uppercase border-b border-slate-700">
@@ -57,11 +65,7 @@ const ProductList = () => {
               <tbody>
                 {data.products.length > 0 &&
                   data.products.map((item) => (
-                    <ProductItem
-                      key={item._id}
-                      product={item}
-                      onChange={handleFiltersChange}
-                    />
+                    <ProductItem key={item._id} product={item} />
                   ))}
               </tbody>
             </table>

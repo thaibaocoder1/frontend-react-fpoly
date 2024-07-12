@@ -1,7 +1,8 @@
-import authReducer from "@modules/client/Auth/AuthSlice";
+import authReducer from "@app/slice/AuthSlice";
 import cartReducer from "@app/slice/CartSlice";
 import productReducer from "@app/slice/ProductSlice";
 import categoryReducer from "@app/slice/CategorySlice";
+import accountReducer from "@app/slice/AccountSlice";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
   FLUSH,
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
   cart: cartReducer,
   product: productReducer,
   category: categoryReducer,
+  account: accountReducer,
 });
 
 const persistConfig = {

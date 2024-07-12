@@ -32,9 +32,7 @@ const ProductAddEdit = () => {
     }
   };
   useEffect(() => {
-    if (id) {
-      dispatch(getOneProduct(id));
-    }
+    id && dispatch(getOneProduct(id));
   }, [id, dispatch]);
   useEffect(() => {
     if (isHasError) {
@@ -63,7 +61,5 @@ const ProductAddEdit = () => {
     </div>
   );
 };
-
-ProductAddEdit.propTypes = {};
 
 export default ProductAddEdit;

@@ -17,6 +17,7 @@ const FileField = ({ name, form, current }) => {
       (img) => img._id !== item._id
     );
     setImageList(imageListClone);
+    form.setValue("imageUrl", imageListClone);
   };
   return (
     <>
@@ -29,10 +30,7 @@ const FileField = ({ name, form, current }) => {
           <Controller
             name={name}
             control={control}
-            render={({
-              field: { onChange, onBlur },
-              fieldState: { error },
-            }) => (
+            render={({ field: { onChange }, fieldState: { error } }) => (
               <>
                 <input
                   type="file"
@@ -46,9 +44,8 @@ const FileField = ({ name, form, current }) => {
                       Array.from(files)
                     );
                     setImageList([...imageList, ...images]);
-                    return onChange([...files, ...imageList]);
+                    return onChange([...imageList, ...files]);
                   }}
-                  onBlur={onBlur}
                 />
                 {error && (
                   <p className="text-red-500 text-sm">{error.message}</p>
@@ -63,12 +60,12 @@ const FileField = ({ name, form, current }) => {
           />
         </label>
       </div>
-      <div className="grid grid-cols-5 md-lg:grid-cols-3 sm:grid-cols-1 sm:w-full gap-4">
+      <div className="grid grid-cols-5 md-lg:grid-cols-3 sm:w-full gap-4">
         {imageList.length > 0
           ? imageList.map((item, index) => (
               <div
                 key={index}
-                className="flex justify-center items-center flex-col h-[140px] cursor-pointer border border-dashed border-slate-500 hover:border-red-500 w-[140px] mb-4 relative"
+                className="flex justify-center items-center flex-col h-[140px] cursor-pointer border border-dashed border-slate-500 hover:border-red-500 w-full mb-4 relative"
               >
                 <div
                   className="absolute w-5 h-5 bg-red-500 right-0 top-0 -translate-y-1/2 translate-x-1/2 text-white flex items-center justify-center z-50"
@@ -79,7 +76,7 @@ const FileField = ({ name, form, current }) => {
                 <img
                   src={typeof item === "string" ? item : item.fileName}
                   alt="image"
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover"
                 />
               </div>
             ))

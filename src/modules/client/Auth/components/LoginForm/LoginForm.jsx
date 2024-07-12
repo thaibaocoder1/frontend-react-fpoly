@@ -12,26 +12,24 @@ import * as yup from "yup";
 LoginForm.propTypes = {
   onSubmit: PropTypes.func,
 };
-
 const defaultTheme = createTheme();
-
+const schema = yup.object({
+  email: yup
+    .string()
+    .required("Please enter email")
+    .email("Please enter a valid email"),
+  password: yup
+    .string()
+    .required("Please enter password")
+    .min(6, "Please enter at least 6 characters"),
+});
 function LoginForm(props) {
-  const schema = yup.object({
-    email: yup
-      .string()
-      .required("Please enter email")
-      .email("Please enter a valid email"),
-    password: yup
-      .string()
-      .required("Please enter password")
-      .min(6, "Please enter at least 6 characters"),
-  });
   const form = useForm({
     defaultValues: {
       email: "",
       password: "",
     },
-    resolver: yupResolver(schema),
+    resolver: yupResolver(schema, { abortEarly: false }),
   });
   const handleSubmit = async (values) => {
     const { onSubmit } = props;
@@ -58,12 +56,8 @@ function LoginForm(props) {
           label="Email"
           form={form}
           autoComplete="email"
-        ></InputField>
-        <PasswordField
-          name="password"
-          label="Password"
-          form={form}
-        ></PasswordField>
+        />
+        <PasswordField name="password" label="Password" form={form} />
         <Button
           disabled={!isValid}
           sx={{ width: "100%" }}

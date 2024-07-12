@@ -1,9 +1,9 @@
 import axiosClient from "./AxiosClient";
 
 const categoryApi = {
-  async getAll(config = {}) {
+  async getAll(params, config = {}) {
     const url = "/catalogs";
-    const request = axiosClient.get(url, { config });
+    const request = axiosClient.get(url, { ...params, config });
     return await request;
   },
   async getOne(id) {
@@ -22,7 +22,11 @@ const categoryApi = {
   },
   async update(data) {
     const url = "/catalogs";
-    const request = axiosClient.patch(url + "/" + data.id, data);
+    const request = axiosClient.patch(url + "/" + data.get("id"), data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return await request;
   },
   async remove(id) {

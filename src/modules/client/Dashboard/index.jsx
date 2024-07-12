@@ -7,8 +7,9 @@ import { IoIosHome, IoMdLogOut } from "react-icons/io";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { logout } from "../Auth/AuthSlice";
+import { logout } from "../../../app/slice/AuthSlice";
 import { useState } from "react";
+import { clearCart } from "@app/slice/CartSlice";
 
 const DashboardFeature = ({ filterShow }) => {
   const navigate = useNavigate();
@@ -20,10 +21,11 @@ const DashboardFeature = ({ filterShow }) => {
     try {
       const action = logout(userInfo._id);
       const resultAction = await dispatch(action);
-      const data = unwrapResult(resultAction);
-      data && navigate("/login");
+      dispatch(clearCart());
+      unwrapResult(resultAction);
+      navigate("/login");
     } catch (error) {
-      toastObj.error(error.message);
+      toastObj.error(error);
     }
   };
   return (
