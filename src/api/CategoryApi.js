@@ -3,8 +3,8 @@ import axiosClient from "./AxiosClient";
 const categoryApi = {
   async getAll(params, config = {}) {
     const url = "/catalogs";
-    const request = axiosClient.get(url, { ...params, config });
-    return await request;
+    const request = await axiosClient.get(url, { ...params, signal: config });
+    return request;
   },
   async getOne(id) {
     const url = "/catalogs";

@@ -30,14 +30,14 @@ const CartItem = ({ pt, handleChangeQuantity, handleDelete }) => {
           <div className="flex bg-slate-200 h-[30px] justify-center items-center text-xl">
             <div
               onClick={() => handleChangeQuantity("decrement", pt)}
-              className="px-3 cursor-pointer"
+              className="px-3 cursor-pointer select-none"
             >
               -
             </div>
             <div className="px-3">{pt.quantity}</div>
             <div
               onClick={() => handleChangeQuantity("increment", pt)}
-              className="px-3 cursor-pointer"
+              className="px-3 cursor-pointer select-none"
             >
               +
             </div>

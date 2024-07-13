@@ -1,5 +1,5 @@
 import { getProductsWithParams } from "@app/slice/ProductSlice";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const useProduct = (filters) => {
@@ -15,15 +15,9 @@ const useProduct = (filters) => {
       },
     };
   }, [filters]);
-  const mountedRef = useRef(false);
   useEffect(() => {
-    let promise;
-    if (mountedRef.current) {
-      promise = dispatch(getProductsWithParams(config));
-    } else {
-      mountedRef.current = true;
-    }
-    return () => promise && promise.abort();
+    const promise = dispatch(getProductsWithParams(config));
+    return () => promise.abort();
   }, [config, dispatch]);
 
   return { data, loading, error };

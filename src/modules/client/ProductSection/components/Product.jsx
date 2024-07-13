@@ -38,7 +38,7 @@ const Product = ({ product }) => {
           ) : (
             ""
           )}
-          <NavLink to={`shops/detail/${product._id}`}>
+          <NavLink to={`/shops/detail/${product._id}`}>
             <img
               src={product.thumb[0].fileName}
               alt={product.name}

@@ -5,23 +5,23 @@ const productApi = {
     const url = "/products";
     const request = axiosClient.get(url, {
       ...params,
-      config,
+      signal: config,
     });
     return await request;
   },
   async getAll(config = {}) {
     const url = "/products/all";
-    const request = axiosClient.get(url, { config });
+    const request = axiosClient.get(url, { signal: config });
     return await request;
   },
   async getRelatedProducts(productId, config = {}) {
     const url = "/products/list";
-    const request = axiosClient.get(`${url}/${productId}`, { config });
+    const request = axiosClient.get(`${url}/${productId}`, { signal: config });
     return await request;
   },
   async getOne(id, config = {}) {
     const url = "/products";
-    return await axiosClient.get(`${url}/${id}`, { config });
+    return await axiosClient.get(`${url}/${id}`, { signal: config });
   },
   async create(data) {
     const url = "/products/save";

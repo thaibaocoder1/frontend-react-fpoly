@@ -24,7 +24,9 @@ const CheckoutShipping = () => {
   };
   return (
     <div className="bg-white p-6 shadow-sm rounded-md">
-      <h2 className="text-slate-600 font-bold pb-3">Shipping Information</h2>
+      <h2 className="text-slate-600 text-xl font-bold pb-3">
+        Shipping Information
+      </h2>
       {!isLoading && (
         <CheckoutFormShip
           provinceList={provinceList}

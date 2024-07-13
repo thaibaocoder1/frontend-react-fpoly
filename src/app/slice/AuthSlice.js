@@ -14,6 +14,17 @@ export const register = createAsyncThunk(
     }
   }
 );
+export const active = createAsyncThunk(
+  "auth/active",
+  async (payload, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const userInfo = await userApi.active(payload);
+      return fulfillWithValue(userInfo.data);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 export const login = createAsyncThunk(
   "auth/login",
   async (payload, { rejectWithValue, fulfillWithValue, dispatch }) => {
@@ -22,6 +33,17 @@ export const login = createAsyncThunk(
       localStorage.setItem(StorageKeys.TOKEN, userInfo.data.accessToken);
       dispatch(loadCart(userInfo.data.user.cart));
       return fulfillWithValue(userInfo.data.user);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const forgot = createAsyncThunk(
+  "auth/forgot",
+  async (payload, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const userInfo = await userApi.forgot(payload);
+      return fulfillWithValue(userInfo.data);
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -57,6 +79,9 @@ const authSlice = createSlice({
     setEmtpyUser(state) {
       state.user = null;
     },
+    setEmtpyError(state) {
+      state.error = "";
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(register.pending, (state) => {
@@ -68,6 +93,30 @@ const authSlice = createSlice({
       state.error = "";
     });
     builder.addCase(register.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(active.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(active.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(active.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(forgot.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(forgot.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(forgot.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });
@@ -101,5 +150,5 @@ const authSlice = createSlice({
 });
 
 const { reducer, actions } = authSlice;
-export const { setEmtpyUser } = actions;
+export const { setEmtpyUser, setEmtpyError } = actions;
 export default reducer;

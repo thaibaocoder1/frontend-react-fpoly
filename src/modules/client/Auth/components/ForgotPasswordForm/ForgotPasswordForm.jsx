@@ -1,16 +1,15 @@
 import InputField from "@components/FormControls/InputField";
-import PasswordField from "@components/FormControls/PasswordField";
 import { yupResolver } from "@hookform/resolvers/yup";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import { Avatar, Box, Button, LinearProgress, Typography } from "@mui/material";
+import Divider from "@mui/material/Divider";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
-import Divider from "@mui/material/Divider";
 import * as yup from "yup";
 
-LoginForm.propTypes = {
+ForgotPasswordForm.propTypes = {
   onSubmit: PropTypes.func,
 };
 const defaultTheme = createTheme();
@@ -19,16 +18,11 @@ const schema = yup.object({
     .string()
     .required("Please enter email")
     .email("Please enter a valid email"),
-  password: yup
-    .string()
-    .required("Please enter password")
-    .min(6, "Please enter at least 6 characters"),
 });
-function LoginForm(props) {
+function ForgotPasswordForm(props) {
   const form = useForm({
     defaultValues: {
       email: "",
-      password: "",
     },
     resolver: yupResolver(schema, { abortEarly: false }),
   });
@@ -49,7 +43,7 @@ function LoginForm(props) {
         Welcome to BSmart
       </Typography>
       <Typography sx={{ textAlign: "center" }} variant="p" component={"h3"}>
-        Please login here
+        Please enter your email to verify account
       </Typography>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <InputField
@@ -58,7 +52,6 @@ function LoginForm(props) {
           form={form}
           autoComplete="email"
         />
-        <PasswordField name="password" label="Password" form={form} />
         <Button
           disabled={!isValid}
           sx={{ width: "100%" }}
@@ -88,4 +81,4 @@ function LoginForm(props) {
   );
 }
 
-export default LoginForm;
+export default ForgotPasswordForm;

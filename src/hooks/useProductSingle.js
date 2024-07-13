@@ -7,9 +7,8 @@ const useProductSingle = (productId) => {
   const { current, loading, error } = useSelector((state) => state.product);
 
   useEffect(() => {
-    const controller = new AbortController();
-    dispatch(getOneProduct(productId, { signal: controller.signal }));
-    return () => controller.abort();
+    const promise = dispatch(getOneProduct(productId));
+    return () => promise.abort();
   }, [productId, dispatch]);
 
   return { current, loading, error };

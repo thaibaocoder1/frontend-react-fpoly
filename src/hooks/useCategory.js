@@ -1,5 +1,5 @@
 import { getAllCategory } from "@app/slice/CategorySlice";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const defaultFilters = {
@@ -19,16 +19,12 @@ const useCategory = (filters = defaultFilters) => {
       },
     };
   }, [filters]);
-  const mountedRef = useRef(false);
 
   useEffect(() => {
-    let promise;
-    if (mountedRef.current) {
-      promise = dispatch(getAllCategory(config));
-    } else {
-      mountedRef.current = true;
-    }
-    return () => promise && promise.abort();
+    const promise = dispatch(getAllCategory(config));
+    return () => {
+      promise.abort();
+    };
   }, [dispatch, config]);
 
   return { data, loading, error };

@@ -74,7 +74,7 @@ function RegisterForm(props) {
         <LockOutlinedIcon />
       </Avatar>
       <Typography sx={{ textAlign: "center" }} component="h3" variant="h5">
-        Welcome to Ecommerce
+        Welcome to BSmart
       </Typography>
       <Typography sx={{ textAlign: "center" }} variant="p" component={"h3"}>
         Please register your account

@@ -8,7 +8,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 
 const ProductRelated = ({ relatedProducts }) => {
   return (
-    <section className="w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto">
+    <section className="w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto pb-8">
       <h2 className="text-2xl pb-8 text-slate-600">Related Products</h2>
       <div>
         <Swiper
@@ -31,10 +31,6 @@ const ProductRelated = ({ relatedProducts }) => {
             </SwiperSlide>
           ))}
         </Swiper>
-      </div>
-
-      <div className="w-full flex justify-center items-center py-8">
-        <div className="custom_bullet justify-center gap-3 !w-auto"></div>
       </div>
     </section>
   );

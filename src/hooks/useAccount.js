@@ -1,5 +1,5 @@
 import { getAllAccount } from "@app/slice/AccountSlice";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 const useAccount = (filters) => {
@@ -14,15 +14,9 @@ const useAccount = (filters) => {
       },
     };
   }, [filters]);
-  const mountedRef = useRef(false);
   useEffect(() => {
-    let promise;
-    if (mountedRef.current) {
-      promise = dispatch(getAllAccount(config));
-    } else {
-      mountedRef.current = true;
-    }
-    return () => promise && promise.abort();
+    const promise = dispatch(getAllAccount(config));
+    return () => promise.abort();
   }, [dispatch, config]);
 
   return { data, loading, error };

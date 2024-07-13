@@ -3,7 +3,15 @@ import axiosClient from "./AxiosClient";
 const userApi = {
   register(info) {
     const url = "/users";
-    return axiosClient.post(`${url}/save`, info);
+    return axiosClient.post(`${url}/register`, info);
+  },
+  active(id) {
+    const url = "/users";
+    return axiosClient.post(`${url}/active`, { id });
+  },
+  forgot(email) {
+    const url = "/users";
+    return axiosClient.post(`${url}/forgot`, email);
   },
   login(info) {
     const url = "/users";

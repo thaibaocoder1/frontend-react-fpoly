@@ -21,6 +21,9 @@ import ShopDetail from "@pages/client/ShopDetail";
 import { useRoutes } from "react-router-dom";
 import ProtectedRoute from "./protected";
 import CheckoutPage from "@pages/client/Checkout";
+import ActiveAccount from "@pages/client/ActiveAccount";
+import ForgotAccount from "@pages/client/ForgotAccount";
+import ResetAccount from "@pages/client/ResetAccount";
 
 const RoutesFeature = () => {
   let element = useRoutes([
@@ -78,6 +81,23 @@ const RoutesFeature = () => {
               <Login />
             </Container>
           ),
+        },
+        {
+          path: "auth",
+          children: [
+            {
+              path: "active/:id",
+              element: <ActiveAccount />,
+            },
+            {
+              path: "forgot",
+              element: <ForgotAccount />,
+            },
+            {
+              path: "reset/:id",
+              element: <ResetAccount />,
+            },
+          ],
         },
       ],
     },
