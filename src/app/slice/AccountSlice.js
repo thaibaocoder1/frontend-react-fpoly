@@ -17,6 +17,21 @@ export const getAllAccount = createAsyncThunk(
     }
   }
 );
+export const getAllAccountTrash = createAsyncThunk(
+  "account/getAllAccountTrash",
+  async (params, { rejectWithValue, fulfillWithValue, signal }) => {
+    try {
+      const response = await userApi.getAllTrash(params, signal);
+      return fulfillWithValue({
+        data: response.data,
+        pagination: response.pagination,
+      });
+    } catch (error) {
+      if (error instanceof CanceledError) return;
+      return rejectWithValue(error.message);
+    }
+  }
+);
 export const getOneAccount = createAsyncThunk(
   "account/getOneAccount",
   async (params, { rejectWithValue, fulfillWithValue }) => {
@@ -50,6 +65,39 @@ export const updateAccount = createAsyncThunk(
     }
   }
 );
+export const deleteAccount = createAsyncThunk(
+  "account/deleteAccount",
+  async (params, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response = await userApi.delete(params);
+      return fulfillWithValue(response.data);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const destroyAccount = createAsyncThunk(
+  "account/destroyAccount",
+  async (params, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response = await userApi.destroy(params);
+      return fulfillWithValue(response.data);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const recoverAccount = createAsyncThunk(
+  "account/recoverAccount",
+  async (params, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response = await userApi.recover(params);
+      return fulfillWithValue(response.data);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const accountSlice = createSlice({
   name: "account",
@@ -57,6 +105,7 @@ const accountSlice = createSlice({
     data: {
       users: [],
       pagination: {},
+      deleted: [],
     },
     current: null,
     loading: false,
@@ -81,6 +130,19 @@ const accountSlice = createSlice({
       state.error = "";
     });
     builder.addCase(getAllAccount.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(getAllAccountTrash.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getAllAccountTrash.fulfilled, (state, action) => {
+      const { data, pagination } = action.payload;
+      state.data = { ...state.data, deleted: data, pagination };
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(getAllAccountTrash.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });
@@ -115,6 +177,39 @@ const accountSlice = createSlice({
       state.error = "";
     });
     builder.addCase(updateAccount.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(deleteAccount.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteAccount.fulfilled, (state) => {
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(deleteAccount.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(destroyAccount.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(destroyAccount.fulfilled, (state) => {
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(destroyAccount.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(recoverAccount.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(recoverAccount.fulfilled, (state) => {
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(recoverAccount.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

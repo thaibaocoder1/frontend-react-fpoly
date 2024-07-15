@@ -4,6 +4,7 @@ import toastObj from "@utils/Toast";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import LoginForm from "../LoginForm/LoginForm";
+import { Container } from "@mui/material";
 
 function Login() {
   const dispatch = useDispatch();
@@ -19,7 +20,11 @@ function Login() {
       toastObj.error(error);
     }
   };
-  return <LoginForm onSubmit={handleSubmit}></LoginForm>;
+  return (
+    <Container sx={{ marginTop: 1 }}>
+      <LoginForm onSubmit={handleSubmit}></LoginForm>
+    </Container>
+  );
 }
 
 export default Login;

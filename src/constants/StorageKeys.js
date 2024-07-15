@@ -3,6 +3,7 @@ const StorageKeys = {
   ADMIN: "admin",
   USER: "user",
   CART: "cart",
+  COUPON: "coupon",
 };
 
 export default StorageKeys;

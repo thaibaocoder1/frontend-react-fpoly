@@ -1,25 +1,35 @@
+import useProduct from "@hooks/useProduct";
 import { Box, Button, Pagination, TextField } from "@mui/material";
-import PropTypes from "prop-types";
 import { useState } from "react";
 import { AiFillStar } from "react-icons/ai";
 import { BsFillGridFill } from "react-icons/bs";
 import { CiStar } from "react-icons/ci";
 import { FaThList } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { useSearchParams } from "react-router-dom";
 import ProductList from "../components/ProductList";
 
-const ListPage = ({ products, pagination, onChange }) => {
+const ListPage = () => {
   const [category, setCategory] = useState("");
   const [styles, setStyles] = useState("grid");
   const [filter, setFilter] = useState(true);
-
   const { categories } = useSelector((state) => state.category.data);
-
+  const [searchParams] = useSearchParams();
+  const categoryTerm = searchParams.get("category") || "";
+  const [filters, setFilters] = useState({
+    _page: 1,
+    _limit: 6,
+    _category: categoryTerm,
+  });
+  const { data } = useProduct(filters);
+  const handleFiltersChange = (page) => {
+    setFilters((prev) => ({ ...prev, _page: page }));
+  };
   const queryCategory = (e, value) =>
     e.target.checked ? setCategory(value) : setCategory("");
-  const handleChange = (e, page) => {
-    if (onChange) onChange(page);
-  };
+  if (!data || !data.products || data.products.length === 0) {
+    return <p>Loading...</p>;
+  }
   return (
     <section className="py-16">
       <div className="w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto">
@@ -224,7 +234,7 @@ const ListPage = ({ products, pagination, onChange }) => {
             <div className="pl-8 md:pl-0">
               <div className="py-4 bg-white mb-10 px-3 rounded-md flex justify-between items-start border">
                 <h2 className="text-lg font-medium text-slate-600">
-                  ({products.length}) Products
+                  ({data.products.length}) Products
                 </h2>
                 <div className="flex justify-center items-center gap-3">
                   <select
@@ -258,17 +268,17 @@ const ListPage = ({ products, pagination, onChange }) => {
               </div>
 
               <div className="pb-8">
-                <ProductList data={products} styles={styles} />
+                <ProductList data={data.products} styles={styles} />
               </div>
 
               <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <Pagination
-                  count={pagination.totalPages || 10}
-                  page={pagination.page || 1}
+                  count={data.pagination.totalPages}
+                  page={data.pagination.page || 1}
                   color="primary"
                   variant="outlined"
                   shape="rounded"
-                  onChange={handleChange}
+                  onChange={handleFiltersChange}
                 />
               </Box>
             </div>
@@ -277,11 +287,6 @@ const ListPage = ({ products, pagination, onChange }) => {
       </div>
     </section>
   );
-};
-ListPage.propTypes = {
-  products: PropTypes.array,
-  pagination: PropTypes.object,
-  onChange: PropTypes.func,
 };
 
 export default ListPage;

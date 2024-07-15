@@ -49,7 +49,7 @@ const DashboardFeature = ({ filterShow }) => {
               <span className="text-xl">
                 <FaBorderAll />
               </span>
-              <NavLink to="/dashboard/my-orders" className="block">
+              <NavLink to="/dashboard/orders" className="block">
                 My Orders
               </NavLink>
             </li>
@@ -57,7 +57,7 @@ const DashboardFeature = ({ filterShow }) => {
               <span className="text-xl">
                 <FaHeart />
               </span>
-              <NavLink to="/dashboard/my-wishlist" className="block">
+              <NavLink to="/dashboard/wishlist" className="block">
                 Wishlist
               </NavLink>
             </li>
@@ -65,7 +65,7 @@ const DashboardFeature = ({ filterShow }) => {
               <span className="text-xl">
                 <RiLockPasswordLine />
               </span>
-              <NavLink to="/dashboard/change-password" className="block">
+              <NavLink to="/dashboard/change" className="block">
                 Change Password
               </NavLink>
             </li>

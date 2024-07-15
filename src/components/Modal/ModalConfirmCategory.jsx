@@ -39,7 +39,7 @@ export default function ModalConfirmCategory({ open, handleClose, onConfirm }) {
         open={open}
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Logout Dialog
+          Category Delete Dialog
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -55,7 +55,7 @@ export default function ModalConfirmCategory({ open, handleClose, onConfirm }) {
         </IconButton>
         <DialogContent dividers sx={{ minWidth: "500px" }}>
           <Typography gutterBottom>
-            Are you sure you want to delete this category?
+            Are you sure to delete this category?
           </Typography>
         </DialogContent>
         <DialogActions>

@@ -1,32 +1,23 @@
-import { addProductToCart } from "@app/slice/CartSlice";
 import { formatOriginalPrice, formatSalePrice } from "@utils/Format";
-import toastObj from "@utils/Toast";
 import PropTypes from "prop-types";
+import { memo, useCallback } from "react";
 import { FaEye, FaRegHeart } from "react-icons/fa";
 import { RiShoppingCartLine } from "react-icons/ri";
-import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
-const Product = ({ product }) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const userInfo = useSelector((state) => state.auth.user);
-
-  const handleAddToCart = () => {
-    if (userInfo && userInfo._id) {
-      dispatch(
-        addProductToCart({
-          userId: userInfo._id,
-          quantity: 1,
-          productId: product._id,
-        })
-      );
-      toastObj.success("Add to cart success!");
-    } else {
-      toastObj.error("Please login first");
-      navigate("/login");
-    }
-  };
+const Product = memo(({ product, onClickCart, onClickWithList }) => {
+  const handleAddToCart = useCallback(
+    (product) => {
+      onClickCart && onClickCart(product);
+    },
+    [onClickCart]
+  );
+  const handleAddWithList = useCallback(
+    (product) => {
+      onClickWithList && onClickWithList(product);
+    },
+    [onClickWithList]
+  );
   return (
     <div className="hover:-translate-y-2 group transition-all duration-500 hover:shadow-md shadow rounded-md max-w-sm w-full mx-auto">
       <div className="flex flex-col">
@@ -46,14 +37,17 @@ const Product = ({ product }) => {
             />
           </NavLink>
           <ul className="flex transition-all duration-500 -bottom-14 justify-center items-center gap-2 absolute w-full group-hover:bottom-3">
-            <li className="select-none w-[38px] h-[38px] cursor-pointer bg-slate-100 flex justify-center items-center rounded-full hover:bg-[#059473] hover:text-white hover:rotate-[720deg] transition-all">
+            <li
+              onClick={() => handleAddWithList(product)}
+              className="select-none w-[38px] h-[38px] cursor-pointer bg-slate-100 flex justify-center items-center rounded-full hover:bg-[#059473] hover:text-white hover:rotate-[720deg] transition-all"
+            >
               <FaRegHeart />
             </li>
             <li className="select-none w-[38px] h-[38px] cursor-pointer bg-slate-100 flex justify-center items-center rounded-full hover:bg-[#059473] hover:text-white hover:rotate-[720deg] transition-all">
               <FaEye />
             </li>
             <li
-              onClick={handleAddToCart}
+              onClick={() => handleAddToCart(product)}
               className="select-none w-[38px] h-[38px] cursor-pointer bg-slate-100 flex justify-center items-center rounded-full hover:bg-[#059473] hover:text-white hover:rotate-[720deg] transition-all"
             >
               <RiShoppingCartLine />
@@ -81,10 +75,13 @@ const Product = ({ product }) => {
       </div>
     </div>
   );
-};
+});
+Product.displayName = "Product";
 
 Product.propTypes = {
   product: PropTypes.object.isRequired,
+  onClickCart: PropTypes.func,
+  onClickWithList: PropTypes.func,
 };
 
 export default Product;

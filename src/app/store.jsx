@@ -1,8 +1,10 @@
 import authReducer from "@app/slice/AuthSlice";
 import cartReducer from "@app/slice/CartSlice";
+import withListReducer from "@app/slice/WithlistSlice";
 import productReducer from "@app/slice/ProductSlice";
 import categoryReducer from "@app/slice/CategorySlice";
 import accountReducer from "@app/slice/AccountSlice";
+import couponReducer from "@app/slice/CouponSlice";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
   FLUSH,
@@ -19,9 +21,11 @@ import storage from "redux-persist/lib/storage";
 const rootReducer = combineReducers({
   auth: authReducer,
   cart: cartReducer,
+  withlist: withListReducer,
   product: productReducer,
   category: categoryReducer,
   account: accountReducer,
+  coupon: couponReducer,
 });
 
 const persistConfig = {

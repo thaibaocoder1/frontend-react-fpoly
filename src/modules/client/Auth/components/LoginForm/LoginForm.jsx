@@ -51,38 +51,40 @@ function LoginForm(props) {
       <Typography sx={{ textAlign: "center" }} variant="p" component={"h3"}>
         Please login here
       </Typography>
-      <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <InputField
-          name="email"
-          label="Email"
-          form={form}
-          autoComplete="email"
-        />
-        <PasswordField name="password" label="Password" form={form} />
-        <Button
-          disabled={!isValid}
-          sx={{ width: "100%" }}
-          type="submit"
-          variant="contained"
-          color="primary"
-          size="large"
-        >
-          Login
-        </Button>
-      </form>
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Button color="primary">
-          <Link to={"/auth/forgot"}>Forgot Password</Link>
-        </Button>
-        <Button color="primary">
-          <Link to={"/register"}>Recover Account</Link>
-        </Button>
-      </Box>
-      <Divider>OR</Divider>
-      <Box py={1} textAlign={"center"}>
-        <Button color="primary">
-          <Link to={"/register"}>Dont have an account. Register here</Link>
-        </Button>
+      <Box sx={{ maxWidth: "600px", marginInline: "auto" }}>
+        <form onSubmit={form.handleSubmit(handleSubmit)}>
+          <InputField
+            name="email"
+            label="Email"
+            form={form}
+            autoComplete="email"
+          />
+          <PasswordField name="password" label="Password" form={form} />
+          <Button
+            disabled={!isValid}
+            sx={{ width: "100%" }}
+            type="submit"
+            variant="contained"
+            color="primary"
+            size="large"
+          >
+            Login
+          </Button>
+        </form>
+        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Button color="primary">
+            <Link to={"/auth/forgot"}>Forgot Password</Link>
+          </Button>
+          <Button color="primary">
+            <Link to={"/auth/recover"}>Recover Account</Link>
+          </Button>
+        </Box>
+        <Divider>OR</Divider>
+        <Box py={1} textAlign={"center"}>
+          <Button color="primary">
+            <Link to={"/register"}>Dont have an account. Register here</Link>
+          </Button>
+        </Box>
       </Box>
     </ThemeProvider>
   );

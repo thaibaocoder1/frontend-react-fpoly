@@ -49,6 +49,61 @@ export const forgot = createAsyncThunk(
     }
   }
 );
+export const reset = createAsyncThunk(
+  "auth/reset",
+  async (payload, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const userInfo = await userApi.reset(payload);
+      return fulfillWithValue(userInfo.data);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const recover = createAsyncThunk(
+  "auth/recover",
+  async (payload, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const userInfo = await userApi.requestRecover(payload);
+      return fulfillWithValue(userInfo.data);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const confirmRecover = createAsyncThunk(
+  "auth/confirmRecover",
+  async (payload, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const userInfo = await userApi.confirmRecover(payload);
+      return fulfillWithValue(userInfo.data);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const refreshToken = createAsyncThunk(
+  "auth/refreshToken",
+  async (_, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const userInfo = await userApi.refreshToken();
+      return fulfillWithValue(userInfo.data);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const changePassword = createAsyncThunk(
+  "auth/changePassword",
+  async (payload, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const userInfo = await userApi.change(payload);
+      return fulfillWithValue(userInfo.data);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 export const logout = createAsyncThunk(
   "auth/logout",
   async (payload, { rejectWithValue, fulfillWithValue }) => {
@@ -67,6 +122,7 @@ export const logout = createAsyncThunk(
     }
   }
 );
+
 const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -120,6 +176,55 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     });
+    builder.addCase(reset.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(reset.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(reset.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(recover.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(recover.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(recover.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(confirmRecover.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(confirmRecover.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(confirmRecover.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(changePassword.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(changePassword.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(changePassword.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+
     builder.addCase(login.pending, (state) => {
       state.loading = true;
     });
@@ -143,6 +248,17 @@ const authSlice = createSlice({
       state.isAdmin = false;
     });
     builder.addCase(logout.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(refreshToken.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(refreshToken.fulfilled, (state) => {
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(refreshToken.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

@@ -53,7 +53,6 @@ const CategoryForm = () => {
     }
     isShowDialog === false && clearErrors(["title", "imageUrl"]);
   }, [currentCategory, setValue, clearErrors, isShowDialog]);
-
   const onSubmit = async (data) => {
     data.slug = slugify(data.title, {
       replacement: "-",
@@ -91,7 +90,6 @@ const CategoryForm = () => {
         />
         <p className="text-white text-sm">{errors.title?.message}</p>
       </div>
-
       <div>
         <label
           className="flex justify-center items-center flex-col h-[238px] cursor-pointer border border-dashed hover:border-red-500 w-full border-[#d0d2d6]"
@@ -117,11 +115,9 @@ const CategoryForm = () => {
         />
         <p className="text-white text-sm pt-1">{errors.imageUrl?.message}</p>
       </div>
-      <div className="mt-4">
-        <button className="bg-red-500 w-full hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3">
-          Submit
-        </button>
-      </div>
+      <button className="bg-red-500 w-full hover:shadow-red-300/50 hover:shadow-lg text-white rounded-md px-7 py-2 mb-3 mt-4">
+        Submit
+      </button>
     </form>
   );
 };

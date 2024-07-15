@@ -29,6 +29,7 @@ const HeaderClient = () => {
 
   const { data } = useCategory();
   const cartSlice = useSelector((state) => state.cart.data);
+  const withListSlice = useSelector((state) => state.withlist.data);
 
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -191,16 +192,14 @@ const HeaderClient = () => {
                 <div className="flex md-lg:hidden justify-center items-center gap-5">
                   <div className="flex justify-center gap-5">
                     <div
-                      // onClick={() =>
-                      //   navigate(userInfo? ? "/dashboard/my-wishlist" : "/login")
-                      // }
+                      onClick={() => navigate("/dashboard/my-wishlist")}
                       className="relative flex justify-center items-center cursor-pointer w-[35px] h-[35px] rounded-full bg-[#e2e2e2]"
                     >
                       <span className="text-xl text-green-500">
                         <FaHeart />
                       </span>
                       <div className="w-[15px] h-[15px] text-xs font-medium absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
-                        0
+                        {withListSlice.length > 0 ? withListSlice.length : 0}
                       </div>
                     </div>
 
@@ -213,7 +212,7 @@ const HeaderClient = () => {
                       </span>
 
                       <div className="w-[15px] h-[15px] text-xs font-medium absolute bg-red-500 rounded-full text-white flex justify-center items-center -top-[3px] -right-[5px] ">
-                        {cartSlice.length}
+                        {cartSlice.length > 0 ? cartSlice.length : 0}
                       </div>
                     </div>
                   </div>

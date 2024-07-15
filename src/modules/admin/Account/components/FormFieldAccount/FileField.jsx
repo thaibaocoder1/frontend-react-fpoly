@@ -23,13 +23,12 @@ const FileField = ({ form, name, current }) => {
               <img
                 src={image}
                 alt="image"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             </div>
           ) : (
             <>
               <span>Add Image</span>
-              <div className="border-gray-300 h-8 w-8 animate-spin rounded-full border-4 border-t-blue-600" />
             </>
           )}
         </label>
@@ -49,7 +48,9 @@ const FileField = ({ form, name, current }) => {
                 className="hidden"
                 accept="image/*"
               />
-              {error && <p className="text-red-500 text-sm">{error.message}</p>}
+              {error && (
+                <p className="text-red-500 text-sm mt-1">{error.message}</p>
+              )}
             </>
           )}
           rules={{

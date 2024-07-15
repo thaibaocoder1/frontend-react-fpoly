@@ -40,12 +40,13 @@ function ForgotPasswordForm(props) {
         <LockOutlinedIcon />
       </Avatar>
       <Typography sx={{ textAlign: "center" }} component="h3" variant="h5">
-        Welcome to BSmart
+        Forgot Password
       </Typography>
-      <Typography sx={{ textAlign: "center" }} variant="p" component={"h3"}>
-        Please enter your email to verify account
-      </Typography>
-      <form onSubmit={form.handleSubmit(handleSubmit)}>
+
+      <form
+        style={{ maxWidth: "600px", marginInline: "auto" }}
+        onSubmit={form.handleSubmit(handleSubmit)}
+      >
         <InputField
           name="email"
           label="Email"
@@ -60,19 +61,11 @@ function ForgotPasswordForm(props) {
           color="primary"
           size="large"
         >
-          Login
+          Submit
         </Button>
+        <Divider>OR</Divider>
       </form>
-      <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-        <Button color="primary">
-          <Link to={"/auth/forgot"}>Forgot Password</Link>
-        </Button>
-        <Button color="primary">
-          <Link to={"/register"}>Recover Account</Link>
-        </Button>
-      </Box>
-      <Divider>OR</Divider>
-      <Box py={1} textAlign={"center"}>
+      <Box pb={1} textAlign={"center"}>
         <Button color="primary">
           <Link to={"/register"}>Dont have an account. Register here</Link>
         </Button>

@@ -2,6 +2,9 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 
 const AccountItem = ({ user, onClick }) => {
+  const handleClickUser = (id) => {
+    if (onClick) onClick(id);
+  };
   return (
     <tr>
       <td scope="row" className="py-1 px-4 font-medium whitespace-nowrap">
@@ -42,7 +45,7 @@ const AccountItem = ({ user, onClick }) => {
           </Link>
           <span
             className="text-white p-[6px] bg-red-500 rounded hover:shadow-lg cursor-pointer hover:shadow-red-500/50"
-            onClick={() => onClick && onClick()}
+            onClick={() => handleClickUser(user._id)}
           >
             Deactive
           </span>

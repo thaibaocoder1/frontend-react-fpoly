@@ -15,5 +15,8 @@
       "@assets/*": ["assets/*"]
     }
   },
-  "include": ["src/**/*"]
+  "include": [
+    "src/**/*",
+    "src/modules/client/Auth/components/ResetPasswordForm/.jsx"
+  ]
 }

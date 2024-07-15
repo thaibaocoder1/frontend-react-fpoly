@@ -7,23 +7,28 @@ import ProductAddEdit from "@modules/admin/Product/components/ProductAddEdit";
 import Login from "@modules/client/Auth/components/Login";
 import Register from "@modules/client/Auth/components/Register";
 import Index from "@modules/client/Dashboard/pages/Index";
-import { Container } from "@mui/material";
 import AccountAdmin from "@pages/admin/Account";
 import CategoryAdmin from "@pages/admin/Category";
+import CouponAdmin from "@pages/admin/Coupon";
 import DashboardAdmin from "@pages/admin/Dashboard";
 import ProductAdmin from "@pages/admin/Product";
 import ProfileAdmin from "@pages/admin/Profile";
+import ActiveAccount from "@pages/client/ActiveAccount";
 import Cart from "@pages/client/Cart";
+import ChangePassword from "@pages/client/ChangePassword";
+import CheckoutPage from "@pages/client/Checkout";
+import ConfirmRecover from "@pages/client/ConfirmRecover";
 import Dashboard from "@pages/client/Dashboard";
+import ForgotAccount from "@pages/client/ForgotAccount";
 import Home from "@pages/client/Home";
+import MyOrders from "@pages/client/MyOrders";
+import MyWishList from "@pages/client/MyWishList";
+import RecoverAccount from "@pages/client/RecoverAccount";
+import ResetAccount from "@pages/client/ResetAccount";
 import Shop from "@pages/client/Shop";
 import ShopDetail from "@pages/client/ShopDetail";
 import { useRoutes } from "react-router-dom";
 import ProtectedRoute from "./protected";
-import CheckoutPage from "@pages/client/Checkout";
-import ActiveAccount from "@pages/client/ActiveAccount";
-import ForgotAccount from "@pages/client/ForgotAccount";
-import ResetAccount from "@pages/client/ResetAccount";
 
 const RoutesFeature = () => {
   let element = useRoutes([
@@ -64,23 +69,27 @@ const RoutesFeature = () => {
               index: true,
               element: <Index />,
             },
+            {
+              path: "orders",
+              element: <MyOrders />,
+            },
+            {
+              path: "wishlist",
+              element: <MyWishList />,
+            },
+            {
+              path: "change",
+              element: <ChangePassword />,
+            },
           ],
         },
         {
           path: "/register",
-          element: (
-            <Container sx={{ marginTop: 1 }}>
-              <Register />
-            </Container>
-          ),
+          element: <Register />,
         },
         {
           path: "/login",
-          element: (
-            <Container sx={{ marginTop: 1 }}>
-              <Login />
-            </Container>
-          ),
+          element: <Login />,
         },
         {
           path: "auth",
@@ -96,6 +105,14 @@ const RoutesFeature = () => {
             {
               path: "reset/:id",
               element: <ResetAccount />,
+            },
+            {
+              path: "recover",
+              element: <RecoverAccount />,
+            },
+            {
+              path: "confirm",
+              element: <ConfirmRecover />,
             },
           ],
         },
@@ -116,6 +133,10 @@ const RoutesFeature = () => {
         {
           path: "category",
           element: <CategoryAdmin />,
+        },
+        {
+          path: "coupon",
+          element: <CouponAdmin />,
         },
         {
           path: "product",

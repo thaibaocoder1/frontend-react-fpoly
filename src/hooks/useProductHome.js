@@ -7,7 +7,9 @@ const useProductHome = () => {
   const { data, loading, error } = useSelector((state) => state.product);
   useEffect(() => {
     const promise = dispatch(getProductsNoParams());
-    return () => promise.abort();
+    return () => {
+      promise.abort();
+    };
   }, [dispatch]);
 
   return { data, loading, error };

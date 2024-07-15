@@ -4,6 +4,7 @@ import toastObj from "@utils/Toast";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import RegisterForm from "../RegisterForm/RegisterForm";
+import { Container } from "@mui/material";
 
 function Register() {
   const dispatch = useDispatch();
@@ -23,9 +24,9 @@ function Register() {
     }
   };
   return (
-    <div>
+    <Container sx={{ marginTop: 1 }}>
       <RegisterForm onSubmit={handleSubmit}></RegisterForm>
-    </div>
+    </Container>
   );
 }
 

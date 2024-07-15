@@ -1,15 +1,13 @@
+import { removeCategory, setEmptyError } from "@app/slice/CategorySlice";
+import SearchItem from "@components/SearchItem/SearchItem";
 import useCategory from "@hooks/useCategory";
+import { Pagination } from "@mui/material";
+import toastObj from "@utils/Toast";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import CategoryAddEdit from "./CategoryAddEdit";
 import CategoryItem from "./CategoryItem";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  removeCategory,
-  setEmptyError,
-} from "../../../../app/slice/CategorySlice";
-import { useEffect, useState } from "react";
-import toastObj from "@utils/Toast";
-import SearchItem from "@components/SearchItem/SearchItem";
-import { Pagination } from "@mui/material";
+import CategoryItemEmpty from "./CategoryItemEmpty";
 
 const CategoryList = () => {
   const [filters, setFilters] = useState({
@@ -65,13 +63,17 @@ const CategoryList = () => {
                 </tr>
               </thead>
               <tbody>
-                {data.categories.map((item) => (
-                  <CategoryItem
-                    key={item._id}
-                    category={item}
-                    onClick={handleClickItem}
-                  />
-                ))}
+                {data.categories.length > 0 ? (
+                  data.categories.map((item) => (
+                    <CategoryItem
+                      key={item._id}
+                      category={item}
+                      onClick={handleClickItem}
+                    />
+                  ))
+                ) : (
+                  <CategoryItemEmpty />
+                )}
               </tbody>
             </table>
           </div>

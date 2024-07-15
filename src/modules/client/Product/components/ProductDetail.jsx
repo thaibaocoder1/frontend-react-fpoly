@@ -18,19 +18,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { getRelatedProducts } from "../../../../app/slice/ProductSlice";
 import ProductContent from "./ProductContent";
 import ProductRelated from "./ProductRelated";
-import { PacmanLoader } from "react-spinners";
+import { addProductToWithList, setEmptyError } from "@app/slice/WithlistSlice";
 
 const ProductDetail = ({ product }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const [quantity, setQuantity] = useState(1);
-  const { data, loading } = useSelector((state) => state.product);
+  const { data } = useSelector((state) => state.product);
   const userInfo = useSelector((state) => state.auth.user);
+  const isHasErrorWithlist = useSelector((state) => state.withlist.error);
+  const isSuccessWithlist = useSelector((state) => state.withlist.success);
   useEffect(() => {
-    const controller = new AbortController();
-    dispatch(getRelatedProducts(product._id, { signal: controller.signal }));
-    return () => controller.abort();
+    const promise = dispatch(getRelatedProducts(product._id));
+    return () => promise.abort();
   }, [product, dispatch]);
   const increaseQuantity = () => {
     if (quantity >= product.stock) {
@@ -49,7 +49,7 @@ const ProductDetail = ({ product }) => {
       dispatch(
         addProductToCart({
           userId: userInfo._id,
-          quantity: 1,
+          quantity,
           productId: product._id,
         })
       );
@@ -58,6 +58,10 @@ const ProductDetail = ({ product }) => {
       toastObj.error("Please login first");
       navigate("/login");
     }
+  };
+  const handleBuyNow = () => {};
+  const handleAddWithList = () => {
+    dispatch(addProductToWithList(product._id));
   };
   const responsive = {
     superLargeDesktop: {
@@ -89,12 +93,15 @@ const ProductDetail = ({ product }) => {
       items: 1,
     },
   };
-  if (loading === true)
-    return (
-      <div className="fixed inset-0 flex items-center justify-center w-full h-full transition-all duration-300">
-        <PacmanLoader />
-      </div>
-    );
+  useEffect(() => {
+    if (isHasErrorWithlist) {
+      toastObj.error(isHasErrorWithlist);
+      dispatch(setEmptyError());
+    }
+    if (isSuccessWithlist) {
+      toastObj.success("Add to withlist");
+    }
+  }, [isHasErrorWithlist, isSuccessWithlist, dispatch]);
 
   return (
     <>
@@ -166,8 +173,8 @@ const ProductDetail = ({ product }) => {
                       {formatOriginalPrice(product?.price)}
                     </h2>
                     <h2>
-                      {formatSalePrice(product?.price, product?.discount)}
-                      (-{product?.discount}%)
+                      {formatSalePrice(product?.price, product?.discount)} (-
+                      {product?.discount}%)
                     </h2>
                   </>
                 ) : (
@@ -207,7 +214,10 @@ const ProductDetail = ({ product }) => {
                       Add To Cart
                     </button>
                     {product.quantity > 0 ? (
-                      <button className="px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-green-500/40 bg-[#247462] text-white">
+                      <button
+                        onClick={handleBuyNow}
+                        className="px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-green-500/40 bg-[#247462] text-white"
+                      >
                         Buy Now
                       </button>
                     ) : (
@@ -217,10 +227,11 @@ const ProductDetail = ({ product }) => {
                 ) : (
                   ""
                 )}
-                <div>
-                  <div className="h-[50px] w-[50px] flex justify-center items-center cursor-pointer hover:shadow-lg hover:shadow-cyan-500/40 bg-cyan-500 text-white">
-                    <FaHeart />
-                  </div>
+                <div
+                  onClick={handleAddWithList}
+                  className="h-[50px] w-[50px] flex justify-center items-center cursor-pointer hover:shadow-lg hover:shadow-cyan-500/40 bg-cyan-500 text-white"
+                >
+                  <FaHeart />
                 </div>
               </div>
 

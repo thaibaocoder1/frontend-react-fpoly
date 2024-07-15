@@ -1,10 +1,23 @@
+import {
+  checkCoupon,
+  deleteCouponStorage,
+  setEmptyError,
+} from "@app/slice/CouponSlice";
 import CartKeys from "@constants/CartKeys";
 import { formatOriginalPrice } from "@utils/Format";
+import toastObj from "@utils/Toast";
 import PropTypes from "prop-types";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import CartCoupon from "./CartCoupon";
 
 const CartSummary = ({ cart = [] }) => {
+  const [value, setValue] = useState("");
+  const distpatch = useDispatch();
+  const isHasError = useSelector((state) => state.coupon.error);
+  const { couponStorage } = useSelector((state) => state.coupon.data);
+
   const totalPrice = useMemo(() => {
     return cart.reduce(
       (total, item) =>
@@ -13,8 +26,34 @@ const CartSummary = ({ cart = [] }) => {
     );
   }, [cart]);
   const shippingPrice = useMemo(() => {
-    return cart.length * CartKeys.SHIPPING;
-  }, [cart]);
+    let percentCoupon;
+    if (couponStorage.length > 0) {
+      percentCoupon = couponStorage.reduce((acc, item) => {
+        return (acc + item.value) / 100;
+      }, 0);
+    } else {
+      percentCoupon = 0;
+    }
+    return cart.length * CartKeys.SHIPPING * (1 - percentCoupon);
+  }, [cart, couponStorage]);
+
+  const handleApplyCoupon = async () => {
+    if (value) {
+      const data = await distpatch(checkCoupon(value));
+      data && setValue("");
+    } else {
+      toastObj.error("Please fill into input");
+    }
+  };
+  const handleDeleteCoupon = (name) => {
+    distpatch(deleteCouponStorage(name));
+  };
+  useEffect(() => {
+    if (isHasError) {
+      toastObj.error(isHasError);
+      distpatch(setEmptyError());
+    }
+  }, [isHasError, distpatch]);
   return (
     <div className="w-[33%] md-lg:w-full">
       <div className="pl-3 md-lg:pl-0 md-lg:mt-5">
@@ -34,12 +73,24 @@ const CartSummary = ({ cart = [] }) => {
                 className="w-full px-3 py-2 border border-slate-200 outline-0 focus:border-green-500 rounded-sm"
                 type="text"
                 placeholder="Input Voucher Coupon"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
               />
-              <button className="px-5 py-[1px] bg-[#059473] text-white rounded-sm uppercase text-sm">
+              <button
+                onClick={handleApplyCoupon}
+                className="px-5 py-[1px] bg-[#059473] text-white rounded-sm uppercase text-sm"
+              >
                 Apply
               </button>
             </div>
-
+            {couponStorage.length > 0 &&
+              couponStorage.map((item) => (
+                <CartCoupon
+                  key={item.name}
+                  coupon={item}
+                  onClickDelete={handleDeleteCoupon}
+                />
+              ))}
             <div className="flex justify-between items-center">
               <span>Total</span>
               <span className="text-lg text-[#059473]">

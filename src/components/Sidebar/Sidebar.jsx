@@ -10,6 +10,7 @@ import { useState } from "react";
 import ModalLogout from "@components/Modal/ModalLogout";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@app/slice/AuthSlice";
+import { RiCoupon2Line } from "react-icons/ri";
 
 const Sidebar = ({ showSidebar, setShowSidebar }) => {
   const { pathname } = useLocation();
@@ -25,35 +26,42 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
       path: "/admin",
     },
     {
-      id: 3,
+      id: 2,
       title: "Category",
       icon: <BiCategory />,
       role: "admin",
       path: "/admin/category",
     },
     {
-      id: 5,
+      id: 3,
+      title: "Coupon",
+      icon: <RiCoupon2Line />,
+      role: "admin",
+      path: "/admin/coupon",
+    },
+    {
+      id: 4,
       title: "Products",
       icon: <FaProductHunt />,
       role: "admin",
       path: "/admin/product",
     },
     {
-      id: 2,
+      id: 5,
       title: "Orders",
       icon: <AiOutlineShoppingCart />,
       role: "admin",
       path: "/admin/orders",
     },
     {
-      id: 4,
+      id: 6,
       title: "Accounts",
       icon: <FaUsers />,
       role: "admin",
       path: "/admin/accounts",
     },
     {
-      id: 6,
+      id: 7,
       title: "Profile",
       icon: <ImProfile />,
       role: "admin",

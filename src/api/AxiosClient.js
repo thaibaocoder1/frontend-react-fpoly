@@ -1,4 +1,5 @@
-import axios from "axios";
+import StorageKeys from "@constants/StorageKeys";
+import axios, { CanceledError } from "axios";
 
 const axiosClient = axios.create({
   baseURL: "http://localhost:8888/api",
@@ -8,30 +9,56 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   function (config) {
-    // Do something before request is sent
+    const access_token =
+      localStorage && localStorage.getItem(StorageKeys.TOKEN);
+    if (access_token) {
+      config.headers.Authorization = `Bearer ${access_token}`;
+    }
     return config;
   },
   function (error) {
-    // Do something with request error
     return Promise.reject(error);
   }
 );
 
-// Add a response interceptor
 axiosClient.interceptors.response.use(
   function (response) {
-    // Any status code that lie within the range of 2xx cause this function to trigger
-    // Do something with response data
     return response.data;
   },
-  function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
+  async function (error) {
+    if (error instanceof CanceledError) return Promise.reject(error);
     const {
-      response: { data },
+      config,
+      response: { data, status },
     } = error;
+
+    if (
+      status === 401 &&
+      !config._retry &&
+      data.message === "Unauthorization"
+    ) {
+      config._retry = true;
+      try {
+        const { accessToken } = await refreshToken();
+        config.headers.Authorization = `Bearer ${accessToken}`;
+        return axiosClient(config);
+      } catch (error) {
+        console.log(error);
+      }
+    }
     return Promise.reject(data);
   }
 );
+
+async function refreshToken() {
+  try {
+    const response = await axiosClient.get("/refresh");
+    localStorage.setItem(StorageKeys.TOKEN, response.accessToken);
+    return response;
+  } catch (error) {
+    console.error("Unable to refresh token:", error);
+    throw error;
+  }
+}
 
 export default axiosClient;

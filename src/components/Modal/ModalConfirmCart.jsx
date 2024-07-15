@@ -24,6 +24,7 @@ ModalConfirmCart.propTypes = {
   item: PropTypes.object,
   handleClose: PropTypes.func,
   onConfirm: PropTypes.func,
+  all: PropTypes.bool,
 };
 
 export default function ModalConfirmCart({
@@ -31,9 +32,10 @@ export default function ModalConfirmCart({
   item,
   handleClose,
   onConfirm,
+  all,
 }) {
   const handleClickConfirm = () => {
-    if (onConfirm) onConfirm(item);
+    if (onConfirm) onConfirm(item, all);
     handleClose();
   };
 
@@ -45,7 +47,9 @@ export default function ModalConfirmCart({
         open={open}
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Do you want to delete this product?
+          {!all
+            ? "Do you want to delete this product?"
+            : "Do you want to delete all products?"}
         </DialogTitle>
         <IconButton
           aria-label="close"
@@ -61,7 +65,9 @@ export default function ModalConfirmCart({
         </IconButton>
         <DialogContent dividers sx={{ minWidth: "500px" }}>
           <Typography gutterBottom>
-            This product will be removed out of your cart. Continue?
+            {!all
+              ? "This product will be removed out of your cart. Continue?"
+              : "All products will be removed out of your cart. Continue?"}
           </Typography>
         </DialogContent>
         <DialogActions>

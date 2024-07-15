@@ -1,8 +1,14 @@
-import useAccount from "@hooks/useAccount";
-import { useState } from "react";
-import AccountItem from "./AccountItem";
-import { Pagination } from "@mui/material";
+import { deleteAccount, getAllAccount } from "@app/slice/AccountSlice";
+import { setEmptyError } from "@app/slice/CouponSlice";
+import ModalConfirmAccount from "@components/Modal/ModalConfirmAccount";
 import SearchItem from "@components/SearchItem/SearchItem";
+import useAccount from "@hooks/useAccount";
+import { Pagination } from "@mui/material";
+import toastObj from "@utils/Toast";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import AccountItem from "./AccountItem";
+import AccountItemEmpty from "./AccountItemEmpty";
 
 const AccountList = () => {
   const [filters, setFilters] = useState({
@@ -10,9 +16,15 @@ const AccountList = () => {
     _limit: 6,
     _search: "",
   });
+  const [modal, setModal] = useState({
+    open: false,
+    userId: "",
+  });
   const { data } = useAccount(filters);
-  const handleClick = () => {
-    console.log(123);
+  const dispatch = useDispatch();
+  const isHasError = useSelector((state) => state.account.error);
+  const handleClick = (userId) => {
+    if (userId) setModal((prev) => ({ ...prev, open: true, userId }));
   };
   const handlePageChange = (_, page) => {
     setFilters((prev) => ({ ...prev, _page: page }));
@@ -20,6 +32,23 @@ const AccountList = () => {
   const handleSearchChange = (value) => {
     setFilters((prev) => ({ ...prev, _search: value }));
   };
+  const handleDeleteUser = async (id) => {
+    try {
+      const results = await dispatch(deleteAccount(id));
+      if (!results.type.includes("rejected"))
+        toastObj.success("Delete success");
+      setModal((prev) => ({ ...prev, open: false }));
+      dispatch(getAllAccount(filters));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (isHasError) {
+      toastObj.error(isHasError);
+      dispatch(setEmptyError());
+    }
+  }, [isHasError, dispatch]);
 
   return (
     <div className="w-full">
@@ -62,21 +91,24 @@ const AccountList = () => {
               </tr>
             </thead>
             <tbody>
-              {data.users.length > 0 &&
+              {data.users.length > 0 ? (
                 data.users.map((user) => (
                   <AccountItem
                     key={user._id}
                     user={user}
                     onClick={handleClick}
                   />
-                ))}
+                ))
+              ) : (
+                <AccountItemEmpty />
+              )}
             </tbody>
           </table>
         </div>
 
         <div className="w-full inline-flex justify-end mt-4 bottom-4 right-4">
           <Pagination
-            count={data.pagination.totalPages || 4}
+            count={data.pagination.totalPages}
             page={data.pagination.page || 1}
             variant="outlined"
             shape="rounded"
@@ -85,6 +117,12 @@ const AccountList = () => {
           />
         </div>
       </div>
+      <ModalConfirmAccount
+        open={modal.open}
+        handleClose={() => setModal((prev) => ({ ...prev, open: false }))}
+        userId={modal.userId}
+        onConfirm={handleDeleteUser}
+      />
     </div>
   );
 };

@@ -1,7 +1,20 @@
-import { useSelector } from "react-redux";
+import { getOneAccount } from "@app/slice/AccountSlice";
+import ModalUpdateProfile from "@components/Modal/ModalUpdateProfile";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import ProfileFormUpdate from "./ProfileFormUpdate";
 
 const ProfileItem = () => {
   const userLoggined = useSelector((state) => state.auth.user);
+  const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  const handleUpdateProfile = () => {
+    setOpen(true);
+    dispatch(getOneAccount(userLoggined._id));
+  };
+  const handleSubmitForm = async (data) => {
+    console.log(data);
+  };
 
   return (
     <div className="w-full md:w-6/12">
@@ -34,6 +47,14 @@ const ProfileItem = () => {
                 {userLoggined.isActive ? "Active" : "Deactive"}
               </span>
             </div>
+            <div className="mt-1">
+              <button
+                onClick={handleUpdateProfile}
+                className="bg-white text-black px-2 py-1 rounded-md"
+              >
+                Update
+              </button>
+            </div>
           </div>
           <div className="w-[200px] rounded-full">
             <img
@@ -43,6 +64,12 @@ const ProfileItem = () => {
           </div>
         </div>
       </div>
+      <ModalUpdateProfile
+        open={open}
+        handleClose={() => setOpen((prev) => !prev)}
+      >
+        <ProfileFormUpdate onSubmit={handleSubmitForm} />
+      </ModalUpdateProfile>
     </div>
   );
 };

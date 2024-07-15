@@ -5,16 +5,20 @@ import ProductLatest from "../components/ProductLatest";
 import ProductSkeleton from "../components/ProductSkeleton";
 
 const ListProductFeatudataPage = () => {
-  const { data, loading, error } = useProductHome();
+  const { data, error } = useProductHome();
 
-  if (error) return toastObj.error(error);
-  if (loading)
+  if (error) {
+    toastObj.error(error);
+    return null;
+  }
+
+  if (!data || !data.products || data.products.length === 0) {
     return (
       <div className="grid grid-cols-4 gap-3 mx-auto w-[85%]">
         <ProductSkeleton length={8} />
       </div>
     );
-
+  }
   return (
     <div className="w-[85%] flex flex-wrap mx-auto">
       <ProductLatest data={data.products.slice(0, 8)} />

@@ -1,5 +1,7 @@
+import ResetPassword from "@modules/client/Auth/components/ResetPassword";
+
 const ResetAccount = () => {
-  return <div></div>;
+  return <ResetPassword />;
 };
 
 export default ResetAccount;

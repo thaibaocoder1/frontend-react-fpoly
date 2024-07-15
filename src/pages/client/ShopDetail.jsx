@@ -6,11 +6,8 @@ import { NavLink, useParams } from "react-router-dom";
 const ShopDetail = () => {
   const { id } = useParams();
   const { current } = useProductSingle(id);
-
   if (!current) {
-    return (
-      <div className="animate-spin w-8 h-8 border border-x-transparent"></div>
-    );
+    return <div>No product found</div>;
   }
   return (
     <>
