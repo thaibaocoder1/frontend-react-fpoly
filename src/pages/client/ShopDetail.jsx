@@ -1,14 +1,13 @@
 import useProductSingle from "@hooks/useProductSingle";
 import ProductDetail from "@modules/client/Product/components/ProductDetail";
+import ProductDetailSkeleton from "@modules/client/Product/components/ProductDetailSkeleton";
 import { IoIosArrowForward } from "react-icons/io";
 import { NavLink, useParams } from "react-router-dom";
 
 const ShopDetail = () => {
   const { id } = useParams();
   const { current } = useProductSingle(id);
-  if (!current) {
-    return <div>No product found</div>;
-  }
+  if (!current) return <ProductDetailSkeleton />;
   return (
     <>
       <section

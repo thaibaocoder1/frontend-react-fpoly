@@ -1,16 +1,15 @@
 import useProductHome from "@hooks/useProductHome";
-import toastObj from "@utils/Toast";
+import { useMemo } from "react";
 import ProductFeature from "../components/ProductFeature";
 import ProductLatest from "../components/ProductLatest";
 import ProductSkeleton from "../components/ProductSkeleton";
 
 const ListProductFeatudataPage = () => {
-  const { data, error } = useProductHome();
-
-  if (error) {
-    toastObj.error(error);
-    return null;
-  }
+  const { data } = useProductHome();
+  const memoizedProducts = useMemo(() => {
+    if (!data || !data.products) return;
+    return data.products.slice(0, 8);
+  }, [data]);
 
   if (!data || !data.products || data.products.length === 0) {
     return (
@@ -21,7 +20,7 @@ const ListProductFeatudataPage = () => {
   }
   return (
     <div className="w-[85%] flex flex-wrap mx-auto">
-      <ProductLatest data={data.products.slice(0, 8)} />
+      <ProductLatest data={memoizedProducts} />
       <div className="py-[90px] w-full grid grid-cols-3 md-lg:grid-cols-2 md:grid-cols-1 gap-6">
         <ProductFeature
           title="Featured Products"

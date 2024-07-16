@@ -117,6 +117,10 @@ const couponSlice = createSlice({
       state.data.couponStorage = newCouponList;
       saveCoupon(newCouponList);
     },
+    loadCoupon(state, action) {
+      state.data.couponStorage = action.payload;
+      saveCoupon(action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getAllCoupons.pending, (state) => {
@@ -200,5 +204,6 @@ export const {
   toggleDialog,
   setEmtpyCoupon,
   deleteCouponStorage,
+  loadCoupon,
 } = actions;
 export default reducer;

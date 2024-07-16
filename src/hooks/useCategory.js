@@ -1,24 +1,37 @@
 import { getAllCategory } from "@app/slice/CategorySlice";
 import { useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { createSelector } from "reselect";
 
+const selectCategory = (state) => state.category;
+const selectCategoryState = createSelector([selectCategory], (category) => ({
+  data: category.data,
+  loading: category.loading,
+  error: category.error,
+}));
 const defaultFilters = {
   _page: 1,
   _limit: 10,
   _search: "",
 };
+
 const useCategory = (filters = defaultFilters) => {
   const dispatch = useDispatch();
-  const { data, loading, error } = useSelector((state) => state.category);
-  const config = useMemo(() => {
-    return {
+  const { data, loading, error } = useSelector(
+    selectCategoryState,
+    shallowEqual
+  );
+
+  const config = useMemo(
+    () => ({
       params: {
         _page: filters?._page,
         _limit: filters?._limit,
         _search: filters?._search,
       },
-    };
-  }, [filters]);
+    }),
+    [filters]
+  );
 
   useEffect(() => {
     const promise = dispatch(getAllCategory(config));

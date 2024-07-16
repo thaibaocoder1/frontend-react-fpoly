@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
+import { memo } from "react";
 import { Controller } from "react-hook-form";
 
-const CheckoutSelectField = ({ form, name, data, selectedProvince }) => {
+const CheckoutSelectField = memo(({ form, name, data, selectedProvince }) => {
   const { control } = form;
 
   return (
@@ -25,7 +26,7 @@ const CheckoutSelectField = ({ form, name, data, selectedProvince }) => {
                 onChange(e.target.value);
                 selectedProvince(e.target.selectedOptions[0].dataset.id);
               }}
-              value={value || ""}
+              value={value}
             >
               <option value="">--Select one province--</option>
               {data &&
@@ -45,7 +46,8 @@ const CheckoutSelectField = ({ form, name, data, selectedProvince }) => {
       />
     </div>
   );
-};
+});
+CheckoutSelectField.displayName = "CheckoutSelectField";
 
 CheckoutSelectField.propTypes = {
   form: PropTypes.object,

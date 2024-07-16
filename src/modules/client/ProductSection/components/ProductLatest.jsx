@@ -1,48 +1,69 @@
 import { addProductToCart } from "@app/slice/CartSlice";
-import { addProductToWithList, setEmptyError } from "@app/slice/WithlistSlice";
+import {
+  addProductToWishList,
+  setEmptyError,
+  setStatusSuccess,
+} from "@app/slice/WishlistSlice";
 import toastObj from "@utils/Toast";
 import PropTypes from "prop-types";
-import { memo, useEffect } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Product from "./Product";
+import QuickView from "@components/QuickView/QuickView";
+import ModalViewProduct from "@components/Modal/ModalViewProduct";
 
 const ProductLatest = memo(({ data }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
   const userLoggined = useSelector((state) => state.auth.user);
-  const isHasErrorWithList = useSelector((state) => state.withlist.error);
-  const isSuccessWithList = useSelector((state) => state.withlist.success);
+  const isHasErrorWishList = useSelector((state) => state.wishlist.error);
+  const isSuccessWishList = useSelector((state) => state.wishlist.success);
+  const [viewProduct, setViewProduct] = useState(null);
+  const [open, setOpen] = useState(false);
 
-  const handleAddCart = (item) => {
-    if (userLoggined && userLoggined._id) {
-      dispatch(
-        addProductToCart({
-          userId: userLoggined._id,
-          quantity: 1,
-          productId: item._id,
-        })
-      );
-      toastObj.success("Add to cart success");
-    } else {
-      toastObj.error("Please login first");
-      navigate("/login");
-    }
-  };
-  const handleAddWithList = (item) => {
-    dispatch(addProductToWithList(item._id));
-  };
-
+  const handleAddCart = useCallback(
+    (item) => {
+      if (userLoggined && userLoggined._id) {
+        dispatch(
+          addProductToCart({
+            userId: userLoggined._id,
+            quantity: 1,
+            productId: item._id,
+          })
+        );
+        toastObj.success("Add to cart success");
+      } else {
+        toastObj.error("Please login first");
+        navigate("/login");
+      }
+    },
+    [dispatch, navigate, userLoggined]
+  );
+  const handleAddWishList = useCallback(
+    (item) => {
+      if (userLoggined && userLoggined._id) {
+        dispatch(addProductToWishList(item._id));
+      } else {
+        toastObj.error("Please login first");
+      }
+    },
+    [userLoggined, dispatch]
+  );
+  const handleQuickView = useCallback((item) => {
+    setOpen(true);
+    setViewProduct(item);
+  }, []);
   useEffect(() => {
-    if (isHasErrorWithList) {
-      toastObj.error(isHasErrorWithList);
+    if (isHasErrorWishList) {
+      toastObj.error(isHasErrorWishList);
       dispatch(setEmptyError());
     }
-    if (isSuccessWithList) {
-      toastObj.success("Add to withlist");
+    if (isSuccessWishList) {
+      toastObj.success("Add to wishlist");
+      dispatch(setStatusSuccess());
     }
-  }, [isHasErrorWithList, isSuccessWithList, dispatch]);
+  }, [isHasErrorWishList, isSuccessWishList, dispatch]);
   return (
     <div className="w-full">
       <div className="text-center flex justify-center items-center flex-col text-4xl text-slate-600 font-bold relative pb-[35px]">
@@ -55,10 +76,16 @@ const ProductLatest = memo(({ data }) => {
             key={item._id}
             product={item}
             onClickCart={handleAddCart}
-            onClickWithList={handleAddWithList}
+            onClickWishList={handleAddWishList}
+            onClickView={handleQuickView}
           />
         ))}
       </div>
+      {open && (
+        <ModalViewProduct open={open} handleClose={() => setOpen(false)}>
+          <QuickView item={viewProduct} key={viewProduct._id} />
+        </ModalViewProduct>
+      )}
     </div>
   );
 });

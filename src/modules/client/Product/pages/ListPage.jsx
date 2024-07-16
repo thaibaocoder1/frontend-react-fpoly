@@ -1,11 +1,17 @@
 import useProduct from "@hooks/useProduct";
-import { Box, Button, Pagination, TextField } from "@mui/material";
-import { useState } from "react";
+import {
+  Box,
+  Button,
+  LinearProgress,
+  Pagination,
+  TextField,
+} from "@mui/material";
+import { useEffect, useState } from "react";
 import { AiFillStar } from "react-icons/ai";
 import { BsFillGridFill } from "react-icons/bs";
 import { CiStar } from "react-icons/ci";
 import { FaThList } from "react-icons/fa";
-import { useSelector } from "react-redux";
+import { shallowEqual, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import ProductList from "../components/ProductList";
 
@@ -13,7 +19,10 @@ const ListPage = () => {
   const [category, setCategory] = useState("");
   const [styles, setStyles] = useState("grid");
   const [filter, setFilter] = useState(true);
-  const { categories } = useSelector((state) => state.category.data);
+  const { categories } = useSelector(
+    (state) => state.category.data,
+    shallowEqual
+  );
   const [searchParams] = useSearchParams();
   const categoryTerm = searchParams.get("category") || "";
   const [filters, setFilters] = useState({
@@ -22,14 +31,20 @@ const ListPage = () => {
     _category: categoryTerm,
   });
   const { data } = useProduct(filters);
-  const handleFiltersChange = (page) => {
+  const handleFiltersChange = (_, page) => {
     setFilters((prev) => ({ ...prev, _page: page }));
   };
   const queryCategory = (e, value) =>
     e.target.checked ? setCategory(value) : setCategory("");
-  if (!data || !data.products || data.products.length === 0) {
-    return <p>Loading...</p>;
-  }
+  useEffect(() => {
+    setFilters((prev) => ({
+      ...prev,
+      _page: 1,
+      _category: categoryTerm,
+    }));
+  }, [categoryTerm]);
+  if (!data || !data.products || data.products.length === 0)
+    return <LinearProgress />;
   return (
     <section className="py-16">
       <div className="w-[85%] md:w-[80%] sm:w-[90%] lg:w-[90%] h-full mx-auto">

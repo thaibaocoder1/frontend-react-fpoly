@@ -1,11 +1,43 @@
+import CartKeys from "@constants/CartKeys";
+import useProductHome from "@hooks/useProductHome";
 import CheckoutCart from "@modules/client/Checkout/components/CheckoutCart";
 import CheckoutShipping from "@modules/client/Checkout/components/CheckoutShipping";
+import CheckoutSkeleton from "@modules/client/Checkout/components/CheckoutSkeleton";
 import CheckoutSummary from "@modules/client/Checkout/components/CheckoutSummary";
-import { Link, useLocation } from "react-router-dom";
+import { shallowEqual, useSelector } from "react-redux";
+import { Link, Navigate, useLocation } from "react-router-dom";
 
 const CheckoutPage = () => {
   const location = useLocation();
-  const { cart, totalPrice, shippingPrice } = location.state || [];
+  const state = location.state;
+  const { data } = useProductHome();
+  const cart = useSelector((state) => state.cart.data, shallowEqual);
+  if (cart.length === 0) return <Navigate to={"/login"} replace />;
+  const cartProducts =
+    data.products.length > 0
+      ? cart
+          .map((cartItem) => {
+            const product = data.products?.find(
+              (product) => product._id === cartItem.productId
+            );
+            if (!product) return null;
+            return {
+              ...cartItem,
+              ...product,
+              quantity: cartItem.quantity,
+              stock: product.quantity,
+            };
+          })
+          .filter((item) => item.isBuyNow)
+      : [];
+  const shippingPrice = cartProducts.length * CartKeys.SHIPPING;
+  const totalPrice = cartProducts.reduce(
+    (total, item) =>
+      total + item.quantity * ((100 - item.discount) / 100) * item.price,
+    0
+  );
+  if (cartProducts.length === 0 && state.cart.length === 0)
+    return <CheckoutSkeleton />;
   return (
     <>
       <section className="bg-[url('/images/checkout.jpg')] h-[300px] mt-6 bg-cover bg-no-repeat relative bg-left">
@@ -41,16 +73,40 @@ const CheckoutPage = () => {
       </section>
       <section className="bg-[#eeeeee]">
         <div className="w-[85%] lg:w-[90%] md:w-[90%] sm:w-[90%] mx-auto py-16">
-          <div className="w-full flex">
-            <div className="w-[60%] md-lg:w-full">
-              <CheckoutShipping />
+          <div className="w-full flex lg:flex-col">
+            <div className="w-[60%] lg:w-full">
+              <CheckoutShipping
+                shippingPrice={
+                  state && state.prevPath.includes("cart")
+                    ? state.shippingPrice
+                    : shippingPrice
+                }
+              />
             </div>
-            <div className="w-[35%] md-lg:w-full pl-3 md-lg:pl-0 md-lg:mt-5">
-              <CheckoutCart cart={cart} />
+            <div className="w-[35%] md-lg:w-full pl-3 md-lg:pl-0 lg:mt-3">
+              <CheckoutCart
+                cart={
+                  state && state.prevPath.includes("cart")
+                    ? state.cart
+                    : cartProducts
+                }
+              />
               <CheckoutSummary
-                cart={cart}
-                totalPrice={totalPrice}
-                shippingPrice={shippingPrice}
+                cart={
+                  state && state.prevPath.includes("cart")
+                    ? state.cart
+                    : cartProducts
+                }
+                totalPrice={
+                  state && state.prevPath.includes("cart")
+                    ? state.totalPrice
+                    : totalPrice
+                }
+                shippingPrice={
+                  state && state.prevPath.includes("cart")
+                    ? state.shippingPrice
+                    : shippingPrice
+                }
               />
             </div>
           </div>

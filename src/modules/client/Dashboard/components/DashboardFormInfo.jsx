@@ -2,11 +2,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import PropTypes from "prop-types";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import InputField from "./FormControlProfile/InputField";
-import FileField from "./FormControlProfile/FileField";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { convertObjToFormData } from "@utils/Convert";
+import InputField from "./FormControlDashboard/InputField";
+import FileField from "./FormControlDashboard/FileField";
 
 const schema = (isEditMode) =>
   yup.object({
@@ -32,7 +32,7 @@ const schema = (isEditMode) =>
       }),
   });
 
-const ProfileFormUpdate = ({ onSubmit }) => {
+const DashboardFormInfo = ({ onSubmit }) => {
   const userDispatch = useSelector((state) => state.account.current);
   const form = useForm({
     defaultValues: {
@@ -73,15 +73,15 @@ const ProfileFormUpdate = ({ onSubmit }) => {
         current={userDispatch}
       />
       <div className="flex justify-end">
-        <button className="bg-red-500 hover:shadow-red-500/40 hover:shadow-md text-white rounded-md px-7 py-2 my-2">
+        <button className="bg-[#059473] hover:shadow-md text-white rounded-md px-7 py-2 my-2">
           Save Changes
         </button>
       </div>
     </form>
   );
 };
-ProfileFormUpdate.propTypes = {
+DashboardFormInfo.propTypes = {
   onSubmit: PropTypes.func.isRequired,
 };
 
-export default ProfileFormUpdate;
+export default DashboardFormInfo;

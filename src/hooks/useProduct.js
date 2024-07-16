@@ -1,26 +1,37 @@
 import { getProductsWithParams } from "@app/slice/ProductSlice";
 import { useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { createSelector } from "reselect";
+
+const selectProduct = (state) => state.product;
+
+const selectProductState = createSelector([selectProduct], (product) => ({
+  data: product.data,
+}));
 
 const useProduct = (filters) => {
   const dispatch = useDispatch();
-  const { data, loading, error } = useSelector((state) => state.product);
-  const config = useMemo(() => {
-    return {
+
+  const config = useMemo(
+    () => ({
       params: {
         _page: filters?._page,
         _limit: filters?._limit,
         _category: filters?._category,
         _search: filters?._search,
       },
-    };
-  }, [filters]);
+    }),
+    [filters]
+  );
+
+  const { data } = useSelector(selectProductState, shallowEqual);
+
   useEffect(() => {
     const promise = dispatch(getProductsWithParams(config));
     return () => promise.abort();
   }, [config, dispatch]);
 
-  return { data, loading, error };
+  return { data };
 };
 
 export default useProduct;

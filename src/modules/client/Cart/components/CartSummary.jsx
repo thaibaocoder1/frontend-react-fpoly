@@ -8,7 +8,7 @@ import { formatOriginalPrice } from "@utils/Format";
 import toastObj from "@utils/Toast";
 import PropTypes from "prop-types";
 import { useEffect, useMemo, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import CartCoupon from "./CartCoupon";
 
@@ -16,8 +16,10 @@ const CartSummary = ({ cart = [] }) => {
   const [value, setValue] = useState("");
   const distpatch = useDispatch();
   const isHasError = useSelector((state) => state.coupon.error);
-  const { couponStorage } = useSelector((state) => state.coupon.data);
-
+  const { couponStorage } = useSelector(
+    (state) => state.coupon.data,
+    shallowEqual
+  );
   const totalPrice = useMemo(() => {
     return cart.reduce(
       (total, item) =>
@@ -99,7 +101,15 @@ const CartSummary = ({ cart = [] }) => {
             </div>
             <Link
               to="/checkout"
-              state={{ cart, totalPrice, shippingPrice }}
+              state={{
+                cart: cart.map((item) => ({
+                  ...item,
+                  isBuyNow: true,
+                })),
+                totalPrice,
+                shippingPrice,
+                prevPath: "cart",
+              }}
               disabled={cart.length === 0}
               className="px-5 py-[6px] rounded-sm hover:shadow-red-500/50 hover:shadow-lg bg-red-500 text-sm font-medium text-white uppercase text-center"
             >

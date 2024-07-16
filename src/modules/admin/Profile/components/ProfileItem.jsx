@@ -1,8 +1,10 @@
 import { getOneAccount } from "@app/slice/AccountSlice";
+import { update } from "@app/slice/AuthSlice";
 import ModalUpdateProfile from "@components/Modal/ModalUpdateProfile";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import ProfileFormUpdate from "./ProfileFormUpdate";
+import toastObj from "@utils/Toast";
 
 const ProfileItem = () => {
   const userLoggined = useSelector((state) => state.auth.user);
@@ -13,7 +15,16 @@ const ProfileItem = () => {
     dispatch(getOneAccount(userLoggined._id));
   };
   const handleSubmitForm = async (data) => {
-    console.log(data);
+    try {
+      data.append("id", userLoggined._id);
+      const results = await dispatch(update(data));
+      if (!results.type.includes("rejected")) {
+        toastObj.success("Change success");
+        setOpen(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

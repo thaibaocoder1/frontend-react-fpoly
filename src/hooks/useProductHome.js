@@ -1,18 +1,21 @@
 import { getProductsNoParams } from "@app/slice/ProductSlice";
+import { createSelector } from "@reduxjs/toolkit";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
+const selectProduct = (state) => state.product;
+const selectProductState = createSelector([selectProduct], (product) => ({
+  data: product.data,
+}));
 const useProductHome = () => {
   const dispatch = useDispatch();
-  const { data, loading, error } = useSelector((state) => state.product);
+  const { data } = useSelector(selectProductState, shallowEqual);
   useEffect(() => {
     const promise = dispatch(getProductsNoParams());
-    return () => {
-      promise.abort();
-    };
+    return () => promise.abort();
   }, [dispatch]);
 
-  return { data, loading, error };
+  return { data };
 };
 
 export default useProductHome;

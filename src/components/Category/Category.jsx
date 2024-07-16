@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 
 const Categories = () => {
   const { categories } = useSelector((state) => state.category.data);
-
   const responsive = {
     superLargeDesktop: {
       breakpoint: { max: 4000, min: 3000 },

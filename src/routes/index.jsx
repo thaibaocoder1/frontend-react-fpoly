@@ -29,6 +29,7 @@ import Shop from "@pages/client/Shop";
 import ShopDetail from "@pages/client/ShopDetail";
 import { useRoutes } from "react-router-dom";
 import ProtectedRoute from "./protected";
+import NotFound from "@pages/NotFound";
 
 const RoutesFeature = () => {
   let element = useRoutes([
@@ -181,6 +182,10 @@ const RoutesFeature = () => {
     {
       path: "/admin/login",
       element: <LoginForm />,
+    },
+    {
+      path: "*",
+      element: <NotFound />,
     },
   ]);
 

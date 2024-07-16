@@ -10,6 +10,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { logout } from "../../../app/slice/AuthSlice";
 import { useState } from "react";
 import { clearCart } from "@app/slice/CartSlice";
+import { clearWishList } from "@app/slice/WishlistSlice";
 
 const DashboardFeature = ({ filterShow }) => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const DashboardFeature = ({ filterShow }) => {
       const action = logout(userInfo._id);
       const resultAction = await dispatch(action);
       dispatch(clearCart());
+      dispatch(clearWishList());
       unwrapResult(resultAction);
       navigate("/login");
     } catch (error) {

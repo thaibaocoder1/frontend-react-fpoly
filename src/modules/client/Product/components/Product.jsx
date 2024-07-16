@@ -1,35 +1,14 @@
 import Rating from "@components/Rating/Rating";
-import { addProductToCart } from "@app/slice/CartSlice";
 import { formatSalePrice } from "@utils/Format";
-import toastObj from "@utils/Toast";
 import PropTypes from "prop-types";
 import { FaEye, FaRegHeart } from "react-icons/fa";
 import { RiShoppingCartLine } from "react-icons/ri";
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const ProductShop = ({ p, styles }) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const userInfo = useSelector((state) => state.auth.user);
-  const handleAddToCart = () => {
-    if (userInfo && userInfo._id) {
-      dispatch(
-        addProductToCart({
-          userId: userInfo._id,
-          quantity: 1,
-          productId: p._id,
-        })
-      );
-      toastObj.success("Add to cart success!");
-    } else {
-      toastObj.error("Please login first");
-      navigate("/login");
-    }
-  };
+const ProductShop = ({ p, styles, onClick, onClickCart }) => {
   return (
     <div
-      className={`flex transition-all duration-1000 hover:shadow-md hover:-translate-y-3 ${
+      className={`flex transition-all duration-300 hover:shadow-md hover:-translate-y-3 ${
         styles === "grid"
           ? "flex-col justify-start items-start"
           : "justify-start items-center md-lg:flex-col md-lg:justify-start md-lg:items-start"
@@ -52,15 +31,18 @@ const ProductShop = ({ p, styles }) => {
           />
         </Link>
 
-        <ul className="flex transition-all duration-700 -bottom-10 justify-center items-center gap-2 absolute w-full group-hover:bottom-3">
-          <li className="select-none w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#059473] hover:text-white hover:rotate-[720deg] transition-all">
+        <ul className="flex transition-all duration-500 -bottom-10 justify-center items-center gap-2 absolute w-full group-hover:bottom-3">
+          <li
+            onClick={() => onClick && onClick(p)}
+            className="select-none w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#059473] hover:text-white hover:rotate-[720deg] transition-all"
+          >
             <FaRegHeart />
           </li>
           <li className="select-none w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#059473] hover:text-white hover:rotate-[720deg] transition-all">
             <FaEye />
           </li>
           <li
-            onClick={handleAddToCart}
+            onClick={() => onClickCart && onClickCart(p)}
             className="select-none w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#059473] hover:text-white hover:rotate-[720deg] transition-all"
           >
             <RiShoppingCartLine />
@@ -84,10 +66,11 @@ const ProductShop = ({ p, styles }) => {
     </div>
   );
 };
-
 ProductShop.propTypes = {
   p: PropTypes.object.isRequired,
   styles: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
+  onClickCart: PropTypes.func,
 };
 
 export default ProductShop;

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const CheckoutCart = ({ cart }) => {
   return (
-    <div className="flex bg-white p-4 flex-col gap-2 mb-3 rounded-lg">
+    <div className="flex bg-white p-4 flex-col gap-2 mb-3 rounded-lg max-h-[285px] overflow-y-auto">
       <div className="flex justify-start items-center">
         <h2 className="text-xl text-slate-600 font-bold">Cart</h2>
       </div>

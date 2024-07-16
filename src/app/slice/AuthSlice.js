@@ -2,6 +2,8 @@ import userApi from "@api/UserApi";
 import StorageKeys from "@constants/StorageKeys";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { loadCart } from "./CartSlice";
+import { loadCoupon } from "./CouponSlice";
+import { loadWishList } from "./WishlistSlice";
 
 export const register = createAsyncThunk(
   "auth/register",
@@ -32,6 +34,8 @@ export const login = createAsyncThunk(
       const userInfo = await userApi.login(payload);
       localStorage.setItem(StorageKeys.TOKEN, userInfo.data.accessToken);
       dispatch(loadCart(userInfo.data.user.cart));
+      dispatch(loadCoupon(userInfo.data.user.coupon));
+      dispatch(loadWishList(userInfo.data.user.wishlist));
       return fulfillWithValue(userInfo.data.user);
     } catch (error) {
       return rejectWithValue(error.message);
@@ -109,14 +113,33 @@ export const logout = createAsyncThunk(
   async (payload, { rejectWithValue, fulfillWithValue }) => {
     try {
       const cart =
-        localStorage && localStorage.getItem("cart")
-          ? JSON.parse(localStorage.getItem("cart"))
+        localStorage && localStorage.getItem(StorageKeys.CART)
+          ? JSON.parse(localStorage.getItem(StorageKeys.CART))
           : [];
-      const data = { id: payload, cart };
+      const coupon =
+        localStorage && localStorage.getItem(StorageKeys.COUPON)
+          ? JSON.parse(localStorage.getItem(StorageKeys.COUPON))
+          : [];
+      const wishlist =
+        localStorage && localStorage.getItem(StorageKeys.WISHLIST)
+          ? JSON.parse(localStorage.getItem(StorageKeys.WISHLIST))
+          : [];
+      const data = { id: payload, cart, coupon, wishlist };
       await userApi.logout(data);
       localStorage.removeItem(StorageKeys.TOKEN);
-      localStorage.removeItem("cart");
+      localStorage.removeItem(StorageKeys.COUPON);
       return fulfillWithValue(null);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+export const update = createAsyncThunk(
+  "auth/update",
+  async (params, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const response = await userApi.update(params);
+      return fulfillWithValue(response.data);
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -224,7 +247,18 @@ const authSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     });
-
+    builder.addCase(update.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(update.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(update.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
     builder.addCase(login.pending, (state) => {
       state.loading = true;
     });

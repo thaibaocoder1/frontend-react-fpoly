@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Controller } from "react-hook-form";
 
-const CheckoutSelectFieldWard = ({ form, name, data, selectedProvince }) => {
+const CheckoutSelectFieldWard = ({ form, name, data }) => {
   const { control } = form;
 
   return (
@@ -23,18 +23,13 @@ const CheckoutSelectFieldWard = ({ form, name, data, selectedProvince }) => {
               onBlur={onBlur}
               onChange={(e) => {
                 onChange(e.target.value);
-                selectedProvince(e.target.selectedOptions[0].dataset.id);
               }}
-              value={value || ""}
+              value={value}
             >
               <option value="">--Select one ward--</option>
               {data &&
                 data.map((item) => (
-                  <option
-                    key={item.ward_id}
-                    value={item.ward_name}
-                    data-id={item.ward_id}
-                  >
+                  <option key={item.ward_id} value={item.ward_name}>
                     {item.ward_name}
                   </option>
                 ))}
@@ -51,7 +46,6 @@ CheckoutSelectFieldWard.propTypes = {
   form: PropTypes.object,
   name: PropTypes.string.isRequired,
   data: PropTypes.array,
-  selectedProvince: PropTypes.func,
 };
 
 export default CheckoutSelectFieldWard;

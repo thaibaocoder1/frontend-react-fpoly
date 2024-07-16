@@ -5,7 +5,7 @@ import CheckoutInputField from "./CheckoutFormControl/CheckoutInputField";
 import PropTypes from "prop-types";
 import CheckoutSelectField from "./CheckoutFormControl/CheckoutSelectField";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { CanceledError } from "axios";
 import CheckoutSelectFieldDistrict from "./CheckoutFormControl/CheckoutSelectFieldDistrict";
 import CheckoutSelectFieldWard from "./CheckoutFormControl/CheckoutSelectFieldWard";
 import CheckoutSelectFieldPayment from "./CheckoutFormControl/CheckoutSelectFieldPayment";
@@ -29,7 +29,7 @@ const schema = yup.object({
   ward: yup.string().required("Please enter ward"),
   payment: yup.string().required("Please choose one payment"),
 });
-const CheckoutFormShip = ({ provinceList, onSubmit }) => {
+const CheckoutFormShip = ({ onSubmit }) => {
   const form = useForm({
     defaultValues: {
       fullname: "",
@@ -52,6 +52,26 @@ const CheckoutFormShip = ({ provinceList, onSubmit }) => {
     data: [],
   });
 
+  const [provinceList, setProvinceList] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    const abortController = new AbortController();
+    const getProvinceList = async () => {
+      try {
+        setIsLoading(true);
+        const res = await axios.get("https://vapi.vnappmob.com/api/province", {
+          signal: abortController.signal,
+        });
+        res.data && setProvinceList(res.data.results);
+        setIsLoading(false);
+      } catch (error) {
+        if (error instanceof CanceledError) return;
+        setIsLoading(false);
+      }
+    };
+    getProvinceList();
+    return () => abortController.abort();
+  }, []);
   useEffect(() => {
     if (selectedProvince) {
       axios
@@ -67,6 +87,7 @@ const CheckoutFormShip = ({ provinceList, onSubmit }) => {
         });
     } else {
       setDistricts([]);
+      setWards([]);
     }
   }, [selectedProvince]);
   useEffect(() => {
@@ -116,12 +137,7 @@ const CheckoutFormShip = ({ provinceList, onSubmit }) => {
               data={districts}
               selectedDistrict={setSelectedDistrict}
             />
-            <CheckoutSelectFieldWard
-              form={form}
-              name="ward"
-              data={wards}
-              selectedProvince={setSelectedProvince}
-            />
+            <CheckoutSelectFieldWard form={form} name="ward" data={wards} />
           </div>
           <div className="flex md:flex-col md:gap-2 w-full gap-5 text-slate-600">
             <CheckoutInputField
@@ -151,11 +167,7 @@ const CheckoutFormShip = ({ provinceList, onSubmit }) => {
             <span className="bg-blue-200 text-blue-800 text-sm font-medium mr-2 px-2 py-1 rounded">
               Home
             </span>
-            <span>
-              {isSubmit.data.phone} - {isSubmit.data.province},{" "}
-              {isSubmit.data.district}, {isSubmit.data.ward},{" "}
-              {isSubmit.data.address}
-            </span>
+            <span>{isSubmit.data.phone}</span>
             <button
               onClick={() =>
                 setIsSubmit((prev) => ({ ...prev, submitted: false }))
@@ -176,7 +188,6 @@ const CheckoutFormShip = ({ provinceList, onSubmit }) => {
 };
 
 CheckoutFormShip.propTypes = {
-  provinceList: PropTypes.array,
   onSubmit: PropTypes.func,
 };
 

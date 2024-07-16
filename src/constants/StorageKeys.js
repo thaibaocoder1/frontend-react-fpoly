@@ -1,9 +1,10 @@
 const StorageKeys = {
-  TOKEN: "access_token",
   ADMIN: "admin",
   USER: "user",
+  TOKEN: "access_token",
   CART: "cart",
   COUPON: "coupon",
+  WISHLIST: "wishlist",
 };
 
 export default StorageKeys;

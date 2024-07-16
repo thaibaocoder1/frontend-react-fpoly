@@ -7,28 +7,24 @@ import ModalConfirmCart from "@components/Modal/ModalConfirmCart";
 import useProductHome from "@hooks/useProductHome";
 import toastObj from "@utils/Toast";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import CartItem from "./CartItem";
 import CartSummary from "./CartSummary";
 
 const CartList = () => {
   const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart.data);
-  const { data } = useSelector((state) => state.product);
-  // eslint-disable-next-line no-unused-vars
+  const cart = useSelector((state) => state.cart.data, shallowEqual);
   const { data: results } = useProductHome();
-  const products = data?.products || [];
   const [modalItem, setModalItem] = useState({
     open: false,
     data: {},
     all: false,
   });
-
   const cartProducts =
-    products.length > 0
+    results?.products.length > 0
       ? cart.map((cartItem) => {
-          const product = products.find(
+          const product = results?.products.find(
             (product) => product._id === cartItem.productId
           );
           return {
