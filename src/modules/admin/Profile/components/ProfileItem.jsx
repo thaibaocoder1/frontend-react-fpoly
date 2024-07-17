@@ -71,6 +71,7 @@ const ProfileItem = () => {
             <img
               src={userLoggined.imageUrl.fileName}
               alt={userLoggined.username}
+              loading="lazy"
             />
           </div>
         </div>

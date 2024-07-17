@@ -5,6 +5,7 @@ import productReducer from "@app/slice/ProductSlice";
 import categoryReducer from "@app/slice/CategorySlice";
 import accountReducer from "@app/slice/AccountSlice";
 import couponReducer from "@app/slice/CouponSlice";
+import orderReducer from "@app/slice/OrderSlice";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import {
   FLUSH,
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   category: categoryReducer,
   account: accountReducer,
   coupon: couponReducer,
+  order: orderReducer,
 });
 
 const persistConfig = {

@@ -30,10 +30,12 @@ const QuickView = ({ item }) => {
           className="h-64 w-full object-contain"
           src={item.thumb[0].fileName}
           alt={item.name}
+          loading="lazy"
         />
         <div className="mt-4 grid grid-cols-5 gap-2">
           {item.thumb.map((thumb, index) => (
             <img
+              loading="lazy"
               key={index}
               className="h-24 w-full object-cover border border-dashed border-slate-500"
               src={thumb.fileName}

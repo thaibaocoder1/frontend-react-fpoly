@@ -12,6 +12,7 @@ const AccountItem = ({ user, onClick }) => {
       </td>
       <td scope="row" className="py-1 px-4 font-medium whitespace-nowrap">
         <img
+          loading="lazy"
           className="w-[80px] h-[80px] object-cover"
           src={user.imageUrl.fileName}
           alt={user.fullname}

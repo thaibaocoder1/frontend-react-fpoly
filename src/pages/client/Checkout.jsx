@@ -1,5 +1,5 @@
 import CartKeys from "@constants/CartKeys";
-import useProductHome from "@hooks/useProductHome";
+import useProductCart from "@hooks/useProductCart";
 import CheckoutCart from "@modules/client/Checkout/components/CheckoutCart";
 import CheckoutShipping from "@modules/client/Checkout/components/CheckoutShipping";
 import CheckoutSkeleton from "@modules/client/Checkout/components/CheckoutSkeleton";
@@ -10,14 +10,14 @@ import { Link, Navigate, useLocation } from "react-router-dom";
 const CheckoutPage = () => {
   const location = useLocation();
   const state = location.state;
-  const { data } = useProductHome();
+  const { cart: products } = useProductCart();
   const cart = useSelector((state) => state.cart.data, shallowEqual);
   if (cart.length === 0) return <Navigate to={"/login"} replace />;
   const cartProducts =
-    data.products.length > 0
+    products.length > 0
       ? cart
           .map((cartItem) => {
-            const product = data.products?.find(
+            const product = products?.find(
               (product) => product._id === cartItem.productId
             );
             if (!product) return null;
@@ -30,13 +30,16 @@ const CheckoutPage = () => {
           })
           .filter((item) => item.isBuyNow)
       : [];
-  const shippingPrice = cartProducts.length * CartKeys.SHIPPING;
-  const totalPrice = cartProducts.reduce(
-    (total, item) =>
-      total + item.quantity * ((100 - item.discount) / 100) * item.price,
-    0
-  );
-  if (cartProducts.length === 0 && state.cart.length === 0)
+  const shippingPrice =
+    products.length > 0 && cartProducts.length * CartKeys.SHIPPING;
+  const totalPrice =
+    cartProducts.length > 0 &&
+    cartProducts.reduce(
+      (total, item) =>
+        total + item.quantity * ((100 - item.discount) / 100) * item.price,
+      0
+    );
+  if (cartProducts.length === 0 && state.cart && state.cart.length === 0)
     return <CheckoutSkeleton />;
   return (
     <>
@@ -81,9 +84,14 @@ const CheckoutPage = () => {
                     ? state.shippingPrice
                     : shippingPrice
                 }
+                cart={
+                  state && state.prevPath.includes("cart")
+                    ? state.cart
+                    : cartProducts
+                }
               />
             </div>
-            <div className="w-[35%] md-lg:w-full pl-3 md-lg:pl-0 lg:mt-3">
+            <div className="w-[35%] lg:w-full pl-3 lg:pl-0 lg:mt-3">
               <CheckoutCart
                 cart={
                   state && state.prevPath.includes("cart")

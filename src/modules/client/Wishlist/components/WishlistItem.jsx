@@ -16,6 +16,7 @@ const WishlistItem = ({ item, onClickCart, onClickDelete }) => {
           className="w-[80px] h-[80px] object-cover"
           src={item.thumb[0].fileName}
           alt={item.name}
+          loading="lazy"
         />
       </td>
       <td scope="row" className="px-6 py-4 font-medium whitespace-nowrap">

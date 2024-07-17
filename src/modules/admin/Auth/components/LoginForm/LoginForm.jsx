@@ -51,7 +51,12 @@ function LoginForm() {
         <div className="bg-white p-4 rounded-md">
           <div className="h-[70px] flex justify-center items-center">
             <div className="w-[180px] h-[50px]">
-              <img className="w-full h-full" src={logo} alt="image" />
+              <img
+                className="w-full h-full"
+                src={logo}
+                alt="image"
+                loading="lazy"
+              />
             </div>
           </div>
 

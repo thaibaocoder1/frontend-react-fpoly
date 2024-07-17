@@ -24,6 +24,7 @@ const FileField = ({ form, name, current }) => {
                 src={image}
                 alt="image"
                 className="w-full h-full object-contain"
+                loading="lazy"
               />
             </div>
           ) : (

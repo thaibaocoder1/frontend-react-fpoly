@@ -1,4 +1,4 @@
-import CartFeature from "@modules/client/Cart";
+import CartList from "@modules/client/Cart/components/CartList";
 import { IoIosArrowForward } from "react-icons/io";
 import { NavLink } from "react-router-dom";
 
@@ -23,7 +23,7 @@ const Cart = () => {
           </div>
         </div>
       </section>
-      <CartFeature />
+      <CartList />
     </>
   );
 };

@@ -1,11 +1,12 @@
 import Rating from "@components/Rating/Rating";
 import { formatSalePrice } from "@utils/Format";
 import PropTypes from "prop-types";
+import { memo } from "react";
 import { FaEye, FaRegHeart } from "react-icons/fa";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 
-const ProductShop = ({ p, styles, onClick, onClickCart }) => {
+const ProductShop = memo(({ p, styles, onClick, onClickCart }) => {
   return (
     <div
       className={`flex transition-all duration-300 hover:shadow-md hover:-translate-y-3 ${
@@ -21,13 +22,14 @@ const ProductShop = ({ p, styles, onClick, onClickCart }) => {
             : "md-lg:w-full relative group h-[210px] md:h-[270px] overflow-hidden"
         }
       >
-        <Link to={`detail/${p._id}`}>
+        <Link to={`/shops/detail/${p._id}`}>
           <img
             className={`h-[200px] rounded-md md:h-[270px] xs:h-[170px] w-full ${
               styles === "grid" ? "object-contain" : "object-cover"
             }`}
             src={p.thumb[0].fileName}
             alt={p.name}
+            loading="lazy"
           />
         </Link>
 
@@ -51,7 +53,7 @@ const ProductShop = ({ p, styles, onClick, onClickCart }) => {
       </div>
 
       <div className="flex justify-start items-start flex-col gap-1 p-2">
-        <Link to={`shops/detail/${p._id}`}>
+        <Link to={`/shops/detail/${p._id}`}>
           <h2 className="font-bold">{p.name}</h2>
         </Link>
         <div className="flex justify-start items-center gap-3">
@@ -65,10 +67,11 @@ const ProductShop = ({ p, styles, onClick, onClickCart }) => {
       </div>
     </div>
   );
-};
+});
+ProductShop.displayName = "ProductShop";
 ProductShop.propTypes = {
   p: PropTypes.object.isRequired,
-  styles: PropTypes.string.isRequired,
+  styles: PropTypes.string,
   onClick: PropTypes.func,
   onClickCart: PropTypes.func,
 };

@@ -19,5 +19,24 @@ const formatSubtotalPrice = (product) => {
     currency: "VND",
   });
 };
+const formatOrderStatus = (status) => {
+  switch (status) {
+    case 1:
+      return "Pending";
+    case 2:
+      return "Confirmed";
+    case 3:
+      return "Shipping";
+    case 4:
+      return "Completed";
+    default:
+      return "Cancelled";
+  }
+};
 
-export { formatSalePrice, formatOriginalPrice, formatSubtotalPrice };
+export {
+  formatSalePrice,
+  formatOriginalPrice,
+  formatSubtotalPrice,
+  formatOrderStatus,
+};

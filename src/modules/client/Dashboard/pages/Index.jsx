@@ -85,6 +85,7 @@ const Index = () => {
                 className="w-48 h-48 rounded-full"
                 src={userLoggined.imageUrl.fileName}
                 alt={userLoggined.username}
+                loading="lazy"
               />
             </div>
             <div className="p-4">

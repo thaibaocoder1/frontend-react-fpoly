@@ -39,7 +39,11 @@ const Banner = memo(() => {
             >
               {[1, 2, 3, 4, 5, 6].map((item, i) => (
                 <Link key={item} to={`#`}>
-                  <img src={`src/assets/banner/${i + 1}.jpg`} alt="Banner" />
+                  <img
+                    src={`src/assets/banner/${i + 1}.jpg`}
+                    alt="Banner"
+                    loading="lazy"
+                  />
                 </Link>
               ))}
             </Carousel>

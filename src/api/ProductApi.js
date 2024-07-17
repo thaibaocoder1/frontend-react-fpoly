@@ -39,6 +39,10 @@ const productApi = {
       },
     });
   },
+  async updateField(data) {
+    const url = "/products";
+    return await axiosClient.patch(`${url}/update-fields`, data);
+  },
 };
 
 export default productApi;

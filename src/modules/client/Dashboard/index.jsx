@@ -1,16 +1,16 @@
+import { logout } from "@app/slice/AuthSlice";
+import { clearCart } from "@app/slice/CartSlice";
+import { clearWishList } from "@app/slice/WishlistSlice";
 import ModalLogout from "@components/Modal/ModalLogout";
 import { unwrapResult } from "@reduxjs/toolkit";
 import toastObj from "@utils/Toast";
 import PropTypes from "prop-types";
+import { useState } from "react";
 import { FaBorderAll, FaHeart } from "react-icons/fa";
 import { IoIosHome, IoMdLogOut } from "react-icons/io";
 import { RiLockPasswordLine } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import { logout } from "../../../app/slice/AuthSlice";
-import { useState } from "react";
-import { clearCart } from "@app/slice/CartSlice";
-import { clearWishList } from "@app/slice/WishlistSlice";
 
 const DashboardFeature = ({ filterShow }) => {
   const navigate = useNavigate();

@@ -4,7 +4,7 @@ import {
   updateProductCart,
 } from "@app/slice/CartSlice";
 import ModalConfirmCart from "@components/Modal/ModalConfirmCart";
-import useProductHome from "@hooks/useProductHome";
+import useProductCart from "@hooks/useProductCart";
 import toastObj from "@utils/Toast";
 import { useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
@@ -15,16 +15,17 @@ import CartSummary from "./CartSummary";
 const CartList = () => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.data, shallowEqual);
-  const { data: results } = useProductHome();
+  const { cart: results } = useProductCart();
   const [modalItem, setModalItem] = useState({
     open: false,
     data: {},
     all: false,
   });
+
   const cartProducts =
-    results?.products.length > 0
+    results.length > 0
       ? cart.map((cartItem) => {
-          const product = results?.products.find(
+          const product = results.find(
             (product) => product._id === cartItem.productId
           );
           return {

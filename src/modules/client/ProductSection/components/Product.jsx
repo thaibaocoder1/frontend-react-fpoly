@@ -32,6 +32,7 @@ const Product = memo(
                 src={product.thumb[0].fileName}
                 alt={product.name}
                 className="sm:w-full w-full h-full object-contain mx-auto cursor-pointer"
+                loading="lazy"
               />
             </NavLink>
             <ul className="flex transition-all duration-500 -bottom-14 justify-center items-center gap-2 absolute w-full group-hover:bottom-3">

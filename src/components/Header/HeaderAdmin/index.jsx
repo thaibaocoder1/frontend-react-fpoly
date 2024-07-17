@@ -49,9 +49,11 @@ const HeaderAdmin = ({ showSidebar, setShowSidebar }) => {
                   className="w-[45px] h-[45px] rounded-full overflow-hidden"
                   src={logo}
                   alt={userInfo.username}
+                  loading="lazy"
                 />
               ) : (
                 <img
+                  loading="lazy"
                   className="w-[45px] h-[45px] rounded-full overflow-hidden"
                   src={logo}
                   alt="BSMART"

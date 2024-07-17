@@ -26,6 +26,17 @@ export const getProductsNoParams = createAsyncThunk(
     }
   }
 );
+export const getProductsCart = createAsyncThunk(
+  "product/getProductsCart",
+  async (_, { rejectWithValue, fulfillWithValue, signal }) => {
+    try {
+      const response = await productApi.getAll(signal);
+      return fulfillWithValue(response.data);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 export const getRelatedProducts = createAsyncThunk(
   "product/getRelatedProducts",
   async (payload, { rejectWithValue, fulfillWithValue, signal }) => {
@@ -70,12 +81,24 @@ export const updateProduct = createAsyncThunk(
     }
   }
 );
+export const updateFieldProduct = createAsyncThunk(
+  "product/updateFieldProduct",
+  async (payload, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const res = await productApi.updateField(payload);
+      return fulfillWithValue(res.data);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const productSlice = createSlice({
   name: "product",
   initialState: {
     data: {
       products: [],
+      cart: [],
       pagination: {},
       related: [],
     },
@@ -111,6 +134,18 @@ const productSlice = createSlice({
       state.error = "";
     });
     builder.addCase(getProductsNoParams.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(getProductsCart.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getProductsCart.fulfilled, (state, action) => {
+      state.data = { ...state.data, cart: action.payload, pagination: {} };
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(getProductsCart.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });
@@ -157,6 +192,17 @@ const productSlice = createSlice({
       state.error = "";
     });
     builder.addCase(updateProduct.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(updateFieldProduct.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updateFieldProduct.fulfilled, (state) => {
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(updateFieldProduct.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

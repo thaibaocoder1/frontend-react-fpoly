@@ -13,6 +13,7 @@ const FooterClient = () => {
               className="w-[190px] h-[70px]  sm:w-full"
               src={logo}
               alt="BSMART"
+              loading="lazy"
             />
             <ul className="flex flex-col gap-2 text-slate-600">
               <li>Address : FPT Polytechnic College</li>

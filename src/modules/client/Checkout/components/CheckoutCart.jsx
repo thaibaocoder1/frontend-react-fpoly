@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 const CheckoutCart = ({ cart }) => {
   return (
-    <div className="flex bg-white p-4 flex-col gap-2 mb-3 rounded-lg max-h-[285px] overflow-y-auto">
+    <div className="flex bg-white p-4 flex-col gap-2 mb-3 rounded-lg max-h-[285px] overflow-auto">
       <div className="flex justify-start items-center">
         <h2 className="text-xl text-slate-600 font-bold">Cart</h2>
       </div>
@@ -16,6 +16,7 @@ const CheckoutCart = ({ cart }) => {
                   className="w-[60px] h-[60px] object-cover"
                   src={item.thumb[0].fileName}
                   alt={item.name}
+                  loading="lazy"
                 />
                 <div className="pr-4 text-slate-600">
                   <h2 className="text-base font-semibold">{item.name}</h2>

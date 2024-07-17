@@ -77,6 +77,7 @@ const FileField = ({ name, form, current }) => {
                   src={typeof item === "string" ? item : item.fileName}
                   alt="image"
                   className="w-full h-full object-cover"
+                  loading="lazy"
                 />
               </div>
             ))

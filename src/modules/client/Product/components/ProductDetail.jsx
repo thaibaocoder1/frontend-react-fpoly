@@ -150,6 +150,7 @@ const ProductDetail = memo(({ product }) => {
                 className="h-[400px] w-full"
                 src={product.thumb?.[0].fileName}
                 alt={product.name}
+                loading="lazy"
               />
             </div>
             <div className="py-3">
@@ -166,6 +167,7 @@ const ProductDetail = memo(({ product }) => {
                         className="h-[100px] w-full cursor-pointer object-contain"
                         src={img.fileName}
                         alt={i}
+                        loading="lazy"
                       />
                     </div>
                   );

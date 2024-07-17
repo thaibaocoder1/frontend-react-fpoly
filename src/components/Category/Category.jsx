@@ -60,6 +60,7 @@ const Categories = () => {
             >
               <div className="w-full h-full relative">
                 <img
+                  loading="lazy"
                   src={item.imageUrl}
                   className="w-full h-full object-cover"
                   alt={item.slug}

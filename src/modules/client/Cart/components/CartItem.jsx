@@ -10,6 +10,7 @@ const CartItem = ({ pt, handleChangeQuantity, handleDelete }) => {
             className="w-[80px] h-[80px] object-cover"
             src={pt.thumb[0].fileName}
             alt={pt.name}
+            loading="lazy"
           />
           <div className="pr-4 text-slate-600">
             <h2 className="text-md font-semibold">{pt.name}</h2>

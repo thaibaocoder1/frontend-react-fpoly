@@ -97,6 +97,7 @@ const CategoryForm = () => {
         >
           {image !== "" ? (
             <img
+              loading="lazy"
               src={image}
               alt="Placeholder"
               className={`${image !== "" ? "block" : "hidden"} w-full h-full`}

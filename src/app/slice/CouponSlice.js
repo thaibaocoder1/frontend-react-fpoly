@@ -107,6 +107,9 @@ const couponSlice = createSlice({
     setEmtpyCoupon(state) {
       state.current = null;
     },
+    clearCoupon(state) {
+      state.data.couponStorage = [];
+    },
     toggleDialog(state) {
       state.show = !state.show;
     },
@@ -205,5 +208,6 @@ export const {
   setEmtpyCoupon,
   deleteCouponStorage,
   loadCoupon,
+  clearCoupon,
 } = actions;
 export default reducer;

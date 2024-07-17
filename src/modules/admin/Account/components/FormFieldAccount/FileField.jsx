@@ -21,6 +21,7 @@ const FileField = ({ form, name, current }) => {
           {image ? (
             <div className="flex justify-center items-center flex-col h-full w-[200px] cursor-pointer border border-dashed border-slate-500 hover:border-red-500 relative">
               <img
+                loading="lazy"
                 src={image}
                 alt="image"
                 className="w-full h-full object-contain"

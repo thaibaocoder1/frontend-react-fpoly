@@ -7,6 +7,8 @@ import ProductAddEdit from "@modules/admin/Product/components/ProductAddEdit";
 import Login from "@modules/client/Auth/components/Login";
 import Register from "@modules/client/Auth/components/Register";
 import Index from "@modules/client/Dashboard/pages/Index";
+import Orders from "@modules/client/Dashboard/pages/Orders";
+import NotFound from "@pages/NotFound";
 import AccountAdmin from "@pages/admin/Account";
 import CategoryAdmin from "@pages/admin/Category";
 import CouponAdmin from "@pages/admin/Coupon";
@@ -21,15 +23,14 @@ import ConfirmRecover from "@pages/client/ConfirmRecover";
 import Dashboard from "@pages/client/Dashboard";
 import ForgotAccount from "@pages/client/ForgotAccount";
 import Home from "@pages/client/Home";
-import MyOrders from "@pages/client/MyOrders";
 import MyWishList from "@pages/client/MyWishList";
+import OrderComplete from "@pages/client/OrderComplete";
 import RecoverAccount from "@pages/client/RecoverAccount";
 import ResetAccount from "@pages/client/ResetAccount";
 import Shop from "@pages/client/Shop";
 import ShopDetail from "@pages/client/ShopDetail";
 import { useRoutes } from "react-router-dom";
 import ProtectedRoute from "./protected";
-import NotFound from "@pages/NotFound";
 
 const RoutesFeature = () => {
   let element = useRoutes([
@@ -55,12 +56,12 @@ const RoutesFeature = () => {
           ],
         },
         {
-          path: "cart",
-          element: <Cart />,
-        },
-        {
           path: "checkout",
           element: <CheckoutPage />,
+        },
+        {
+          path: "cart",
+          element: <Cart />,
         },
         {
           path: "dashboard",
@@ -72,7 +73,7 @@ const RoutesFeature = () => {
             },
             {
               path: "orders",
-              element: <MyOrders />,
+              element: <Orders />,
             },
             {
               path: "wishlist",
@@ -116,6 +117,10 @@ const RoutesFeature = () => {
               element: <ConfirmRecover />,
             },
           ],
+        },
+        {
+          path: "/order/complete",
+          element: <OrderComplete />,
         },
       ],
     },

@@ -19,6 +19,7 @@ const CategoryItem = ({ category, onClick }) => {
         </td>
         <td scope="row" className="py-1 px-4 font-medium whitespace-nowrap">
           <img
+            loading="lazy"
             className="w-[80px] h-[80px] md:w-full md:h-full object-cover"
             src={category.imageUrl}
             alt={category.title}

@@ -10,6 +10,7 @@ const ProductItem = ({ product }) => {
       </td>
       <td scope="row" className="py-1 px-4 font-medium whitespace-nowrap">
         <img
+          loading="lazy"
           className="w-[60px] h-[60px] object-cover"
           src={product.thumb[0].fileName}
           alt={product.name}

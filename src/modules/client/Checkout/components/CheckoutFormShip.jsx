@@ -1,14 +1,15 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import useFetchData from "@hooks/useFetchData";
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import CheckoutInputField from "./CheckoutFormControl/CheckoutInputField";
-import PropTypes from "prop-types";
 import CheckoutSelectField from "./CheckoutFormControl/CheckoutSelectField";
-import { useEffect, useState } from "react";
-import axios, { CanceledError } from "axios";
 import CheckoutSelectFieldDistrict from "./CheckoutFormControl/CheckoutSelectFieldDistrict";
-import CheckoutSelectFieldWard from "./CheckoutFormControl/CheckoutSelectFieldWard";
 import CheckoutSelectFieldPayment from "./CheckoutFormControl/CheckoutSelectFieldPayment";
+import CheckoutSelectFieldWard from "./CheckoutFormControl/CheckoutSelectFieldWard";
+import { useSelector } from "react-redux";
 
 const schema = yup.object({
   fullname: yup.string().required("Please enter fullname"),
@@ -30,11 +31,12 @@ const schema = yup.object({
   payment: yup.string().required("Please choose one payment"),
 });
 const CheckoutFormShip = ({ onSubmit }) => {
+  const userLoggined = useSelector((state) => state.auth.user);
   const form = useForm({
     defaultValues: {
-      fullname: "",
-      email: "",
-      phone: "",
+      fullname: userLoggined ? userLoggined.fullname : "",
+      email: userLoggined ? userLoggined.email : "",
+      phone: userLoggined ? userLoggined.phone : "",
       note: "",
       address: "",
       province: "",
@@ -44,67 +46,34 @@ const CheckoutFormShip = ({ onSubmit }) => {
     resolver: yupResolver(schema),
   });
   const [selectedProvince, setSelectedProvince] = useState("");
-  const [districts, setDistricts] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState("");
-  const [wards, setWards] = useState([]);
+  const { data: provinceList } = useFetchData(
+    "https://vapi.vnappmob.com/api/province"
+  );
+  const { data: districts } = useFetchData(
+    selectedProvince
+      ? `https://vapi.vnappmob.com/api/province/district/${selectedProvince}`
+      : null,
+    !!selectedProvince,
+    [selectedProvince]
+  );
+  const { data: wards } = useFetchData(
+    selectedDistrict
+      ? `https://vapi.vnappmob.com/api/province/ward/${selectedDistrict}`
+      : null,
+    !!selectedDistrict,
+    [selectedDistrict]
+  );
   const [isSubmit, setIsSubmit] = useState({
     submitted: false,
     data: [],
   });
-
-  const [provinceList, setProvinceList] = useState();
-  const [isLoading, setIsLoading] = useState(false);
   useEffect(() => {
-    const abortController = new AbortController();
-    const getProvinceList = async () => {
-      try {
-        setIsLoading(true);
-        const res = await axios.get("https://vapi.vnappmob.com/api/province", {
-          signal: abortController.signal,
-        });
-        res.data && setProvinceList(res.data.results);
-        setIsLoading(false);
-      } catch (error) {
-        if (error instanceof CanceledError) return;
-        setIsLoading(false);
-      }
-    };
-    getProvinceList();
-    return () => abortController.abort();
-  }, []);
-  useEffect(() => {
-    if (selectedProvince) {
-      axios
-        .get(
-          `https://vapi.vnappmob.com/api/province/district/${selectedProvince}`
-        )
-        .then((response) => {
-          setDistricts(response.data.results);
-        })
-        .catch((error) => {
-          console.error("Error fetching districts:", error);
-          setDistricts([]);
-        });
-    } else {
-      setDistricts([]);
-      setWards([]);
+    if (!selectedProvince) {
+      setSelectedDistrict("");
     }
   }, [selectedProvince]);
-  useEffect(() => {
-    if (selectedDistrict) {
-      axios
-        .get(`https://vapi.vnappmob.com/api/province/ward/${selectedDistrict}`)
-        .then((response) => {
-          setWards(response.data.results);
-        })
-        .catch((error) => {
-          console.error("Error fetching districts:", error);
-          setWards([]);
-        });
-    } else {
-      setWards([]);
-    }
-  }, [selectedDistrict]);
+
   const onSubmitData = async (data) => {
     setIsSubmit({
       submitted: true,
@@ -124,7 +93,7 @@ const CheckoutFormShip = ({ onSubmit }) => {
             />
             <CheckoutInputField form={form} name="email" placeholder="Email" />
           </div>
-          <div className="flex md:flex-col md:gap-2 w-full gap-5 text-slate-600">
+          <div className="flex md:flex-col md:gap-2 w-full gap-5 text-slate-600 mb-1">
             <CheckoutSelectField
               form={form}
               name="province"
@@ -167,7 +136,11 @@ const CheckoutFormShip = ({ onSubmit }) => {
             <span className="bg-blue-200 text-blue-800 text-sm font-medium mr-2 px-2 py-1 rounded">
               Home
             </span>
-            <span>{isSubmit.data.phone}</span>
+            <span>
+              {isSubmit.data.phone} - {isSubmit.data.province},{" "}
+              {isSubmit.data.district}, {isSubmit.data.ward},{" "}
+              {isSubmit.data.address}
+            </span>
             <button
               onClick={() =>
                 setIsSubmit((prev) => ({ ...prev, submitted: false }))

@@ -70,6 +70,7 @@ const ProductFeature = ({ title, products }) => {
                     className="w-[110px] h-[110px] object-contain"
                     src={item.thumb[0].fileName}
                     alt={item.name}
+                    loading="lazy"
                   />
                   <div className="px-3 flex justify-start items-start gap-1 flex-col text-slate-600">
                     <h2>{item.name}</h2>

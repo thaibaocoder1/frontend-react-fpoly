@@ -1,10 +1,10 @@
-import Product from "@modules/client/ProductSection/components/Product";
 import PropTypes from "prop-types";
 import "react-multi-carousel/lib/styles.css";
 import "swiper/css";
 import "swiper/css/pagination";
 import { Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import ProductShop from "./Product";
 
 const ProductRelated = ({ relatedProducts }) => {
   return (
@@ -23,11 +23,10 @@ const ProductRelated = ({ relatedProducts }) => {
           }}
           spaceBetween={25}
           modules={[Pagination]}
-          className="mySwiper"
         >
           {relatedProducts.map((item) => (
             <SwiperSlide key={item._id}>
-              <Product product={item} />
+              <ProductShop p={item} styles="grid" />
             </SwiperSlide>
           ))}
         </Swiper>
