@@ -92,6 +92,18 @@ export const updateFieldProduct = createAsyncThunk(
     }
   }
 );
+export const addReview = createAsyncThunk(
+  "product/addReview",
+  async (payload, { rejectWithValue, fulfillWithValue, dispatch }) => {
+    try {
+      const res = await productApi.addReview(payload);
+      dispatch(getOneProduct(payload.productId));
+      return fulfillWithValue(res.data);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const productSlice = createSlice({
   name: "product",
@@ -109,6 +121,9 @@ const productSlice = createSlice({
   reducers: {
     removeCurrentProduct(state) {
       state.current = null;
+    },
+    setEmptyError(state) {
+      state.error = "";
     },
   },
   extraReducers: (builder) => {
@@ -184,6 +199,17 @@ const productSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     });
+    builder.addCase(addReview.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(addReview.fulfilled, (state) => {
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(addReview.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
     builder.addCase(updateProduct.pending, (state) => {
       state.loading = true;
     });
@@ -210,5 +236,5 @@ const productSlice = createSlice({
 });
 
 const { reducer, actions } = productSlice;
-export const { removeCurrentProduct } = actions;
+export const { removeCurrentProduct, setEmptyError } = actions;
 export default reducer;

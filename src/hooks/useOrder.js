@@ -1,14 +1,15 @@
-import { getOrderWithId } from "@app/slice/OrderSlice";
+import { getOrderWithoutId } from "@app/slice/OrderSlice";
 import { useEffect, useMemo } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
 
 const selectOrder = (state) => state.order.data;
 const selectOrderState = createSelector([selectOrder], (order) => ({
-  orders: order.data,
+  orders: order.orders,
+  pagination: order.pagination,
 }));
 
-const useOrder = (filters, id) => {
+const useOrder = (filters) => {
   const dispatch = useDispatch();
   const config = useMemo(
     () => ({
@@ -16,19 +17,18 @@ const useOrder = (filters, id) => {
         _page: filters?._page,
         _limit: filters?._limit,
         _search: filters?._search,
+        _status: filters?._status,
       },
     }),
     [filters]
   );
-
-  const orders = useSelector(selectOrderState, shallowEqual);
-
+  const { orders, pagination } = useSelector(selectOrderState, shallowEqual);
   useEffect(() => {
-    const promise = dispatch(getOrderWithId(id, config));
+    const promise = dispatch(getOrderWithoutId(config));
     return () => promise.abort();
-  }, [config, dispatch, id]);
+  }, [config, dispatch]);
 
-  return orders;
+  return { orders, pagination };
 };
 
 export default useOrder;

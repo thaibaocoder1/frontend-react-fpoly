@@ -1,4 +1,4 @@
-import Rating from "@components/Rating/Rating";
+import { Rating } from "@mui/material";
 import { formatSalePrice } from "@utils/Format";
 import PropTypes from "prop-types";
 import { memo } from "react";
@@ -6,10 +6,10 @@ import { FaEye, FaRegHeart } from "react-icons/fa";
 import { RiShoppingCartLine } from "react-icons/ri";
 import { Link } from "react-router-dom";
 
-const ProductShop = memo(({ p, styles, onClick, onClickCart }) => {
+const ProductShop = memo(({ p, styles, onClick, onClickCart, onClickView }) => {
   return (
     <div
-      className={`flex transition-all duration-300 hover:shadow-md hover:-translate-y-3 ${
+      className={`flex transition-all duration-300 hover:shadow-md hover:-translate-y-2 ${
         styles === "grid"
           ? "flex-col justify-start items-start"
           : "justify-start items-center md-lg:flex-col md-lg:justify-start md-lg:items-start"
@@ -40,7 +40,10 @@ const ProductShop = memo(({ p, styles, onClick, onClickCart }) => {
           >
             <FaRegHeart />
           </li>
-          <li className="select-none w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#059473] hover:text-white hover:rotate-[720deg] transition-all">
+          <li
+            onClick={() => onClickView && onClickView(p)}
+            className="select-none w-[38px] h-[38px] cursor-pointer bg-white flex justify-center items-center rounded-full hover:bg-[#059473] hover:text-white hover:rotate-[720deg] transition-all"
+          >
             <FaEye />
           </li>
           <li
@@ -61,7 +64,12 @@ const ProductShop = memo(({ p, styles, onClick, onClickCart }) => {
             {formatSalePrice(p.price, p.discount)}
           </span>
           <div className="flex">
-            <Rating ratings={4.5} />
+            <Rating
+              defaultValue={p.averageRating || 0}
+              readOnly
+              size="medium"
+              precision={0.5}
+            />
           </div>
         </div>
       </div>
@@ -74,6 +82,7 @@ ProductShop.propTypes = {
   styles: PropTypes.string,
   onClick: PropTypes.func,
   onClickCart: PropTypes.func,
+  onClickView: PropTypes.func,
 };
 
 export default ProductShop;

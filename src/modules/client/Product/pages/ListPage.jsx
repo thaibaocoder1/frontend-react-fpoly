@@ -1,41 +1,33 @@
 import useProduct from "@hooks/useProduct";
-import {
-  Box,
-  Button,
-  LinearProgress,
-  Pagination,
-  TextField,
-} from "@mui/material";
+import { Box, LinearProgress, Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
-import { AiFillStar } from "react-icons/ai";
 import { BsFillGridFill } from "react-icons/bs";
-import { CiStar } from "react-icons/ci";
 import { FaThList } from "react-icons/fa";
-import { shallowEqual, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
+import FilterCategory from "../components/FilterCategory";
+import FilterPrice from "../components/FilterPrice";
+import FilterRating from "../components/FilterRating";
+import FilterViews from "../components/FilterViews";
 import ProductList from "../components/ProductList";
+import { useDispatch, useSelector } from "react-redux";
+import toastObj from "@utils/Toast";
+import { setEmptyError } from "@app/slice/ProductSlice";
+import SortProduct from "../components/SortProduct";
 
 const ListPage = () => {
-  const [category, setCategory] = useState("");
   const [styles, setStyles] = useState("grid");
   const [filter, setFilter] = useState(true);
-  const { categories } = useSelector(
-    (state) => state.category.data,
-    shallowEqual
-  );
   const [searchParams] = useSearchParams();
   const categoryTerm = searchParams.get("category") || "";
   const [filters, setFilters] = useState({
     _page: 1,
     _limit: 6,
     _category: categoryTerm,
+    _sort: "",
   });
   const { data } = useProduct(filters);
-  const handleFiltersChange = (_, page) => {
-    setFilters((prev) => ({ ...prev, _page: page }));
-  };
-  const queryCategory = (e, value) =>
-    e.target.checked ? setCategory(value) : setCategory("");
+  const isHasError = useSelector((state) => state.product.error);
+  const dispatch = useDispatch();
   useEffect(() => {
     setFilters((prev) => ({
       ...prev,
@@ -43,6 +35,25 @@ const ListPage = () => {
       _category: categoryTerm,
     }));
   }, [categoryTerm]);
+  const handlePageChange = (_, page) => {
+    setFilters((prev) => ({ ...prev, _page: page }));
+  };
+  const handleSortChange = (sortValue) => {
+    setFilters((prev) => ({ ...prev, _sort: sortValue }));
+  };
+  const handleFiltersChange = (newFilters) => {
+    setFilters((prev) => ({
+      ...prev,
+      ...newFilters,
+    }));
+  };
+  const setNewFilters = (newFilters) => setFilters(newFilters);
+  useEffect(() => {
+    if (isHasError) {
+      toastObj.error(isHasError);
+      dispatch(setEmptyError());
+    }
+  }, [isHasError, dispatch]);
   if (!data || !data.products || data.products.length === 0)
     return <LinearProgress />;
   return (
@@ -65,202 +76,19 @@ const ListPage = () => {
                 : "md:h-auto md:overflow-auto md:mb-0"
             }`}
           >
-            <h2 className="text-3xl font-bold mb-3 text-slate-600">Category</h2>
-            <div className="py-2">
-              {categories.length > 0 &&
-                categories.map((c, i) => (
-                  <div
-                    key={i}
-                    className="flex justify-start items-center gap-2 py-1"
-                  >
-                    <input
-                      checked={category === c.slug ? true : false}
-                      onChange={(e) => queryCategory(e, c.slug)}
-                      type="checkbox"
-                      id={c.title}
-                    />
-                    <label
-                      className="text-slate-600 block cursor-pointer"
-                      htmlFor={c.title}
-                    >
-                      {c.title}
-                    </label>
-                  </div>
-                ))}
-            </div>
-
-            <div className="py-2 flex flex-col gap-2">
-              <h2 className="text-3xl font-bold text-slate-600">Price</h2>
-              <Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexFlow: "row nowrap",
-                    alignItems: "center",
-                  }}
-                >
-                  <TextField variant="standard" name="salePrice_gte" />
-                  <span style={{ marginInline: 10 }}>-</span>
-                  <TextField variant="standard" name="salePrice_lte" />
-                </Box>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  sx={{ marginTop: 1 }}
-                >
-                  Apply
-                </Button>
-              </Box>
-            </div>
-
-            <div className="py-3 flex flex-col gap-4">
-              <h2 className="text-3xl font-bold mb-3 text-slate-600">Rating</h2>
-              <div className="flex flex-col gap-3">
-                <div
-                  // onClick={() => setRating(5)}
-                  className="text-orange-500 flex justify-start items-start gap-2 text-xl cursor-pointer"
-                >
-                  <span>
-                    <AiFillStar />
-                  </span>
-                  <span>
-                    <AiFillStar />
-                  </span>
-                  <span>
-                    <AiFillStar />
-                  </span>
-                  <span>
-                    <AiFillStar />
-                  </span>
-                  <span>
-                    <AiFillStar />
-                  </span>
-                </div>
-
-                <div
-                  // onClick={() => setRating(4)}
-                  className="text-orange-500 flex justify-start items-start gap-2 text-xl cursor-pointer"
-                >
-                  <span>
-                    <AiFillStar />
-                  </span>
-                  <span>
-                    <AiFillStar />
-                  </span>
-                  <span>
-                    <AiFillStar />
-                  </span>
-                  <span>
-                    <AiFillStar />
-                  </span>
-                  <span>
-                    <CiStar />
-                  </span>
-                </div>
-
-                <div
-                  // onClick={() => setRating(3)}
-                  className="text-orange-500 flex justify-start items-start gap-2 text-xl cursor-pointer"
-                >
-                  <span>
-                    <AiFillStar />
-                  </span>
-                  <span>
-                    <AiFillStar />
-                  </span>
-                  <span>
-                    <AiFillStar />
-                  </span>
-                  <span>
-                    <CiStar />
-                  </span>
-                  <span>
-                    <CiStar />
-                  </span>
-                </div>
-
-                <div
-                  // onClick={() => setRating(2)}
-                  className="text-orange-500 flex justify-start items-start gap-2 text-xl cursor-pointer"
-                >
-                  <span>
-                    <AiFillStar />
-                  </span>
-                  <span>
-                    <AiFillStar />
-                  </span>
-                  <span>
-                    <CiStar />
-                  </span>
-                  <span>
-                    <CiStar />
-                  </span>
-                  <span>
-                    <CiStar />
-                  </span>
-                </div>
-
-                <div
-                  // onClick={() => setRating(1)}
-                  className="text-orange-500 flex justify-start items-start gap-2 text-xl cursor-pointer"
-                >
-                  <span>
-                    <AiFillStar />
-                  </span>
-                  <span>
-                    <CiStar />
-                  </span>
-                  <span>
-                    <CiStar />
-                  </span>
-                  <span>
-                    <CiStar />
-                  </span>
-                  <span>
-                    <CiStar />
-                  </span>
-                </div>
-
-                <div
-                  // onClick={resetRating}
-                  className="text-orange-500 flex justify-start items-start gap-2 text-xl cursor-pointer"
-                >
-                  <span>
-                    <CiStar />
-                  </span>
-                  <span>
-                    <CiStar />
-                  </span>
-                  <span>
-                    <CiStar />
-                  </span>
-                  <span>
-                    <CiStar />
-                  </span>
-                  <span>
-                    <CiStar />
-                  </span>
-                </div>
-              </div>
-            </div>
+            <FilterCategory onChange={handleFiltersChange} />
+            <FilterPrice onChange={handleFiltersChange} />
+            <FilterRating onChange={handleFiltersChange} />
           </div>
 
           <div className="w-9/12 md-lg:w-8/12 md:w-full">
             <div className="pl-8 md:pl-0">
-              <div className="py-4 bg-white mb-10 px-3 rounded-md flex justify-between items-start border">
+              <div className="py-4 bg-white px-3 rounded-md flex justify-between items-start border">
                 <h2 className="text-lg font-medium text-slate-600">
                   ({data.products.length}) Products
                 </h2>
                 <div className="flex justify-center items-center gap-3">
-                  <select
-                    className="p-1 border outline-0 text-slate-600 font-semibold"
-                    name=""
-                    id=""
-                  >
-                    <option value="">Sort By</option>
-                    <option value="low-to-high">Low to High Price</option>
-                    <option value="high-to-low">High to Low Price </option>
-                  </select>
+                  <SortProduct onChange={handleSortChange} />
                   <div className="flex justify-center items-start gap-4 md-lg:hidden">
                     <div
                       onClick={() => setStyles("grid")}
@@ -281,11 +109,10 @@ const ListPage = () => {
                   </div>
                 </div>
               </div>
-
+              <FilterViews filters={filters} onChange={setNewFilters} />
               <div className="pb-8">
                 <ProductList data={data.products} styles={styles} />
               </div>
-
               <Box sx={{ display: "flex", justifyContent: "center" }}>
                 <Pagination
                   count={data.pagination.totalPages}
@@ -293,7 +120,7 @@ const ListPage = () => {
                   color="primary"
                   variant="outlined"
                   shape="rounded"
-                  onChange={handleFiltersChange}
+                  onChange={handlePageChange}
                 />
               </Box>
             </div>

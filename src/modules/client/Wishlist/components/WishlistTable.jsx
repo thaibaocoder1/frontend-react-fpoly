@@ -29,6 +29,7 @@ const WishlistTable = () => {
         userId: userLoggined._id,
         quantity: 1,
         productId: item._id,
+        isBuyNow: false,
       })
     );
     toastObj.success("Add to cart success");

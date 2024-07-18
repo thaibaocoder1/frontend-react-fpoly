@@ -43,6 +43,10 @@ const productApi = {
     const url = "/products";
     return await axiosClient.patch(`${url}/update-fields`, data);
   },
+  async addReview(data) {
+    const url = "/products";
+    return await axiosClient.post(`${url}/review`, data);
+  },
 };
 
 export default productApi;

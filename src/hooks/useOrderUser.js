@@ -3,9 +3,10 @@ import { useEffect, useMemo } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { createSelector } from "reselect";
 
-const selectOrder = (state) => state.order.data;
+const selectOrder = (state) => state.order.ordersWithUser;
 const selectOrderState = createSelector([selectOrder], (order) => ({
-  ordersWithUser: order.ordersWithUser,
+  orders: order.orders,
+  pagination: order.pagination,
 }));
 
 const useOrderUser = (id, filters) => {
@@ -14,18 +15,19 @@ const useOrderUser = (id, filters) => {
       params: {
         _page: filters?._page,
         _limit: filters?._limit,
+        _status: filters?._status,
       },
     }),
     [filters]
   );
   const dispatch = useDispatch();
-  const { ordersWithUser } = useSelector(selectOrderState, shallowEqual);
+  const { orders, pagination } = useSelector(selectOrderState, shallowEqual);
   useEffect(() => {
     const promise = dispatch(getOrderWithId({ id, config }));
     return () => promise.abort();
   }, [dispatch, id, config]);
 
-  return { ordersWithUser };
+  return { orders, pagination };
 };
 
 export default useOrderUser;

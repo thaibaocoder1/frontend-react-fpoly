@@ -3,8 +3,10 @@ import { formatOriginalPrice, formatSalePrice } from "@utils/Format";
 import toastObj from "@utils/Toast";
 import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const QuickView = ({ item }) => {
+  const navigate = useNavigate();
   const productId = item._id;
   const userLoggined = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
@@ -19,6 +21,21 @@ const QuickView = ({ item }) => {
         })
       );
       toastObj.success("Add to cart success");
+    } else {
+      toastObj.error("Please login first");
+    }
+  };
+  const handleBuyNow = () => {
+    if (userLoggined && userLoggined._id) {
+      dispatch(
+        addProductToCart({
+          userId: userLoggined._id,
+          quantity: 1,
+          productId,
+          isBuyNow: true,
+        })
+      );
+      navigate("/checkout");
     } else {
       toastObj.error("Please login first");
     }
@@ -60,12 +77,18 @@ const QuickView = ({ item }) => {
             {formatOriginalPrice(item.price)}
           </span>
         </div>
-        <div className="mt-2">
+        <div className="mt-2 flex justify-end gap-2">
           <button
             onClick={handleAddToCart}
             className="bg-indigo-500 text-white px-3 py-2 rounded-lg transition-all hover:bg-indigo-600 shadow-md duration-300"
           >
             Add to cart
+          </button>
+          <button
+            onClick={handleBuyNow}
+            className="bg-[#0f6d57] text-white px-3 py-2 rounded-lg transition-all hover:bg-[#059473] shadow-md duration-300"
+          >
+            Buy now
           </button>
         </div>
       </div>

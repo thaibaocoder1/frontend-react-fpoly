@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import CheckoutFormShip from "./CheckoutFormShip";
 import { useNavigate } from "react-router-dom";
+import { makePayment } from "@utils/Payment";
 
 const CheckoutShipping = ({ shippingPrice, cart }) => {
   const dispatch = useDispatch();
@@ -26,6 +27,12 @@ const CheckoutShipping = ({ shippingPrice, cart }) => {
       data.userId = userLoggined._id;
       data.coupons = couponStorage;
       data.deliveryFee = shippingPrice;
+      if (data.payment === "Online") {
+        const checkoutSuccessful = await makePayment(cart);
+        if (!checkoutSuccessful) {
+          return;
+        }
+      }
       const order = await dispatch(addOrder(data));
       if (order.type.includes("fulfilled")) {
         const { changeQuantityProduct, orderDetailList } =
@@ -40,7 +47,7 @@ const CheckoutShipping = ({ shippingPrice, cart }) => {
         }
       }
     } catch (error) {
-      console.log(error);
+      toastObj.error(error.message);
     }
   };
   useEffect(() => {

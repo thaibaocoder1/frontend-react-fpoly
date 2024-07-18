@@ -3,13 +3,13 @@ import { update } from "@app/slice/AuthSlice";
 import ModalUpdateProfile from "@components/Modal/ModalUpdateProfile";
 import toastObj from "@utils/Toast";
 import { useState } from "react";
-import { RiShoppingCart2Fill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
 import DashboardFormInfo from "../components/DashboardFormInfo";
+import DashboardFormOrder from "../components/DashboardFormOrder";
 
 const Index = () => {
-  const dispatch = useDispatch();
   const userLoggined = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const handleUpdateInfo = () => {
     setOpen(true);
@@ -31,41 +31,7 @@ const Index = () => {
     userLoggined?._id && (
       <>
         <div className="grid grid-cols-3 md:grid-cols-1 gap-5">
-          <div className="flex justify-center items-center p-5 bg-white rounded-md gap-5">
-            <div className="bg-green-100 w-[47px] h-[47px] rounded-full flex justify-center items-center text-xl">
-              <span className="text-xl text-green-800">
-                <RiShoppingCart2Fill />
-              </span>
-            </div>
-            <div className="flex flex-col justify-start items-start text-slate-600">
-              <h2 className="text-3xl font-bold">{0}</h2>
-              <span>Orders</span>
-            </div>
-          </div>
-
-          <div className="flex justify-center items-center p-5 bg-white rounded-md gap-5">
-            <div className="bg-green-100 w-[47px] h-[47px] rounded-full flex justify-center items-center text-xl">
-              <span className="text-xl text-green-800">
-                <RiShoppingCart2Fill />
-              </span>
-            </div>
-            <div className="flex flex-col justify-start items-start text-slate-600">
-              <h2 className="text-3xl font-bold">{0}</h2>
-              <span>Pending Orders</span>
-            </div>
-          </div>
-
-          <div className="flex justify-center items-center p-5 bg-white rounded-md gap-5">
-            <div className="bg-green-100 w-[47px] h-[47px] rounded-full flex justify-center items-center text-xl">
-              <span className="text-xl text-green-800">
-                <RiShoppingCart2Fill />
-              </span>
-            </div>
-            <div className="flex flex-col justify-start items-start text-slate-600">
-              <h2 className="text-3xl font-bold">{0}</h2>
-              <span>Cancelled Orders</span>
-            </div>
-          </div>
+          <DashboardFormOrder />
         </div>
         <div className="bg-white p-5 mt-5 rounded-md">
           <div className="flex items-center justify-between">

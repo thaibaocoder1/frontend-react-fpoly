@@ -4,7 +4,6 @@ import {
   setEmptyError,
   setStatusSuccess,
 } from "@app/slice/WishlistSlice";
-import Rating from "@components/Rating/Rating";
 import { formatOriginalPrice, formatSalePrice } from "@utils/Format";
 import toastObj from "@utils/Toast";
 import PropTypes from "prop-types";
@@ -18,6 +17,7 @@ import { getRelatedProducts } from "../../../../app/slice/ProductSlice";
 import ProductContent from "./ProductContent";
 import ProductRelated from "./ProductRelated";
 import ProductSocial from "./ProductSocial";
+import { Rating } from "@mui/material";
 
 const ProductDetail = memo(({ product }) => {
   const dispatch = useDispatch();
@@ -181,14 +181,14 @@ const ProductDetail = memo(({ product }) => {
             </div>
             <div className="flex justify-start items-center gap-4">
               <div className="flex text-xl">
-                <Rating ratings={4.5} />
+                <Rating defaultValue={5} readOnly size="medium" />
               </div>
               <span className="text-green-500">
                 ({product.reviews.length} reviews)
               </span>
             </div>
 
-            <div className="text-2xl text-red-500 font-bold flex gap-3">
+            <div className="text-2xl text-red-500 font-bold flex gap-3 lg:text-xl">
               {product.discount !== 0 ? (
                 <>
                   Price:
@@ -230,32 +230,34 @@ const ProductDetail = memo(({ product }) => {
                       +
                     </div>
                   </div>
-                  <button
-                    onClick={handleAddToCart}
-                    className="px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-green-500/40 bg-[#059473] text-white"
-                  >
-                    Add To Cart
-                  </button>
-                  {product.quantity > 0 ? (
+                  <div className="flex gap-2">
                     <button
-                      onClick={handleBuyNow}
-                      className="px-8 py-3 h-[50px] cursor-pointer hover:shadow-lg hover:shadow-green-500/40 bg-[#247462] text-white"
+                      onClick={handleAddToCart}
+                      className="min-w-[120px] lg:min-w-[100px] px-3 cursor-pointer hover:shadow-lg hover:shadow-green-500/40 bg-[#059473] text-white"
                     >
-                      Buy Now
+                      Add To Cart
                     </button>
-                  ) : (
-                    ""
-                  )}
+                    {product.quantity > 0 ? (
+                      <button
+                        onClick={handleBuyNow}
+                        className="min-w-[120px] lg:min-w-[100px] px-3 cursor-pointer hover:shadow-lg hover:shadow-green-500/40 bg-[#247462] text-white"
+                      >
+                        Buy Now
+                      </button>
+                    ) : (
+                      ""
+                    )}
+                    <div
+                      onClick={handleAddWishList}
+                      className="w-[50px] flex justify-center items-center cursor-pointer hover:shadow-lg hover:shadow-cyan-500/40 bg-cyan-500 text-white"
+                    >
+                      <FaHeart />
+                    </div>
+                  </div>
                 </>
               ) : (
                 ""
               )}
-              <div
-                onClick={handleAddWishList}
-                className="h-[50px] w-[50px] flex justify-center items-center cursor-pointer hover:shadow-lg hover:shadow-cyan-500/40 bg-cyan-500 text-white"
-              >
-                <FaHeart />
-              </div>
             </div>
 
             <div className="flex py-5 gap-5">

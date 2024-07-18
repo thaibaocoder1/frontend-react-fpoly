@@ -19,6 +19,10 @@ const useProduct = (filters) => {
         _limit: filters?._limit,
         _category: filters?._category,
         _search: filters?._search,
+        _minPrice: filters?._minPrice,
+        _maxPrice: filters?._maxPrice,
+        _sort: filters?._sort,
+        _rating: filters?._rating,
       },
     }),
     [filters]

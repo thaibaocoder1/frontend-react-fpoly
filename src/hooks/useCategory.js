@@ -6,8 +6,6 @@ import { createSelector } from "reselect";
 const selectCategory = (state) => state.category;
 const selectCategoryState = createSelector([selectCategory], (category) => ({
   data: category.data,
-  loading: category.loading,
-  error: category.error,
 }));
 const defaultFilters = {
   _page: 1,
@@ -17,10 +15,7 @@ const defaultFilters = {
 
 const useCategory = (filters = defaultFilters) => {
   const dispatch = useDispatch();
-  const { data, loading, error } = useSelector(
-    selectCategoryState,
-    shallowEqual
-  );
+  const { data } = useSelector(selectCategoryState, shallowEqual);
 
   const config = useMemo(
     () => ({
@@ -40,7 +35,7 @@ const useCategory = (filters = defaultFilters) => {
     };
   }, [dispatch, config]);
 
-  return { data, loading, error };
+  return { data };
 };
 
 export default useCategory;

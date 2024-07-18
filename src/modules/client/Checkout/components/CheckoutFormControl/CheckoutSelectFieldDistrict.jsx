@@ -30,7 +30,7 @@ const CheckoutSelectFieldDistrict = ({
                 onChange(e.target.value);
                 selectedDistrict(e.target.selectedOptions[0].dataset.id);
               }}
-              value={value || ""}
+              value={value}
             >
               <option value="">--Select one district--</option>
               {data &&

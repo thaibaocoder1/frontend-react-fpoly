@@ -13,7 +13,7 @@ const ProductContent = ({ product }) => {
             <div className="grid grid-cols-2">
               <button
                 onClick={() => setState("reviews")}
-                className={`py-1 hover:text-white px-5 hover:bg-[#059473] ${
+                className={`py-1 transition-all duration-300 hover:text-white px-5 hover:bg-[#059473] ${
                   state === "reviews"
                     ? "bg-[#059473] text-white"
                     : "bg-slate-200 text-slate-700"
@@ -24,7 +24,7 @@ const ProductContent = ({ product }) => {
 
               <button
                 onClick={() => setState("description")}
-                className={`py-1 hover:text-white px-5 hover:bg-[#059473] ${
+                className={`py-1 transition-all duration-300 hover:text-white px-5 hover:bg-[#059473] ${
                   state === "description"
                     ? "bg-[#059473] text-white"
                     : "bg-slate-200 text-slate-700"
@@ -33,21 +33,20 @@ const ProductContent = ({ product }) => {
                 Description
               </button>
             </div>
-
-            <div>
-              {state === "reviews" ? (
-                <ProductReviews product={product} />
-              ) : (
-                <p className="py-5 text-slate-600">{product.content}</p>
-              )}
-            </div>
+            {state === "reviews" ? (
+              <ProductReviews product={product} />
+            ) : (
+              <p className="py-5 text-slate-600">{product.content}</p>
+            )}
           </div>
         </div>
 
         <div className="w-[28%] md-lg:w-full">
           <div className="pl-4 md-lg:pl-0">
             <div className="px-3 py-2 text-slate-600 bg-slate-200">
-              <h2 className="font-bold">From {product.name}</h2>
+              <h2 className="font-bold uppercase text-center">
+                Product last seen
+              </h2>
             </div>
             <div className="flex flex-col gap-5 mt-3 border p-3">TEMP DATA</div>
           </div>

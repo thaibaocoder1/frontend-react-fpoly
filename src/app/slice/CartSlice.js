@@ -18,6 +18,7 @@ const cartSlice = createSlice({
         state.data.push(action.payload);
       } else {
         state.data[index].quantity += action.payload.quantity;
+        state.data[index].isBuyNow = action.payload.isBuyNow;
       }
       saveCart(state);
     },

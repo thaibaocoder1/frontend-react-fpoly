@@ -31,6 +31,10 @@ import Shop from "@pages/client/Shop";
 import ShopDetail from "@pages/client/ShopDetail";
 import { useRoutes } from "react-router-dom";
 import ProtectedRoute from "./protected";
+import OrderDetail from "@modules/client/Dashboard/pages/OrderDetail";
+import OrderAdmin from "@pages/admin/Order";
+import OrderDetailAdmin from "@pages/admin/OrderDetail";
+import AuthPage from "@pages/client/AuthPage";
 
 const RoutesFeature = () => {
   let element = useRoutes([
@@ -73,7 +77,16 @@ const RoutesFeature = () => {
             },
             {
               path: "orders",
-              element: <Orders />,
+              children: [
+                {
+                  index: true,
+                  element: <Orders />,
+                },
+                {
+                  path: ":id",
+                  element: <OrderDetail />,
+                },
+              ],
             },
             {
               path: "wishlist",
@@ -95,6 +108,7 @@ const RoutesFeature = () => {
         },
         {
           path: "auth",
+          element: <AuthPage />,
           children: [
             {
               path: "active/:id",
@@ -175,6 +189,19 @@ const RoutesFeature = () => {
             {
               path: "edit/:id",
               element: <AccountEdit />,
+            },
+          ],
+        },
+        {
+          path: "orders",
+          children: [
+            {
+              index: true,
+              element: <OrderAdmin />,
+            },
+            {
+              path: ":id",
+              element: <OrderDetailAdmin />,
             },
           ],
         },

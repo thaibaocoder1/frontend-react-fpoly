@@ -1,6 +1,7 @@
 import { memo } from "react";
 import PropTypes from "prop-types";
 import { formatOrderStatus } from "@utils/Format";
+import { Link } from "react-router-dom";
 
 const OrderItem = memo(({ item }) => {
   return (
@@ -21,11 +22,11 @@ const OrderItem = memo(({ item }) => {
         {formatOrderStatus(item.status)}
       </td>
       <td scope="row" className="px-6 py-4 font-medium whitespace-nowrap">
-        <a href="./order-detail.html">
+        <Link to={`../orders/${item._id}`}>
           <span className="bg-green-200 cursor-pointer text-green-800 text-md font-semibold mr-2 p-[6px] rounded">
             View
           </span>
-        </a>
+        </Link>
       </td>
     </tr>
   );

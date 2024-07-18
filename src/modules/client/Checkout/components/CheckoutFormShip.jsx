@@ -32,6 +32,8 @@ const schema = yup.object({
 });
 const CheckoutFormShip = ({ onSubmit }) => {
   const userLoggined = useSelector((state) => state.auth.user);
+  const infoOrder =
+    localStorage && JSON.parse(localStorage.getItem("info_order"));
   const form = useForm({
     defaultValues: {
       fullname: userLoggined ? userLoggined.fullname : "",
@@ -73,17 +75,18 @@ const CheckoutFormShip = ({ onSubmit }) => {
       setSelectedDistrict("");
     }
   }, [selectedProvince]);
-
+  const info = isSubmit.submitted && infoOrder ? isSubmit.data : infoOrder;
   const onSubmitData = async (data) => {
     setIsSubmit({
       submitted: true,
       data,
     });
+    localStorage && localStorage.setItem("info_order", JSON.stringify(data));
     onSubmit && (await onSubmit(data));
   };
   return (
     <>
-      {!isSubmit.submitted && (
+      {!isSubmit.submitted && !infoOrder ? (
         <form onSubmit={form.handleSubmit(onSubmitData)}>
           <div className="flex md:flex-col md:gap-2 w-full gap-5 text-slate-600">
             <CheckoutInputField
@@ -126,35 +129,37 @@ const CheckoutFormShip = ({ onSubmit }) => {
             </div>
           </div>
         </form>
+      ) : (
+        ""
       )}
-      {isSubmit.submitted && (
+      {info ? (
         <div className="flex flex-col gap-1">
           <h2 className="text-slate-600 font-semibold pb-2">
-            Deliver To {isSubmit.data.fullname}
+            Deliver To {info.fullname}
           </h2>
           <p>
             <span className="bg-blue-200 text-blue-800 text-sm font-medium mr-2 px-2 py-1 rounded">
               Home
             </span>
             <span>
-              {isSubmit.data.phone} - {isSubmit.data.province},{" "}
-              {isSubmit.data.district}, {isSubmit.data.ward},{" "}
-              {isSubmit.data.address}
+              {info.phone} - {info.province}, {info.district}, {info.ward},{" "}
+              {info.address}
             </span>
             <button
-              onClick={() =>
-                setIsSubmit((prev) => ({ ...prev, submitted: false }))
-              }
+              onClick={() => {
+                localStorage.removeItem("info_order");
+                setIsSubmit((prev) => ({ ...prev, submitted: false }));
+              }}
               className="text-indigo-500 cursor-pointer ml-2"
             >
               Change
             </button>
           </p>
 
-          <p className="text-slate-600 text-sm mt-1">
-            Email To {isSubmit.data.email}
-          </p>
+          <p className="text-slate-600 text-sm mt-1">Email To {info.email}</p>
         </div>
+      ) : (
+        ""
       )}
     </>
   );

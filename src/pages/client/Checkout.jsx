@@ -31,15 +31,17 @@ const CheckoutPage = () => {
           .filter((item) => item.isBuyNow)
       : [];
   const shippingPrice =
-    products.length > 0 && cartProducts.length * CartKeys.SHIPPING;
+    products.length > 0 ? cartProducts.length * CartKeys.SHIPPING : 0;
   const totalPrice =
-    cartProducts.length > 0 &&
-    cartProducts.reduce(
-      (total, item) =>
-        total + item.quantity * ((100 - item.discount) / 100) * item.price,
-      0
-    );
-  if (cartProducts.length === 0 && state.cart && state.cart.length === 0)
+    cartProducts.length > 0
+      ? cartProducts.reduce(
+          (total, item) =>
+            total + item.quantity * ((100 - item.discount) / 100) * item.price,
+          0
+        )
+      : 0;
+
+  if (cartProducts.length === 0 && state?.cart && state.cart.length === 0)
     return <CheckoutSkeleton />;
   return (
     <>
