@@ -3,9 +3,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import toastObj from "./Toast";
 
 export const makePayment = async (cart) => {
-  const stripe = await loadStripe(
-    "pk_test_51PdnC0BJ5MAfNCnPQ7fuEdvyFqjddU96O4RfkBAgk9NZbdJUXOLxeeWGqYmfeNjJs9o1nDfWMB0BpSzMq1tuOhfX00zTAmaSnr"
-  );
+  const stripe = await loadStripe(import.meta.env.STRIPE_KEY);
   const session = await axiosClient.post(`/orders/create-checkout-session`, {
     cart,
   });
