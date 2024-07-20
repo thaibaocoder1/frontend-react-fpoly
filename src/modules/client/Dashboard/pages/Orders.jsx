@@ -34,6 +34,7 @@ const Orders = () => {
           <option value="3">Shipping</option>
           <option value="4">Completed</option>
           <option value="5">Cancelled</option>
+          <option value="6">Rejected</option>
         </select>
       </div>
       <div className="pt-4">
@@ -42,7 +43,7 @@ const Orders = () => {
         </div>
         <div className="mt-2 flex justify-end">
           <Pagination
-            count={pagination.totalPages || 1}
+            count={pagination.totalPages}
             page={pagination.page || 1}
             variant="outlined"
             shape="rounded"

@@ -63,3 +63,7 @@ export const convertObjToFormData = (data) => {
   }
   return formData;
 };
+export const convertPercent = (total, count) => {
+  if (total === 0) return 0;
+  return (count / total) * 100;
+};

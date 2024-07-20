@@ -39,6 +39,11 @@ const orderApi = {
     );
     return request;
   },
+  async print(id) {
+    const url = "/orders";
+    const request = await axiosClient.get(`${url}/invoice/${id}`);
+    return request;
+  },
 };
 
 export default orderApi;

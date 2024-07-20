@@ -4,7 +4,7 @@ import toastObj from "@utils/Toast";
 import PropTypes from "prop-types";
 import { useDeferredValue, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ProductRatingTemp from "./ProductRatingTemp";
+import ProductRatingColumn from "./ProductRatingColumn";
 import ProductReviewItem from "./ProductReviewItem";
 
 const ProductReviews = ({ product }) => {
@@ -13,12 +13,23 @@ const ProductReviews = ({ product }) => {
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
   const commentDefer = useDeferredValue(comment);
-  const avgRating = useMemo(() => {
-    return (
-      product.reviews.reduce((total, item) => total + item.rating, 0) /
-      product.reviews.length
-    );
+  const ratingObj = useMemo(() => {
+    return {
+      avgRating:
+        product.reviews.reduce((total, item) => total + item.rating, 0) /
+        product.reviews.length,
+      ratingCounts: product.reviews.reduce((acc, review) => {
+        const rating = review.rating;
+        if (acc[rating]) {
+          acc[rating]++;
+        } else {
+          acc[rating] = 1;
+        }
+        return acc;
+      }, {}),
+    };
   }, [product]);
+
   const handleSubmitForm = async (e) => {
     e.preventDefault();
     try {
@@ -47,6 +58,7 @@ const ProductReviews = ({ product }) => {
       console.log(error);
     }
   };
+
   return (
     <div className="mt-4">
       <div className="flex gap-10 md:gap-6 md-lg:flex-col">
@@ -54,14 +66,16 @@ const ProductReviews = ({ product }) => {
           <>
             <div className="flex flex-col gap-2 justify-start items-start py-4">
               <div>
-                <span className="text-6xl font-semibold">{avgRating || 0}</span>
+                <span className="text-6xl font-semibold">
+                  {ratingObj.avgRating || 0}
+                </span>
                 <span className="text-3xl font-semibold text-slate-600">
                   /5
                 </span>
               </div>
               <div className="flex text-3xl">
                 <Rating
-                  value={avgRating}
+                  value={ratingObj.avgRating}
                   readOnly
                   size="large"
                   precision={0.5}
@@ -71,68 +85,7 @@ const ProductReviews = ({ product }) => {
                 ({product.reviews.length} Reviews)
               </p>
             </div>
-
-            <div className="flex gap-2 flex-col py-4">
-              <div className="flex justify-start items-center gap-5">
-                <div className="text-md flex gap-1 w-[93px]">
-                  <ProductRatingTemp rating={5} />
-                </div>
-                <div className="w-[200px] h-[14px] bg-slate-200 relative">
-                  <div className="h-full w-[60%] bg-[#Edbb0E]"></div>
-                </div>
-                <p className="text-sm text-slate-600">14</p>
-              </div>
-
-              <div className="flex justify-start items-center gap-5">
-                <div className="text-md flex gap-1 w-[93px]">
-                  <ProductRatingTemp rating={4} />
-                </div>
-                <div className="w-[200px] h-[14px] bg-slate-200 relative">
-                  <div className="w-[70%] h-full bg-[#Edbb0E]"></div>
-                </div>
-                <p className="text-sm text-slate-600">7</p>
-              </div>
-
-              <div className="flex justify-start items-center gap-5">
-                <div className="text-md flex gap-1 w-[93px]">
-                  <ProductRatingTemp rating={3} />
-                </div>
-                <div className="w-[200px] h-[14px] bg-slate-200 relative">
-                  <div className="w-[40%] h-full bg-[#Edbb0E]"></div>
-                </div>
-                <p className="text-sm text-slate-600">2</p>
-              </div>
-
-              <div className="flex justify-start items-center gap-5">
-                <div className="text-md flex gap-1 w-[93px]">
-                  <ProductRatingTemp rating={2} />
-                </div>
-                <div className="w-[200px] h-[14px] bg-slate-200 relative">
-                  <div className="h-full w-[30%s] bg-[#Edbb0E]"></div>
-                </div>
-                <p className="text-sm text-slate-600">1</p>
-              </div>
-
-              <div className="flex justify-start items-center gap-5">
-                <div className="text-md flex gap-1 w-[93px]">
-                  <ProductRatingTemp rating={1} />
-                </div>
-                <div className="w-[200px] h-[14px] bg-slate-200 relative">
-                  <div className="h-full w-[10%] bg-[#Edbb0E]"></div>
-                </div>
-                <p className="text-sm text-slate-600">0</p>
-              </div>
-
-              <div className="flex justify-start items-center gap-5">
-                <div className="text-md flex gap-1 w-[93px]">
-                  <ProductRatingTemp rating={0} />
-                </div>
-                <div className="w-[200px] h-[14px] bg-slate-200 relative">
-                  <div className="h-full bg-[#Edbb0E]"></div>
-                </div>
-                <p className="text-sm text-slate-600">0</p>
-              </div>
-            </div>
+            <ProductRatingColumn ratingCounts={ratingObj.ratingCounts} />
           </>
         )}
       </div>

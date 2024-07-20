@@ -1,6 +1,17 @@
 import productApi from "@api/ProductApi";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+export const getAllProducts = createAsyncThunk(
+  "product/getAllProducts",
+  async (_, { rejectWithValue, fulfillWithValue, signal }) => {
+    try {
+      const response = await productApi.getAll(_, signal);
+      return fulfillWithValue(response.data);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 export const getProductsWithParams = createAsyncThunk(
   "product/getProductsWithParams",
   async (params, { rejectWithValue, fulfillWithValue, signal }) => {
@@ -17,9 +28,9 @@ export const getProductsWithParams = createAsyncThunk(
 );
 export const getProductsNoParams = createAsyncThunk(
   "product/getProductsNoParams",
-  async (_, { rejectWithValue, fulfillWithValue, signal }) => {
+  async (searchTerm, { rejectWithValue, fulfillWithValue, signal }) => {
     try {
-      const response = await productApi.getAll(signal);
+      const response = await productApi.getAll(searchTerm, signal);
       return fulfillWithValue(response.data);
     } catch (error) {
       return rejectWithValue(error.message);

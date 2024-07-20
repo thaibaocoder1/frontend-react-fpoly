@@ -86,6 +86,17 @@ export const cancelOrder = createAsyncThunk(
     }
   }
 );
+export const printInvoiceOrder = createAsyncThunk(
+  "order/printInvoiceOrder",
+  async (id, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const orderInfo = await orderApi.print(id);
+      return fulfillWithValue(orderInfo.data);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const orderSlice = createSlice({
   name: "order",
@@ -168,6 +179,18 @@ const orderSlice = createSlice({
       state.error = "";
     });
     builder.addCase(addOrder.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(printInvoiceOrder.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(printInvoiceOrder.fulfilled, (state, action) => {
+      state.loading = false;
+      state.current = action.payload;
+      state.error = "";
+    });
+    builder.addCase(printInvoiceOrder.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

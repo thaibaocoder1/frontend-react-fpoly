@@ -145,6 +145,17 @@ export const update = createAsyncThunk(
     }
   }
 );
+export const updateFieldAccount = createAsyncThunk(
+  "auth/updateFieldAccount",
+  async (payload, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const res = await userApi.updateField(payload);
+      return fulfillWithValue(res.data);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const authSlice = createSlice({
   name: "auth",
@@ -256,6 +267,18 @@ const authSlice = createSlice({
       state.error = "";
     });
     builder.addCase(update.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    builder.addCase(updateFieldAccount.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updateFieldAccount.fulfilled, (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+      state.error = "";
+    });
+    builder.addCase(updateFieldAccount.rejected, (state, action) => {
       state.loading = false;
       state.error = action.payload;
     });

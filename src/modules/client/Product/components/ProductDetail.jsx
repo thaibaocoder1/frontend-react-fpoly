@@ -32,6 +32,10 @@ const ProductDetail = memo(({ product }) => {
     const promise = dispatch(getRelatedProducts(product._id));
     return () => promise.abort();
   }, [product, dispatch]);
+  const averageRating =
+    product.reviews &&
+    product.reviews.reduce((total, item) => total + item.rating, 0) /
+      product.reviews.length;
   const increaseQuantity = () => {
     if (quantity >= product.stock) {
       toastObj.error("Out of Stock");
@@ -181,7 +185,7 @@ const ProductDetail = memo(({ product }) => {
             </div>
             <div className="flex justify-start items-center gap-4">
               <div className="flex text-xl">
-                <Rating defaultValue={5} readOnly size="medium" />
+                <Rating value={averageRating} readOnly size="medium" />
               </div>
               <span className="text-green-500">
                 ({product.reviews.length} reviews)

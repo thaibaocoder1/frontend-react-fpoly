@@ -1,11 +1,17 @@
+import { printInvoiceOrder } from "@app/slice/OrderSlice";
+import Loading from "@components/Loading/Loading";
 import SearchItem from "@components/SearchItem/SearchItem";
 import useOrder from "@hooks/useOrder";
 import OrderItem from "@modules/admin/Order/components/OrderItem";
 import OrderListSkeleton from "@modules/admin/Order/components/OrderListSkeleton";
 import { Pagination } from "@mui/material";
+import toastObj from "@utils/Toast";
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 const OrderAdmin = () => {
+  const dispatch = useDispatch();
+  const isLoadingOrder = useSelector((state) => state.order.loading);
   const [filters, setFilters] = useState({
     _page: 1,
     _limit: 6,
@@ -22,6 +28,17 @@ const OrderAdmin = () => {
   const handleStatusChange = (e) => {
     setFilters((prev) => ({ ...prev, _status: e.target.value }));
   };
+  const handlePrintInvoice = async (id) => {
+    try {
+      const results = await dispatch(printInvoiceOrder(id));
+      if (results.type.includes("fulfilled")) {
+        toastObj.success("Send order to email successful");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  if (isLoadingOrder) return <Loading />;
 
   return (
     <div className="px-2 lg:px-7 pt-5">
@@ -46,6 +63,7 @@ const OrderAdmin = () => {
                 <option value="3">Shipping</option>
                 <option value="4">Completed</option>
                 <option value="5">Cancelled</option>
+                <option value="6">Rejected</option>
               </select>
             </div>
           </div>
@@ -80,7 +98,11 @@ const OrderAdmin = () => {
             ) : (
               <tbody className="text-slate-600">
                 {orders.map((item) => (
-                  <OrderItem key={item._id} order={item} />
+                  <OrderItem
+                    key={item._id}
+                    order={item}
+                    onClick={handlePrintInvoice}
+                  />
                 ))}
               </tbody>
             )}

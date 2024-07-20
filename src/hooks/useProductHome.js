@@ -7,13 +7,13 @@ const selectProduct = (state) => state.product;
 const selectProductState = createSelector([selectProduct], (product) => ({
   data: product.data,
 }));
-const useProductHome = () => {
+const useProductHome = (searchTerm = "") => {
   const dispatch = useDispatch();
   const { data } = useSelector(selectProductState, shallowEqual);
   useEffect(() => {
-    const promise = dispatch(getProductsNoParams());
+    const promise = dispatch(getProductsNoParams(searchTerm));
     return () => promise.abort();
-  }, [dispatch]);
+  }, [dispatch, searchTerm]);
 
   return { data };
 };

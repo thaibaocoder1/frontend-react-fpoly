@@ -65,6 +65,14 @@ const userApi = {
     });
     return await request;
   },
+  async updateField(data) {
+    const url = "/users";
+    const request = axiosClient.patch(
+      `${url}/cancel-count/${data.userId}`,
+      data
+    );
+    return await request;
+  },
   async delete(id) {
     const url = "/users";
     const request = axiosClient.delete(`${url}/soft/${id}`);

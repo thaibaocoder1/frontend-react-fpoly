@@ -19,11 +19,13 @@ const ListPage = () => {
   const [filter, setFilter] = useState(true);
   const [searchParams] = useSearchParams();
   const categoryTerm = searchParams.get("category") || "";
+  const searchTerm = searchParams.get("search") || "";
   const [filters, setFilters] = useState({
     _page: 1,
     _limit: 6,
     _category: categoryTerm,
     _sort: "",
+    _search: searchTerm,
   });
   const { data } = useProduct(filters);
   const isHasError = useSelector((state) => state.product.error);
@@ -33,8 +35,9 @@ const ListPage = () => {
       ...prev,
       _page: 1,
       _category: categoryTerm,
+      _search: searchTerm,
     }));
-  }, [categoryTerm]);
+  }, [categoryTerm, searchTerm]);
   const handlePageChange = (_, page) => {
     setFilters((prev) => ({ ...prev, _page: page }));
   };

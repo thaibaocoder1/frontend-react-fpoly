@@ -1,4 +1,8 @@
-import { formatOrderStatus, formatOriginalPrice } from "@utils/Format";
+import {
+  formatOrderPayment,
+  formatOrderStatus,
+  formatOriginalPrice,
+} from "@utils/Format";
 import PropTypes from "prop-types";
 
 const OrderDetailInfo = ({ current }) => {
@@ -30,7 +34,9 @@ const OrderDetailInfo = ({ current }) => {
         </p>
         <p>
           Payment Status:
-          <span className="text-sm px-3 rounded-md">Waiting</span>
+          <span className="text-sm px-3 rounded-md">
+            {formatOrderPayment(current.payment, current.status)}
+          </span>
         </p>
         <p>
           Order Status:

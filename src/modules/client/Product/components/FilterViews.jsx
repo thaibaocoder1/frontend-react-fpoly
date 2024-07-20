@@ -48,6 +48,25 @@ const FILTER_LIST = [
     },
     onToggle: null,
   },
+  {
+    id: 4,
+    getLabel: (filters) => `${filters._search}`,
+    isActive: () => true,
+    isVisible: (filters) =>
+      Object.keys(filters).includes("_search") && filters._search,
+    isRemovable: true,
+    onRemove: (filters) => {
+      const newFilters = { ...filters };
+      delete newFilters._search;
+      if ("URLSearchParams" in window) {
+        const url = new URL(window.location);
+        if (url.searchParams.has("search")) url.searchParams.delete("search");
+        history.pushState(null, "", url);
+      }
+      return newFilters;
+    },
+    onToggle: null,
+  },
 ];
 const FilterViews = ({ filters, onChange }) => {
   return (

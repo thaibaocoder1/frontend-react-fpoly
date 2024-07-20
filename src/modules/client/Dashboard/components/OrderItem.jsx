@@ -1,6 +1,6 @@
 import { memo } from "react";
 import PropTypes from "prop-types";
-import { formatOrderStatus } from "@utils/Format";
+import { formatOrderPayment, formatOrderStatus } from "@utils/Format";
 import { Link } from "react-router-dom";
 
 const OrderItem = memo(({ item }) => {
@@ -16,7 +16,7 @@ const OrderItem = memo(({ item }) => {
         {item.email}
       </td>
       <td scope="row" className="px-6 py-4 font-medium whitespace-nowrap">
-        Waiting
+        {formatOrderPayment(item.payment, item.status)}
       </td>
       <td scope="row" className="px-6 py-4 font-medium whitespace-nowrap">
         {formatOrderStatus(item.status)}

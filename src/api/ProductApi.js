@@ -11,7 +11,9 @@ const productApi = {
   },
   async getAll(config = {}) {
     const url = "/products/all";
-    const request = axiosClient.get(url, { signal: config });
+    const request = axiosClient.get(url, {
+      signal: config,
+    });
     return await request;
   },
   async getRelatedProducts(productId, config = {}) {

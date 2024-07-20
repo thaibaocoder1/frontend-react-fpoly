@@ -29,9 +29,35 @@ const formatOrderStatus = (status) => {
       return "Shipping";
     case 4:
       return "Completed";
-    default:
+    case 5:
       return "Cancelled";
+    default:
+      return "Rejected";
   }
+};
+const formatOrderPayment = (payment, status) => {
+  let text = "";
+  switch (payment) {
+    case "COD": {
+      if (status === 1) {
+        text = "Waiting";
+      } else if (status === 4) {
+        text = "Paid";
+      } else if (status === 5 || status === 6) {
+        text = "Cancelled";
+      } else {
+        text = "Waiting";
+      }
+      break;
+    }
+    case "ONLINE": {
+      text = "Paid";
+      break;
+    }
+    default:
+      break;
+  }
+  return text;
 };
 
 export {
@@ -39,4 +65,5 @@ export {
   formatOriginalPrice,
   formatSubtotalPrice,
   formatOrderStatus,
+  formatOrderPayment,
 };

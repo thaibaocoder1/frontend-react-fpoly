@@ -1,6 +1,6 @@
+import SearchHeader from "@components/SearchHeader/SearchHeader";
 import useCategory from "@hooks/useCategory";
 import { useState } from "react";
-import { BsSearch } from "react-icons/bs";
 import {
   FaFacebookF,
   FaGithub,
@@ -416,25 +416,8 @@ const HeaderClient = () => {
 
           <div className="w-9/12 pl-8 md-lg:pl-0 md-lg:w-full">
             <div className="flex flex-wrap w-full justify-between items-center md-lg:gap-6">
-              <div className="w-8/12 md-lg:w-full">
-                <div className="flex border h-[50px] items-center relative gap-6">
-                  <label
-                    htmlFor="searchInput"
-                    className="relative after:absolute after:h-[25px] after:w-[1px] after:bg-[#afafaf] after:-right-[15px] after:-top-[5px]  ml-3 md:hidden"
-                  >
-                    <BsSearch></BsSearch>
-                  </label>
-                  <input
-                    className="w-full relative bg-transparent text-slate-500 outline-0 px-3 h-full"
-                    type="text"
-                    name="search"
-                    id="searchInput"
-                    placeholder="What do you need"
-                  />
-                  <button className="bg-[#059473] right-0 absolute px-8 h-full font-semibold uppercase text-white">
-                    Search
-                  </button>
-                </div>
+              <div className="w-8/12 md-lg:w-full relative">
+                <SearchHeader />
               </div>
 
               <div className="w-4/12 block md-lg:hidden pl-2 md-lg:w-full md-lg:pl-0">
