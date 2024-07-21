@@ -44,6 +44,11 @@ const orderApi = {
     const request = await axiosClient.get(`${url}/invoice/${id}`);
     return request;
   },
+  async statistical(signal) {
+    const url = "/details";
+    const request = await axiosClient.get(`${url}/statistical`, { signal });
+    return request;
+  },
 };
 
 export default orderApi;

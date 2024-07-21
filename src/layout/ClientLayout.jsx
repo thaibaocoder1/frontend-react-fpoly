@@ -21,6 +21,7 @@ const ClientLayout = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
   return (
     <>
       <HeaderClient />

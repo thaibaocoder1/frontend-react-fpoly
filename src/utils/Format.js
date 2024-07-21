@@ -37,7 +37,7 @@ const formatOrderStatus = (status) => {
 };
 const formatOrderPayment = (payment, status) => {
   let text = "";
-  switch (payment) {
+  switch (payment.toUpperCase()) {
     case "COD": {
       if (status === 1) {
         text = "Waiting";
@@ -59,6 +59,12 @@ const formatOrderPayment = (payment, status) => {
   }
   return text;
 };
+function formatCurrencyNumberVI(number) {
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(number);
+}
 
 export {
   formatSalePrice,
@@ -66,4 +72,5 @@ export {
   formatSubtotalPrice,
   formatOrderStatus,
   formatOrderPayment,
+  formatCurrencyNumberVI,
 };

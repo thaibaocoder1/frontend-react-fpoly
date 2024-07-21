@@ -16,6 +16,7 @@ const useOrderUser = (id, filters) => {
         _page: filters?._page,
         _limit: filters?._limit,
         _status: filters?._status,
+        _all: filters?._all,
       },
     }),
     [filters]

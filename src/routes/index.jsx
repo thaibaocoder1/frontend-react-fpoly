@@ -1,140 +1,238 @@
-import AdminLayout from "@layout/AdminLayout";
-import ClientLayout from "@layout/ClientLayout";
-import AccountAdd from "@modules/admin/Account/components/AccountAdd";
-import AccountEdit from "@modules/admin/Account/components/AccountEdit";
-import LoginForm from "@modules/admin/Auth/components/LoginForm/LoginForm";
-import ProductAddEdit from "@modules/admin/Product/components/ProductAddEdit";
-import Login from "@modules/client/Auth/components/Login";
-import Register from "@modules/client/Auth/components/Register";
-import Index from "@modules/client/Dashboard/pages/Index";
-import Orders from "@modules/client/Dashboard/pages/Orders";
-import NotFound from "@pages/NotFound";
-import AccountAdmin from "@pages/admin/Account";
-import CategoryAdmin from "@pages/admin/Category";
-import CouponAdmin from "@pages/admin/Coupon";
-import DashboardAdmin from "@pages/admin/Dashboard";
-import ProductAdmin from "@pages/admin/Product";
-import ProfileAdmin from "@pages/admin/Profile";
-import ActiveAccount from "@pages/client/ActiveAccount";
-import Cart from "@pages/client/Cart";
-import ChangePassword from "@pages/client/ChangePassword";
-import CheckoutPage from "@pages/client/Checkout";
-import ConfirmRecover from "@pages/client/ConfirmRecover";
-import Dashboard from "@pages/client/Dashboard";
-import ForgotAccount from "@pages/client/ForgotAccount";
-import Home from "@pages/client/Home";
-import MyWishList from "@pages/client/MyWishList";
-import OrderComplete from "@pages/client/OrderComplete";
-import RecoverAccount from "@pages/client/RecoverAccount";
-import ResetAccount from "@pages/client/ResetAccount";
-import Shop from "@pages/client/Shop";
-import ShopDetail from "@pages/client/ShopDetail";
+import { lazy, Suspense } from "react";
 import { useRoutes } from "react-router-dom";
 import ProtectedRoute from "./protected";
-import OrderDetail from "@modules/client/Dashboard/pages/OrderDetail";
-import OrderAdmin from "@pages/admin/Order";
-import OrderDetailAdmin from "@pages/admin/OrderDetail";
-import AuthPage from "@pages/client/AuthPage";
+import LoadingV2 from "@components/LoadingV2/LoadingV2";
+
+// Lazily import components
+const AdminLayout = lazy(() => import("@layout/AdminLayout"));
+const AccountAdd = lazy(() =>
+  import("@modules/admin/Account/components/AccountAdd")
+);
+const AccountEdit = lazy(() =>
+  import("@modules/admin/Account/components/AccountEdit")
+);
+const LoginForm = lazy(() =>
+  import("@modules/admin/Auth/components/LoginForm/LoginForm")
+);
+const ProductAddEdit = lazy(() =>
+  import("@modules/admin/Product/components/ProductAddEdit")
+);
+const Login = lazy(() => import("@modules/client/Auth/components/Login"));
+const Register = lazy(() => import("@modules/client/Auth/components/Register"));
+const Index = lazy(() => import("@modules/client/Dashboard/pages/Index"));
+const OrderDetail = lazy(() =>
+  import("@modules/client/Dashboard/pages/OrderDetail")
+);
+const Orders = lazy(() => import("@modules/client/Dashboard/pages/Orders"));
+const NotFound = lazy(() => import("@pages/NotFound"));
+const AccountAdmin = lazy(() => import("@pages/admin/Account"));
+const CategoryAdmin = lazy(() => import("@pages/admin/Category"));
+const CouponAdmin = lazy(() => import("@pages/admin/Coupon"));
+const DashboardAdmin = lazy(() => import("@pages/admin/Dashboard"));
+const OrderAdmin = lazy(() => import("@pages/admin/Order"));
+const OrderDetailAdmin = lazy(() => import("@pages/admin/OrderDetail"));
+const ProductAdmin = lazy(() => import("@pages/admin/Product"));
+const ProfileAdmin = lazy(() => import("@pages/admin/Profile"));
+const ActiveAccount = lazy(() => import("@pages/client/ActiveAccount"));
+const AuthPage = lazy(() => import("@pages/client/AuthPage"));
+const Cart = lazy(() => import("@pages/client/Cart"));
+const ChangePassword = lazy(() => import("@pages/client/ChangePassword"));
+const CheckoutPage = lazy(() => import("@pages/client/Checkout"));
+const ConfirmRecover = lazy(() => import("@pages/client/ConfirmRecover"));
+const Dashboard = lazy(() => import("@pages/client/Dashboard"));
+const ForgotAccount = lazy(() => import("@pages/client/ForgotAccount"));
+const Home = lazy(() => import("@pages/client/Home"));
+const MyWishList = lazy(() => import("@pages/client/MyWishList"));
+const OrderComplete = lazy(() => import("@pages/client/OrderComplete"));
+const RecoverAccount = lazy(() => import("@pages/client/RecoverAccount"));
+const ResetAccount = lazy(() => import("@pages/client/ResetAccount"));
+const Shop = lazy(() => import("@pages/client/Shop"));
+const ShopDetail = lazy(() => import("@pages/client/ShopDetail"));
+const ClientLayout = lazy(() => import("@layout/ClientLayout"));
 
 const RoutesFeature = () => {
   let element = useRoutes([
     {
       path: "/",
-      element: <ClientLayout />,
+      element: (
+        <Suspense fallback={<LoadingV2></LoadingV2>}>
+          <ClientLayout />
+        </Suspense>
+      ),
       children: [
         {
           index: true,
-          element: <Home />,
+          element: (
+            <Suspense fallback={<LoadingV2></LoadingV2>}>
+              <Home />
+            </Suspense>
+          ),
         },
         {
           path: "shops",
           children: [
             {
               index: true,
-              element: <Shop />,
+              element: (
+                <Suspense fallback={<LoadingV2></LoadingV2>}>
+                  <Shop />
+                </Suspense>
+              ),
             },
             {
               path: "detail/:id",
-              element: <ShopDetail />,
+              element: (
+                <Suspense fallback={<LoadingV2></LoadingV2>}>
+                  <ShopDetail />
+                </Suspense>
+              ),
             },
           ],
         },
         {
           path: "checkout",
-          element: <CheckoutPage />,
+          element: (
+            <Suspense fallback={<LoadingV2></LoadingV2>}>
+              <CheckoutPage />
+            </Suspense>
+          ),
         },
         {
           path: "cart",
-          element: <Cart />,
+          element: (
+            <Suspense fallback={<LoadingV2></LoadingV2>}>
+              <Cart />
+            </Suspense>
+          ),
         },
         {
           path: "dashboard",
-          element: <Dashboard />,
+          element: (
+            <Suspense fallback={<LoadingV2></LoadingV2>}>
+              <Dashboard />
+            </Suspense>
+          ),
           children: [
             {
               index: true,
-              element: <Index />,
+              element: (
+                <Suspense fallback={<LoadingV2></LoadingV2>}>
+                  <Index />
+                </Suspense>
+              ),
             },
             {
               path: "orders",
               children: [
                 {
                   index: true,
-                  element: <Orders />,
+                  element: (
+                    <Suspense fallback={<LoadingV2></LoadingV2>}>
+                      <Orders />
+                    </Suspense>
+                  ),
                 },
                 {
                   path: ":id",
-                  element: <OrderDetail />,
+                  element: (
+                    <Suspense fallback={<LoadingV2></LoadingV2>}>
+                      <OrderDetail />
+                    </Suspense>
+                  ),
                 },
               ],
             },
             {
               path: "wishlist",
-              element: <MyWishList />,
+              element: (
+                <Suspense fallback={<LoadingV2></LoadingV2>}>
+                  <MyWishList />
+                </Suspense>
+              ),
             },
             {
               path: "change",
-              element: <ChangePassword />,
+              element: (
+                <Suspense fallback={<LoadingV2></LoadingV2>}>
+                  <ChangePassword />
+                </Suspense>
+              ),
             },
           ],
         },
         {
           path: "/register",
-          element: <Register />,
+          element: (
+            <Suspense fallback={<LoadingV2></LoadingV2>}>
+              <Register />
+            </Suspense>
+          ),
         },
         {
           path: "/login",
-          element: <Login />,
+          element: (
+            <Suspense fallback={<LoadingV2></LoadingV2>}>
+              <Login />
+            </Suspense>
+          ),
         },
         {
           path: "auth",
-          element: <AuthPage />,
+          element: (
+            <Suspense fallback={<LoadingV2></LoadingV2>}>
+              <AuthPage />
+            </Suspense>
+          ),
           children: [
             {
               path: "active/:id",
-              element: <ActiveAccount />,
+              element: (
+                <Suspense fallback={<LoadingV2></LoadingV2>}>
+                  <ActiveAccount />
+                </Suspense>
+              ),
             },
             {
               path: "forgot",
-              element: <ForgotAccount />,
+              element: (
+                <Suspense fallback={<LoadingV2></LoadingV2>}>
+                  <ForgotAccount />
+                </Suspense>
+              ),
             },
             {
               path: "reset/:id",
-              element: <ResetAccount />,
+              element: (
+                <Suspense fallback={<LoadingV2></LoadingV2>}>
+                  <ResetAccount />
+                </Suspense>
+              ),
             },
             {
               path: "recover",
-              element: <RecoverAccount />,
+              element: (
+                <Suspense fallback={<LoadingV2></LoadingV2>}>
+                  <RecoverAccount />
+                </Suspense>
+              ),
             },
             {
               path: "confirm",
-              element: <ConfirmRecover />,
+              element: (
+                <Suspense fallback={<LoadingV2></LoadingV2>}>
+                  <ConfirmRecover />
+                </Suspense>
+              ),
             },
           ],
         },
         {
           path: "/order/complete",
-          element: <OrderComplete />,
+          element: (
+            <Suspense fallback={<LoadingV2></LoadingV2>}>
+              <OrderComplete />
+            </Suspense>
+          ),
         },
       ],
     },
@@ -142,36 +240,62 @@ const RoutesFeature = () => {
       path: "/admin",
       element: (
         <ProtectedRoute>
-          <AdminLayout />
+          <Suspense fallback={<LoadingV2></LoadingV2>}>
+            <AdminLayout />
+          </Suspense>
         </ProtectedRoute>
       ),
       children: [
         {
           index: true,
-          element: <DashboardAdmin />,
+          element: (
+            <Suspense fallback={<LoadingV2></LoadingV2>}>
+              <DashboardAdmin />
+            </Suspense>
+          ),
         },
         {
           path: "category",
-          element: <CategoryAdmin />,
+          element: (
+            <Suspense fallback={<LoadingV2></LoadingV2>}>
+              <CategoryAdmin />
+            </Suspense>
+          ),
         },
         {
           path: "coupon",
-          element: <CouponAdmin />,
+          element: (
+            <Suspense fallback={<LoadingV2></LoadingV2>}>
+              <CouponAdmin />
+            </Suspense>
+          ),
         },
         {
           path: "product",
           children: [
             {
               index: true,
-              element: <ProductAdmin />,
+              element: (
+                <Suspense fallback={<LoadingV2></LoadingV2>}>
+                  <ProductAdmin />
+                </Suspense>
+              ),
             },
             {
               path: "add",
-              element: <ProductAddEdit />,
+              element: (
+                <Suspense fallback={<LoadingV2></LoadingV2>}>
+                  <ProductAddEdit />
+                </Suspense>
+              ),
             },
             {
               path: "edit/:id",
-              element: <ProductAddEdit />,
+              element: (
+                <Suspense fallback={<LoadingV2></LoadingV2>}>
+                  <ProductAddEdit />
+                </Suspense>
+              ),
             },
           ],
         },
@@ -180,15 +304,27 @@ const RoutesFeature = () => {
           children: [
             {
               index: true,
-              element: <AccountAdmin />,
+              element: (
+                <Suspense fallback={<LoadingV2></LoadingV2>}>
+                  <AccountAdmin />
+                </Suspense>
+              ),
             },
             {
               path: "add",
-              element: <AccountAdd />,
+              element: (
+                <Suspense fallback={<LoadingV2></LoadingV2>}>
+                  <AccountAdd />
+                </Suspense>
+              ),
             },
             {
               path: "edit/:id",
-              element: <AccountEdit />,
+              element: (
+                <Suspense fallback={<LoadingV2></LoadingV2>}>
+                  <AccountEdit />
+                </Suspense>
+              ),
             },
           ],
         },
@@ -197,27 +333,47 @@ const RoutesFeature = () => {
           children: [
             {
               index: true,
-              element: <OrderAdmin />,
+              element: (
+                <Suspense fallback={<LoadingV2></LoadingV2>}>
+                  <OrderAdmin />
+                </Suspense>
+              ),
             },
             {
               path: ":id",
-              element: <OrderDetailAdmin />,
+              element: (
+                <Suspense fallback={<LoadingV2></LoadingV2>}>
+                  <OrderDetailAdmin />
+                </Suspense>
+              ),
             },
           ],
         },
         {
           path: "profile",
-          element: <ProfileAdmin />,
+          element: (
+            <Suspense fallback={<LoadingV2></LoadingV2>}>
+              <ProfileAdmin />
+            </Suspense>
+          ),
         },
       ],
     },
     {
       path: "/admin/login",
-      element: <LoginForm />,
+      element: (
+        <Suspense fallback={<LoadingV2></LoadingV2>}>
+          <LoginForm />
+        </Suspense>
+      ),
     },
     {
       path: "*",
-      element: <NotFound />,
+      element: (
+        <Suspense fallback={<LoadingV2></LoadingV2>}>
+          <NotFound />
+        </Suspense>
+      ),
     },
   ]);
 

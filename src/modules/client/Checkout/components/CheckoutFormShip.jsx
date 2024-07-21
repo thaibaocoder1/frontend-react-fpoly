@@ -32,8 +32,6 @@ const schema = yup.object({
 });
 const CheckoutFormShip = ({ onSubmit }) => {
   const userLoggined = useSelector((state) => state.auth.user);
-  const infoOrder =
-    localStorage && JSON.parse(localStorage.getItem("info_order"));
   const form = useForm({
     defaultValues: {
       fullname: userLoggined ? userLoggined.fullname : "",
@@ -75,18 +73,17 @@ const CheckoutFormShip = ({ onSubmit }) => {
       setSelectedDistrict("");
     }
   }, [selectedProvince]);
-  const info = isSubmit.submitted && infoOrder ? isSubmit.data : infoOrder;
+  const info = isSubmit.submitted ? isSubmit.data : null;
   const onSubmitData = async (data) => {
     setIsSubmit({
       submitted: true,
       data,
     });
-    localStorage && localStorage.setItem("info_order", JSON.stringify(data));
     onSubmit && (await onSubmit(data));
   };
   return (
     <>
-      {!isSubmit.submitted && !infoOrder ? (
+      {!isSubmit.submitted ? (
         <form onSubmit={form.handleSubmit(onSubmitData)}>
           <div className="flex md:flex-col md:gap-2 w-full gap-5 text-slate-600">
             <CheckoutInputField

@@ -7,16 +7,11 @@ const selectAccount = (state) => state.account;
 
 const selectAccountState = createSelector([selectAccount], (account) => ({
   data: account.data,
-  loading: account.loading,
-  error: account.error,
 }));
 
 const useAccount = (filters) => {
   const dispatch = useDispatch();
-  const { data, loading, error } = useSelector(
-    selectAccountState,
-    shallowEqual
-  );
+  const { data } = useSelector(selectAccountState, shallowEqual);
 
   const config = useMemo(
     () => ({
@@ -24,9 +19,10 @@ const useAccount = (filters) => {
         _page: filters?._page,
         _limit: filters?._limit,
         _search: filters?._search,
+        _all: filters?._all,
       },
     }),
-    [filters?._page, filters?._limit, filters?._search]
+    [filters?._page, filters?._limit, filters?._search, filters?._all]
   );
 
   useEffect(() => {
@@ -34,7 +30,7 @@ const useAccount = (filters) => {
     return () => promise.abort();
   }, [dispatch, config]);
 
-  return { data, loading, error };
+  return { data };
 };
 
 export default useAccount;

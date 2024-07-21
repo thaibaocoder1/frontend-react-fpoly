@@ -97,6 +97,17 @@ export const printInvoiceOrder = createAsyncThunk(
     }
   }
 );
+export const getStatistical = createAsyncThunk(
+  "order/getStatistical",
+  async (_, { rejectWithValue, fulfillWithValue, signal }) => {
+    try {
+      const orderInfo = await orderApi.statistical(signal);
+      return fulfillWithValue(orderInfo.data);
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const orderSlice = createSlice({
   name: "order",
@@ -104,6 +115,7 @@ const orderSlice = createSlice({
     data: {
       orders: [],
       pagination: {},
+      statistical: [],
     },
     ordersWithUser: {
       orders: [],
@@ -113,10 +125,14 @@ const orderSlice = createSlice({
     details: null,
     loading: false,
     error: "",
+    totalIncoming: 0,
   },
   reducers: {
     setEmptyError(state) {
       state.error = "";
+    },
+    setTotalIncoming(state, action) {
+      state.totalIncoming = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -216,9 +232,21 @@ const orderSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     });
+    builder.addCase(getStatistical.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(getStatistical.fulfilled, (state, action) => {
+      state.loading = false;
+      state.data.statistical = action.payload;
+      state.error = "";
+    });
+    builder.addCase(getStatistical.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
   },
 });
 
 const { reducer, actions } = orderSlice;
-export const { setEmptyError } = actions;
+export const { setEmptyError, setTotalIncoming } = actions;
 export default reducer;

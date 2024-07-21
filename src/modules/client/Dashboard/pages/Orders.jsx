@@ -43,7 +43,7 @@ const Orders = () => {
         </div>
         <div className="mt-2 flex justify-end">
           <Pagination
-            count={pagination.totalPages}
+            count={pagination.totalPages || 1}
             page={pagination.page || 1}
             variant="outlined"
             shape="rounded"

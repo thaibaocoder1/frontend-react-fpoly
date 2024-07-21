@@ -18,6 +18,7 @@ const useOrder = (filters) => {
         _limit: filters?._limit,
         _search: filters?._search,
         _status: filters?._status,
+        _all: filters?._all,
       },
     }),
     [filters]

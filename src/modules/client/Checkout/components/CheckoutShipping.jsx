@@ -5,13 +5,13 @@ import {
 } from "@app/slice/OrderSlice";
 import { updateFieldProduct } from "@app/slice/ProductSlice";
 import { handleOrderDetailList } from "@utils/Order";
+import { makePayment } from "@utils/Payment";
 import toastObj from "@utils/Toast";
 import PropTypes from "prop-types";
 import { useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import CheckoutFormShip from "./CheckoutFormShip";
 import { useNavigate } from "react-router-dom";
-import { makePayment } from "@utils/Payment";
+import CheckoutFormShip from "./CheckoutFormShip";
 
 const CheckoutShipping = ({ shippingPrice, cart }) => {
   const dispatch = useDispatch();
@@ -28,22 +28,26 @@ const CheckoutShipping = ({ shippingPrice, cart }) => {
       data.coupons = couponStorage;
       data.deliveryFee = shippingPrice;
       if (data.payment === "Online") {
-        const checkoutSuccessful = await makePayment(cart);
-        if (!checkoutSuccessful) {
-          return;
-        }
+        data.status = 2;
+      } else {
+        data.status = 1;
       }
       const order = await dispatch(addOrder(data));
+      let results;
       if (order.type.includes("fulfilled")) {
         const { changeQuantityProduct, orderDetailList } =
           handleOrderDetailList(order, cart);
-        const results = await Promise.all([
+        results = await Promise.all([
           dispatch(addOrderDetailList(orderDetailList)),
           dispatch(updateFieldProduct(changeQuantityProduct)),
         ]);
-        if (results && results.length > 0) {
-          toastObj.success("Checkout successfully!");
-          navigate("/order/complete", { replace: true });
+        if (data.payment === "Online") {
+          await makePayment(cart);
+        } else {
+          if (results && results.length > 0) {
+            toastObj.success("Checkout successfully!");
+            navigate("/order/complete", { replace: true });
+          }
         }
       }
     } catch (error) {

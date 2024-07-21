@@ -30,7 +30,7 @@ const Index = () => {
   return (
     userLoggined?._id && (
       <>
-        <div className="grid grid-cols-3 md:grid-cols-1 gap-5">
+        <div className="grid grid-cols-5 md:grid-cols-1 gap-2">
           <DashboardFormOrder />
         </div>
         <div className="bg-white p-5 mt-5 rounded-md">
