@@ -16,8 +16,10 @@ function Register() {
       const action = register(values);
       const resultAction = await dispatch(action);
       const data = unwrapResult(resultAction);
-      if (data._id && data) {
+      if (data) {
         navigate("/login");
+      } else {
+        toastObj.error("Something is error");
       }
     } catch (error) {
       toastObj.error(error.message);

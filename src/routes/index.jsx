@@ -3,7 +3,6 @@ import { useRoutes } from "react-router-dom";
 import ProtectedRoute from "./protected";
 import LoadingV2 from "@components/LoadingV2/LoadingV2";
 
-// Lazily import components
 const AdminLayout = lazy(() => import("@layout/AdminLayout"));
 const AccountAdd = lazy(() =>
   import("@modules/admin/Account/components/AccountAdd")

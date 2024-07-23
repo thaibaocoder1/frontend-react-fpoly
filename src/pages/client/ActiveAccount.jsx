@@ -1,4 +1,4 @@
-import { active, setEmtpyError, setEmtpyUser } from "@app/slice/AuthSlice";
+import { active, setEmtpyActive } from "@app/slice/AuthSlice";
 import { unwrapResult } from "@reduxjs/toolkit";
 import toastObj from "@utils/Toast";
 import { useEffect } from "react";
@@ -11,22 +11,22 @@ const ActiveAccount = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const activateAccount = async () => {
+    (async () => {
       try {
         const action = active(id);
         const resultAction = await dispatch(action);
         const data = unwrapResult(resultAction);
-        data && toastObj.success("Account activated successfully!");
-        navigate("/login");
+        if (data) {
+          toastObj.success("Account activated successfully!");
+          navigate("/login");
+        } else {
+          toastObj.error("Account is activated");
+        }
       } catch (error) {
         toastObj.error(error);
       }
-    };
-    activateAccount();
-    return () => {
-      dispatch(setEmtpyUser());
-      dispatch(setEmtpyError());
-    };
+    })();
+    return () => dispatch(setEmtpyActive());
   }, [dispatch, id, navigate]);
 
   return <div></div>;

@@ -10,9 +10,9 @@ export const register = createAsyncThunk(
   async (payload, { rejectWithValue, fulfillWithValue }) => {
     try {
       const userInfo = await userApi.register(payload);
-      return fulfillWithValue(userInfo.data);
+      return fulfillWithValue(userInfo.created);
     } catch (error) {
-      return rejectWithValue(error.message);
+      return rejectWithValue(error);
     }
   }
 );
@@ -21,7 +21,7 @@ export const active = createAsyncThunk(
   async (payload, { rejectWithValue, fulfillWithValue }) => {
     try {
       const userInfo = await userApi.active(payload);
-      return fulfillWithValue(userInfo.data);
+      return fulfillWithValue(userInfo.isActive);
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -164,6 +164,8 @@ const authSlice = createSlice({
     loading: false,
     error: "",
     isAdmin: false,
+    created: false,
+    isActive: false,
   },
   reducers: {
     setEmtpyUser(state) {
@@ -172,13 +174,16 @@ const authSlice = createSlice({
     setEmtpyError(state) {
       state.error = "";
     },
+    setEmtpyActive(state) {
+      state.isActive = false;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(register.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(register.fulfilled, (state, action) => {
-      state.user = action.payload;
+      state.created = action.payload;
       state.loading = false;
       state.error = "";
     });
@@ -190,7 +195,7 @@ const authSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(active.fulfilled, (state, action) => {
-      state.user = action.payload;
+      state.isActive = action.payload;
       state.loading = false;
       state.error = "";
     });
@@ -323,5 +328,5 @@ const authSlice = createSlice({
 });
 
 const { reducer, actions } = authSlice;
-export const { setEmtpyUser, setEmtpyError } = actions;
+export const { setEmtpyUser, setEmtpyError, setEmtpyActive } = actions;
 export default reducer;
